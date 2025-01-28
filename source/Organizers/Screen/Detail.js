@@ -1,24 +1,25 @@
-import React, { useEffect } from "react";
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
 import { ARheader } from "../../common";
-import { hei, wid, normalize, height, width } from "../../theme";
+import { hei, wid, normalize } from "../../theme";
 import { Colors } from "../../theme";
 import Images from "../../Image/Images";
 import { FontFamily, FontSize } from "../../theme";
 import { useNavigation } from "@react-navigation/native";
 import Navroute from "../navigation/Navroute";
 import { Details } from "../../api/Api";
+import { useSelector } from "react-redux";
 
 const Detail = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState([]);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const { AsyncValue } = useSelector((state) => state.Auth);
+  const pageCount = 10;
+  const organizerLoginId = AsyncValue.OrganizerLoginId;
 
   const events = [
     {
@@ -35,11 +36,25 @@ const Detail = () => {
     },
   ];
 
+  const fetchData = async () => {
+    if (isLoading || !hasMore) return;
+    setIsLoading(true);
+    try {
+      const response = await Details(pageIndex, pageCount, organizerLoginId);
+      if (response && response.length > 0) {
+        setData((prevData) => [...prevData, ...response]);
+        setPageIndex((prevPage) => prevPage + 1);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await Details(PageIndex, PageCount, OrganizerLoginid);
-      console.log(response);
-    };
     fetchData();
   }, []);
 
@@ -88,6 +103,11 @@ const Detail = () => {
               </View>
             </ARbutton>
           )}
+          // onEndReached={fetchData}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isLoading ? <ARtext children="Loading..." /> : null
+          }
         />
       </View>
     </ARcontainer>
