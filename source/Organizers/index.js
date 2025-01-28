@@ -1,0 +1,12 @@
+export { default as Accountcreation } from "./Screen/Accountcreation";
+export { default as Detail  }  from "./Screen/Detail";
+export { default as Home  } from "./Screen/Home";
+export {default as Sellerdetail} from "./Screen/Sellerdetail";
+export {default as Scannerdetail} from "./Screen/Scannerdetail";
+export {default as Boxofficedetail} from "./Screen/Boxofficedetail";
+export {default as Organzerrouteoute }  from "./navigation/Organzerrouteoute";
+export {default as Navroute } from "./navigation/Navroute";
+export {default as Drawerindex} from "./navigation/Drawer/Drawerindex";
+export {default as Bottomindex} from "./navigation/Bottom/Bottomindex";
+export {default as Eventdetail} from "./Screen/Eventdetails";
+export {default as Setting} from "./Screen/Setting";
