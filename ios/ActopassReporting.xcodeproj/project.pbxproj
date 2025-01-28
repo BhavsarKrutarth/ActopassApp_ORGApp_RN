@@ -17,13 +17,13 @@
 		45BF116FCBBE46638FECC818 /* LexendDeca-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48B6C525EC0346F6B70CDB10 /* LexendDeca-SemiBold.ttf */; };
 		5D9A4B16DCE0436E80247C6A /* LexendDeca-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DA43DA7EEF04872AE5DB948 /* LexendDeca-Regular.ttf */; };
 		67ED69B5B03D4183BF28E196 /* LexendDeca-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 973ED1CAF995424DB163FFA9 /* LexendDeca-VariableFont_wght.ttf */; };
-		70B9A8DAB6A8DD79D88914C6 /* libPods-ActopassReporting.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6D511DFD616344067E20EB /* libPods-ActopassReporting.a */; };
+		713D77295407000A78DAF185 /* libPods-ActopassReporting.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A50CECE7EA232255EF067632 /* libPods-ActopassReporting.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8AE07956694646BD889629C0 /* LexendDeca-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E48797D65A43CE9671C302 /* LexendDeca-Medium.ttf */; };
 		96CFECA4A4F847A0AB0BDD03 /* LexendDeca-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FDB2991076045318F7B4BD6 /* LexendDeca-Light.ttf */; };
 		BC3F2155D782ECA07F151649 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		C1AB3B51F58143B6B6E39FF7 /* LexendDeca-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6392715E300C43C88FACA62B /* LexendDeca-ExtraLight.ttf */; };
-		D3E3593F864566188EA20AC5 /* libPods-ActopassReporting-ActopassReportingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CB6A47071CB51661BF4E80 /* libPods-ActopassReporting-ActopassReportingTests.a */; };
+		F3926433631A8FF9C8025BC8 /* libPods-ActopassReporting-ActopassReportingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43316AA79DF59ECAD3484328 /* libPods-ActopassReporting-ActopassReportingTests.a */; };
 		F7FF9CA397C446AEAEE25D16 /* LexendDeca-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CAE3739A69B4855A4886838 /* LexendDeca-ExtraBold.ttf */; };
 /* End PBXBuildFile section */
 
@@ -49,23 +49,23 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ActopassReporting/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ActopassReporting/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ActopassReporting/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		2424DA5D1622C90C82B1B5AE /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig"; path = "Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2FDB2991076045318F7B4BD6 /* LexendDeca-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-Light.ttf"; path = "../source/assets/fonts/LexendDeca-Light.ttf"; sourceTree = "<group>"; };
-		38467B37C1A78D4FBF7703E7 /* Pods-ActopassReporting.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting.debug.xcconfig"; path = "Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting.debug.xcconfig"; sourceTree = "<group>"; };
+		34FABA574A3D7FD3C0772C70 /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting-ActopassReportingTests.release.xcconfig"; path = "Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests.release.xcconfig"; sourceTree = "<group>"; };
 		40B79F6889A344AEB566051C /* LexendDeca-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-Thin.ttf"; path = "../source/assets/fonts/LexendDeca-Thin.ttf"; sourceTree = "<group>"; };
+		43316AA79DF59ECAD3484328 /* libPods-ActopassReporting-ActopassReportingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ActopassReporting-ActopassReportingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48B6C525EC0346F6B70CDB10 /* LexendDeca-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-SemiBold.ttf"; path = "../source/assets/fonts/LexendDeca-SemiBold.ttf"; sourceTree = "<group>"; };
-		4B6D511DFD616344067E20EB /* libPods-ActopassReporting.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ActopassReporting.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CAE3739A69B4855A4886838 /* LexendDeca-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-ExtraBold.ttf"; path = "../source/assets/fonts/LexendDeca-ExtraBold.ttf"; sourceTree = "<group>"; };
+		4EADB1D5F4253219DE490232 /* Pods-ActopassReporting.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting.debug.xcconfig"; path = "Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting.debug.xcconfig"; sourceTree = "<group>"; };
 		61E48797D65A43CE9671C302 /* LexendDeca-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-Medium.ttf"; path = "../source/assets/fonts/LexendDeca-Medium.ttf"; sourceTree = "<group>"; };
 		6392715E300C43C88FACA62B /* LexendDeca-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-ExtraLight.ttf"; path = "../source/assets/fonts/LexendDeca-ExtraLight.ttf"; sourceTree = "<group>"; };
 		658729C527E5476599233BF0 /* LexendDeca-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-Black.ttf"; path = "../source/assets/fonts/LexendDeca-Black.ttf"; sourceTree = "<group>"; };
 		77250418113E49C18DA11D97 /* LexendDeca-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-Bold.ttf"; path = "../source/assets/fonts/LexendDeca-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ActopassReporting/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		868BF5013CFE38799FCC44BC /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting-ActopassReportingTests.release.xcconfig"; path = "Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests.release.xcconfig"; sourceTree = "<group>"; };
 		973ED1CAF995424DB163FFA9 /* LexendDeca-VariableFont_wght.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "LexendDeca-VariableFont_wght.ttf"; path = "../source/assets/fonts/LexendDeca-VariableFont_wght.ttf"; sourceTree = "<group>"; };
-		D9CB6A47071CB51661BF4E80 /* libPods-ActopassReporting-ActopassReportingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ActopassReporting-ActopassReportingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A49C7E8F2DD630840B1D2AF3 /* Pods-ActopassReporting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting.release.xcconfig"; path = "Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting.release.xcconfig"; sourceTree = "<group>"; };
+		A50CECE7EA232255EF067632 /* libPods-ActopassReporting.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ActopassReporting.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D541EFC8CC85CBF168C37794 /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig"; path = "Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F559E884A6BF38F2A19A1016 /* Pods-ActopassReporting.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ActopassReporting.release.xcconfig"; path = "Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3E3593F864566188EA20AC5 /* libPods-ActopassReporting-ActopassReportingTests.a in Frameworks */,
+				F3926433631A8FF9C8025BC8 /* libPods-ActopassReporting-ActopassReportingTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70B9A8DAB6A8DD79D88914C6 /* libPods-ActopassReporting.a in Frameworks */,
+				713D77295407000A78DAF185 /* libPods-ActopassReporting.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,8 +141,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				4B6D511DFD616344067E20EB /* libPods-ActopassReporting.a */,
-				D9CB6A47071CB51661BF4E80 /* libPods-ActopassReporting-ActopassReportingTests.a */,
+				A50CECE7EA232255EF067632 /* libPods-ActopassReporting.a */,
+				43316AA79DF59ECAD3484328 /* libPods-ActopassReporting-ActopassReportingTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -182,10 +182,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				38467B37C1A78D4FBF7703E7 /* Pods-ActopassReporting.debug.xcconfig */,
-				F559E884A6BF38F2A19A1016 /* Pods-ActopassReporting.release.xcconfig */,
-				2424DA5D1622C90C82B1B5AE /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */,
-				868BF5013CFE38799FCC44BC /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */,
+				4EADB1D5F4253219DE490232 /* Pods-ActopassReporting.debug.xcconfig */,
+				A49C7E8F2DD630840B1D2AF3 /* Pods-ActopassReporting.release.xcconfig */,
+				D541EFC8CC85CBF168C37794 /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */,
+				34FABA574A3D7FD3C0772C70 /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -197,12 +197,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ActopassReportingTests" */;
 			buildPhases = (
-				EF79B08A5F506BE350B41EAD /* [CP] Check Pods Manifest.lock */,
+				AB955DB405857B8827EDBA5F /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				53F1DB43019B4BB76F8C5547 /* [CP] Embed Pods Frameworks */,
-				06166937B39D226FE7D05748 /* [CP] Copy Pods Resources */,
+				ADD06118EAD8B1450A8902E9 /* [CP] Embed Pods Frameworks */,
+				AB657F25F623FE68B18ABC8E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -218,13 +218,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ActopassReporting" */;
 			buildPhases = (
-				171683E4B2021D0B6EB4F28B /* [CP] Check Pods Manifest.lock */,
+				EB5662D4CC1210043758A150 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				E211E1E6535347ED40F1F5A8 /* [CP] Embed Pods Frameworks */,
-				ECCFB32F2480714D3F728E1E /* [CP] Copy Pods Resources */,
+				7425D535433B0F6E7F0CC292 /* [CP] Embed Pods Frameworks */,
+				191D276E6E12E798844624CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -318,80 +318,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		06166937B39D226FE7D05748 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		171683E4B2021D0B6EB4F28B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ActopassReporting-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		53F1DB43019B4BB76F8C5547 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E211E1E6535347ED40F1F5A8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		ECCFB32F2480714D3F728E1E /* [CP] Copy Pods Resources */ = {
+		191D276E6E12E798844624CC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -408,7 +335,41 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EF79B08A5F506BE350B41EAD /* [CP] Check Pods Manifest.lock */ = {
+		7425D535433B0F6E7F0CC292 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting/Pods-ActopassReporting-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB657F25F623FE68B18ABC8E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB955DB405857B8827EDBA5F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -424,6 +385,45 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ActopassReporting-ActopassReportingTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ADD06118EAD8B1450A8902E9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ActopassReporting-ActopassReportingTests/Pods-ActopassReporting-ActopassReportingTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EB5662D4CC1210043758A150 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ActopassReporting-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -463,7 +463,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2424DA5D1622C90C82B1B5AE /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */;
+			baseConfigurationReference = D541EFC8CC85CBF168C37794 /* Pods-ActopassReporting-ActopassReportingTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -490,7 +490,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 868BF5013CFE38799FCC44BC /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */;
+			baseConfigurationReference = 34FABA574A3D7FD3C0772C70 /* Pods-ActopassReporting-ActopassReportingTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -514,7 +514,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 38467B37C1A78D4FBF7703E7 /* Pods-ActopassReporting.debug.xcconfig */;
+			baseConfigurationReference = 4EADB1D5F4253219DE490232 /* Pods-ActopassReporting.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -542,7 +542,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F559E884A6BF38F2A19A1016 /* Pods-ActopassReporting.release.xcconfig */;
+			baseConfigurationReference = A49C7E8F2DD630840B1D2AF3 /* Pods-ActopassReporting.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
