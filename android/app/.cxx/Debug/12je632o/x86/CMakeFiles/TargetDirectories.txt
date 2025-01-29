@@ -1,3 +1,0 @@
-/Users/hp/ReactNative/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/12je632o/x86/CMakeFiles/appmodules.dir
-/Users/hp/ReactNative/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/12je632o/x86/CMakeFiles/edit_cache.dir
-/Users/hp/ReactNative/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/12je632o/x86/CMakeFiles/rebuild_cache.dir

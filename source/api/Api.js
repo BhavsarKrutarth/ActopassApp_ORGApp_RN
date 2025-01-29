@@ -1,5 +1,5 @@
 import FetchMethod from "./FetchMethod";
-const { AsyncValue } = useSelector((state) => state.Auth);
+
 
 export const loginUser = async (Id, Password) => {
   try {
@@ -21,7 +21,6 @@ export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
   try {
     const response = await FetchMethod.POST({
       EndPoint: `ORGApp/OrganizerEventList/${PageIndex}/${PageCount}/${OrganizerLoginid}`,
-      NeedToken: AsyncValue.AuthorizationKey,
     });
     return response;
   } catch (error) {
