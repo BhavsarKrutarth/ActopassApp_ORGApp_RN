@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import Colors from "../theme/Color";
 import { FontFamily } from "../theme/Fonts";
 
-const ARtext = ({size,color,children,style,align,weight,mTop,fontFamily,textDecorationLine,onpress}) => {
+const ARtext = ({size,color,children,style,align,weight,mTop,fontFamily,textDecorationLine,onpress,numline}) => {
 
     const Textstyle= {
         color: color ?? Colors.Black,
@@ -16,7 +16,7 @@ const ARtext = ({size,color,children,style,align,weight,mTop,fontFamily,textDeco
     }
 
     return(
-        <Text style={[Textstyle,style]} onpress={onpress}>
+        <Text style={[Textstyle,style]} onpress={onpress} numberOfLines={numline}>
             {children}
         </Text>
     )

@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
-import {Alert, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {ARcontainer, ARLoader} from '../common';
-import Images from '../Image/Images';
-import {hei, isIos, wid} from '../theme';
-import {ARtext} from '../common';
-import {Colors} from '../theme';
-import {ARtextinput} from '../common';
-import {FontFamily, FontSize} from '../theme';
-import {ARbutton} from '../common';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Validation} from '../utils';
-import {useDispatch} from 'react-redux';
+import React, { useState } from "react";
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ARcontainer, ARLoader } from "../common";
+import Images from "../Image/Images";
+import { hei, isIos, wid } from "../theme";
+import { ARtext } from "../common";
+import { Colors } from "../theme";
+import { ARtextinput } from "../common";
+import { FontFamily, FontSize } from "../theme";
+import { ARbutton } from "../common";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Functions, Validation } from "../utils";
+import { useDispatch } from "react-redux";
 import {
   onAuthChange,
   setAsyncStorageValue,
-} from '../redux/Reducer/AuthReducers';
-import {loginUser} from '../api/Api';
+} from "../redux/Reducer/AuthReducers";
+import { loginUser } from "../api/Api";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -25,14 +25,15 @@ const Login = () => {
   const [Logindata, Setlogindata] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
-    Id: '',
-    Password: '',
-    OTP: '',
+    Id: "",
+    Password: "",
+    OTP: "",
   });
 
   const Idvalidation = Fieldvalidation && Validation.isID(Input.Id);
   const Otpvalidation = Fieldvalidation && Validation.isPINValid(Input.OTP);
-  const Passwordvalidation = Fieldvalidation && Validation.isPasswordValid(Input.Password);
+  const Passwordvalidation =
+    Fieldvalidation && Validation.isPasswordValid(Input.Password);
 
   const Login = async (Id, Password) => {
     setfieldvalidation(true);
@@ -51,13 +52,14 @@ const Login = () => {
       if (response) {
         if (response.Response === 2) {
           if (response.otp > 0) {
-            console.log('response.otp', response.otp);
+            console.log("response.otp", response.otp);
             Setlogindata(response);
             setfieldvalidation(false);
           }
         } else if (response.Response === 0) {
           dispatch(onAuthChange(true));
           dispatch(setAsyncStorageValue(response));
+          Functions.setAppData(response)
           setfieldvalidation(false);
         } else if (response.Response === -1) {
           Alert.alert(response.ResponseMessage);
@@ -79,29 +81,29 @@ const Login = () => {
     if (loginotp == otp) {
       dispatch(onAuthChange(true));
       dispatch(setAsyncStorageValue(Logindata));
+      Functions.setAppData(Logindata)
       setfieldvalidation(false);
     } else {
-      Alert.alert('Invalid OTP.');
+      Alert.alert("Invalid OTP.");
     }
   };
 
   const Viapassword = (Id, Password) => {
     SetPasswordField(true);
     Setlogindata({});
-    setInput(prev => ({...prev, OTP: ''}));
+    setInput((prev) => ({ ...prev, OTP: "" }));
   };
 
-  if (isLoading) {
-    return <ARLoader visible={isLoading} />;
-  }
+  if (isLoading) return <ARLoader visible={isLoading} />;
 
   return (
     <ARcontainer>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{flexGrow: 1, paddingHorizontal: wid(4)}}
-        enableAutomaticScroll={Platform.OS === 'ios'}>
+        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: wid(4) }}
+        enableAutomaticScroll={Platform.OS === "ios"}
+      >
         <View style={style.flex1}>
           <View style={style.imageview}>
             <Image source={Images.man} style={style.manimage} />
@@ -126,7 +128,7 @@ const Login = () => {
           <View>
             <ARtextinput
               Containerstyle={{
-                borderColor: Idvalidation ? 'red' : Colors.bordercolor,
+                borderColor: Idvalidation ? "red" : Colors.bordercolor,
               }}
               Lefticon={Images.man}
               Tiheight={50}
@@ -134,18 +136,18 @@ const Login = () => {
               Tiplaceholder="Enter ID"
               Tiflex={1}
               value={Input.Id}
-              onchangetext={v => setInput(prev => ({...prev, Id: v}))}
+              onchangetext={(v) => setInput((prev) => ({ ...prev, Id: v }))}
             />
             {Idvalidation ? (
-              <View style={{marginTop: hei(0.8)}}>
+              <View style={{ marginTop: hei(0.8) }}>
                 <ARtext
-                  children={'Please Enter Your Id'}
-                  color={'red'}
-                  align={''}
+                  children={"Please Enter Your Id"}
+                  color={"red"}
+                  align={""}
                 />
               </View>
             ) : (
-              ''
+              ""
             )}
           </View>
 
@@ -158,16 +160,16 @@ const Login = () => {
                 Tiplaceholder="Enter OTP"
                 Tiflex={1}
                 value={Input.OTP}
-                onchangetext={v =>
-                  setInput(previous => ({...previous, OTP: v}))
+                onchangetext={(v) =>
+                  setInput((previous) => ({ ...previous, OTP: v }))
                 }
               />
               {Otpvalidation && (
-                <View style={{marginTop: hei(0.8)}}>
+                <View style={{ marginTop: hei(0.8) }}>
                   <ARtext
-                    children={'Please Enter Your OTP'}
-                    color={'red'}
-                    align={''}
+                    children={"Please Enter Your OTP"}
+                    color={"red"}
+                    align={""}
                   />
                 </View>
               )}
@@ -181,21 +183,21 @@ const Login = () => {
                 Tiheight={50}
                 Tipadding={10}
                 Righticon={toggle ? Images.eyeoff : Images.eye}
-                Tiplaceholder={'Enter Password'}
+                Tiplaceholder={"Enter Password"}
                 Tiflex={1}
                 value={Input.Password}
-                onchangetext={v =>
-                  setInput(previous => ({...previous, Password: v}))
+                onchangetext={(v) =>
+                  setInput((previous) => ({ ...previous, Password: v }))
                 }
                 securetextentry={toggle}
                 onPress={() => settoggle(!toggle)}
               />
               {Passwordvalidation && (
-                <View style={{marginTop: hei(0.8)}}>
+                <View style={{ marginTop: hei(0.8) }}>
                   <ARtext
-                    children={'Please Enter Your Password'}
-                    color={'red'}
-                    align={''}
+                    children={"Please Enter Your Password"}
+                    color={"red"}
+                    align={""}
                   />
                 </View>
               )}
@@ -212,9 +214,10 @@ const Login = () => {
               } else {
                 Login(Input.Id, Input.Password);
               }
-            }}>
+            }}
+          >
             <ARtext
-              children={Logindata.otp > 0 ? 'Continue' : 'Login'}
+              children={Logindata.otp > 0 ? "Continue" : "Login"}
               style={style.buttontext}
             />
           </ARbutton>
@@ -222,9 +225,10 @@ const Login = () => {
           <View
             style={{
               rowGap: hei(2),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             {Logindata.otp > 0 && (
               <>
                 <View style={style.seperator}>
@@ -238,8 +242,9 @@ const Login = () => {
                   <View style={style.line}></View>
                 </View>
                 <ARbutton
-                  Touchstyle={{height: hei(3), backgroundColor: ''}}
-                  onpress={() => Login(Input.Id)}>
+                  Touchstyle={{ height: hei(3), backgroundColor: "" }}
+                  onpress={() => Login(Input.Id)}
+                >
                   <ARtext
                     children="Resend OTP?"
                     color={Colors.purple}
@@ -250,7 +255,8 @@ const Login = () => {
                 </ARbutton>
                 <ARbutton
                   onpress={() => Viapassword()}
-                  Touchstyle={{height: hei(3), backgroundColor: ''}}>
+                  Touchstyle={{ height: hei(3), backgroundColor: "" }}
+                >
                   <ARtext
                     children="Via Password?"
                     color={Colors.Placeholder}
@@ -280,15 +286,15 @@ const style = StyleSheet.create({
   },
   flex1: {
     flex: 1.3,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    justifyContent: "flex-end",
+    alignItems: "center",
     paddingBottom: hei(2),
     // backgroundColor:"pink"
   },
   imageview: {
     backgroundColor: Colors.lightgrey,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     height: hei(10),
     width: hei(10),
     borderRadius: hei(10),
@@ -299,11 +305,11 @@ const style = StyleSheet.create({
   },
   textview: {
     marginTop: hei(2.5),
-    alignItems: 'center',
+    alignItems: "center",
   },
   flex2: {
     flex: 1.5,
-    justifyContent: 'center',
+    justifyContent: "center",
     rowGap: hei(2),
   },
   textinput: {
@@ -327,10 +333,10 @@ const style = StyleSheet.create({
     fontSize: FontSize.font16,
   },
   seperator: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
     paddingHorizontal: wid(1.7),
-    alignItems: 'center',
+    alignItems: "center",
     columnGap: wid(4),
   },
   line: {

@@ -1,6 +1,5 @@
 import FetchMethod from "./FetchMethod";
 
-
 export const loginUser = async (Id, Password) => {
   try {
     const response = await FetchMethod.POST({
@@ -19,8 +18,21 @@ export const loginUser = async (Id, Password) => {
 
 export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
   try {
-    const response = await FetchMethod.POST({
+    const response = await FetchMethod.GET({
       EndPoint: `ORGApp/OrganizerEventList/${PageIndex}/${PageCount}/${OrganizerLoginid}`,
+      // NeedToken: true,
+    });
+    return response;
+  } catch (error) {
+    console.error("Details API Error:", error);
+    throw error;
+  }
+};
+
+export const EventDetails = async (EventMasterid) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `HomeScreen/get_eventmasterbyid/${EventMasterid}`,
     });
     return response;
   } catch (error) {
