@@ -12,27 +12,27 @@ const Stack = createStackNavigator();
 
 const Loginroute = () => {
   const navigation = useNavigation();
-  // const {isAuth, AsyncValue} = useSelector(state => state.Auth);
+  const { isAuth, AsyncValue } = useSelector((state) => state.Auth);
 
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     const userType = AsyncValue.UserType;
-  //     navigation.dispatch(
-  //       CommonActions.reset({
-  //         index: 0,
-  //         routes: [{name: Loginnavroute[userType] || Loginnavroute.Login}],
-  //       }),
-  //     );
-  //   }
-  // }, [isAuth, AsyncValue, navigation]);
+  useEffect(() => {
+    if (isAuth) {
+      const userType = AsyncValue.UserType;
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: Loginnavroute[userType] || Loginnavroute.Login }],
+        })
+      );
+    }
+  }, [isAuth, AsyncValue, navigation]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen component={Login} name={Loginnavroute.Login} />
       <Stack.Screen
         component={Organzerrouteoute}
         name={Loginnavroute.Organizer}
       />
-      <Stack.Screen component={Login} name={Loginnavroute.Login} />
       <Stack.Screen
         component={Boxofficeroute}
         name={Loginnavroute.BoxofficeUser}
