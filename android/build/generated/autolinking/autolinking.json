@@ -80,6 +80,30 @@
         }
       }
     },
+    "react-native-image-crop-picker": {
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker",
+      "name": "react-native-image-crop-picker",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/RNImageCropPicker.podspec",
+          "version": "0.42.0",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/android",
+          "packageImportPath": "import com.reactnative.ivpusic.imagepicker.PickerPackage;",
+          "packageInstance": "new PickerPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
     "react-native-linear-gradient": {
       "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient",
       "name": "react-native-linear-gradient",
@@ -127,6 +151,19 @@
           "cxxModuleHeaderName": null,
           "isPureCxxDependency": false
         }
+      }
+    },
+    "react-native-render-html": {
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-render-html",
+      "name": "react-native-render-html",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-render-html/react-native-render-html.podspec",
+          "version": "6.3.4",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": null
       }
     },
     "react-native-safe-area-context": {
@@ -403,7 +440,8 @@
         },
         {
           "name": "--terminal <string>",
-          "description": "Launches the Metro Bundler in a new window using the specified terminal path."
+          "description": "Launches the Metro Bundler in a new window using the specified terminal path.",
+          "default": "Apple_Terminal"
         },
         {
           "name": "--binary-path <string>",
@@ -562,7 +600,8 @@
         },
         {
           "name": "--terminal <string>",
-          "description": "Launches the Metro Bundler in a new window using the specified terminal path."
+          "description": "Launches the Metro Bundler in a new window using the specified terminal path.",
+          "default": "Apple_Terminal"
         },
         {
           "name": "--appId <string>",

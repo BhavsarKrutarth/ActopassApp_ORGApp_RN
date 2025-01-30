@@ -10,3 +10,4 @@ export {default as Drawerindex} from "./navigation/Drawer/Drawerindex";
 export {default as Bottomindex} from "./navigation/Bottom/Bottomindex";
 export {default as Eventdetail} from "./Screen/Eventdetails";
 export {default as Setting} from "./Screen/Setting";
+export {default as Createseller} from "./Screen/Createseller";

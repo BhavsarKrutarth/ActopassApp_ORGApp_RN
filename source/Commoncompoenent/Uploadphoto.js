@@ -8,12 +8,12 @@ import Images from '../Image/Images';
 import { FontFamily,FontSize } from '../theme';
 import {ARbutton} from '../common';
 
-const Uploadphoto = ({oneditpress}) => {
+const Uploadphoto = ({oneditpress,onpress,Imagedata}) => {
   return (
     <View style={style.uploadview}>
-      <View style={style.imageview}>
-        <ARimage source={Images.man} style={style.image} />
-      </View>
+      <ARbutton Touchstyle={style.imageview} onpress={onpress}>
+        <ARimage source={Imagedata ? {uri:Imagedata} : Images.man} style={Imagedata ? '' : style.image} />
+      </ARbutton>
       <View style={style.uploadtext}>
         <ARtext
           children={'Upload Photo'}
@@ -60,8 +60,9 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: hei(8),
-    width: wid(17),
+    width: hei(8),
     borderRadius: normalize(50),
+    overflow:"hidden"
   },
   image: {
     height: wid(10),

@@ -98,10 +98,10 @@ const Detail = () => {
             </ARbutton>
           )}
           onEndReached={() => {hasMore.TotalRecords != data.length ? fetchData()
-           : setIsLoading(true)}}
+           : null}}
           onEndReachedThreshold={0.5}
           ListFooterComponent={() =>
-            (isLoading ? <ActivityIndicator size={'large'} color={'blue'} /> : null)
+            (isLoading ? <ActivityIndicator size={'large'} color={Colors.Placeholder} /> : null)
           }
         />
       </View>

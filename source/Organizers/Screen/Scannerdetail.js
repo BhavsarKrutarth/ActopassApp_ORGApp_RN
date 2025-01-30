@@ -70,6 +70,13 @@ const Scannerdetail = () => {
               inputvalue={''}
               onchange={v => console.log(v)}
             />
+
+          <Inputdata
+              txtchildren={'Password'}
+              placeholder={'012345678'}
+              inputvalue={''}
+              onchange={v => console.log(v)}
+            />
           </View>
           <Scbutton
             onsavepress={() => console.log('press')}

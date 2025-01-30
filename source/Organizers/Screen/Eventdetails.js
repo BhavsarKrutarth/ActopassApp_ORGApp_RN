@@ -17,7 +17,6 @@ const Eventdetail = ({route}) => {
 
   const {Id} = route.params;
   
-
   useEffect(() => {
     const fetchData = async () => {
       try {

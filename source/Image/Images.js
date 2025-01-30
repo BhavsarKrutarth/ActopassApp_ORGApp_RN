@@ -39,8 +39,10 @@ const Images = {
     ticket:require('../Image/ticket.png'),
     disc:require('../Image/disc.png'),
     payact:require('../Image/payact.png'),
-    patdec:require('../Image/paydec.png'),
+    help:require('../Image/help.png'),
     otp:require('../Image/otp.png'),
+    camera:require('../Image/CameraIcon.png'),
+    gallary:require('../Image/gallary.png'),
 }
 
 export default Images;

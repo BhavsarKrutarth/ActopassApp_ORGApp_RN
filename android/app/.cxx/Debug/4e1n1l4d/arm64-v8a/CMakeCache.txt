@@ -242,8 +242,8 @@ CMAKE_SYSTEM_NAME:UNINITIALIZED=Android
 //No help, variable specified on the command line.
 CMAKE_SYSTEM_VERSION:UNINITIALIZED=24
 
-//The CMake toolchain file
-CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/linux/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake
+//No help, variable specified on the command line.
+CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/linux/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -311,6 +311,8 @@ CMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_STANDARD_LIBRARIES
 CMAKE_CXX_STANDARD_LIBRARIES-ADVANCED:INTERNAL=1
+//Result of TRY_COMPILE
+CMAKE_C_ABI_COMPILED:INTERNAL=FALSE
 //ADVANCED property for variable: CMAKE_C_COMPILER_AR
 CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_COMPILER_RANLIB
@@ -373,7 +375,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

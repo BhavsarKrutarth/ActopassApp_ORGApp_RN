@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) to help you set a personalized profile photo, we need access to your camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to the photo library to enable users to select images for their profile photo.</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>${PRODUCT_NAME} Microphone Usage</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -32,7 +39,20 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>LexendDeca-Black.ttf</string>
+		<string>LexendDeca-Bold.ttf</string>
+		<string>LexendDeca-ExtraBold.ttf</string>
+		<string>LexendDeca-ExtraLight.ttf</string>
+		<string>LexendDeca-Light.ttf</string>
+		<string>LexendDeca-Medium.ttf</string>
+		<string>LexendDeca-Regular.ttf</string>
+		<string>LexendDeca-SemiBold.ttf</string>
+		<string>LexendDeca-Thin.ttf</string>
+		<string>LexendDeca-VariableFont_wght.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -47,18 +67,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>LexendDeca-Black.ttf</string>
-		<string>LexendDeca-Bold.ttf</string>
-		<string>LexendDeca-ExtraBold.ttf</string>
-		<string>LexendDeca-ExtraLight.ttf</string>
-		<string>LexendDeca-Light.ttf</string>
-		<string>LexendDeca-Medium.ttf</string>
-		<string>LexendDeca-Regular.ttf</string>
-		<string>LexendDeca-SemiBold.ttf</string>
-		<string>LexendDeca-Thin.ttf</string>
-		<string>LexendDeca-VariableFont_wght.ttf</string>
-	</array>
 </dict>
 </plist>
