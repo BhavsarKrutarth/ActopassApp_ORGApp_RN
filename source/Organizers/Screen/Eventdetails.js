@@ -16,7 +16,6 @@ const Eventdetail = ({route}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const {Id} = route.params;
-  
 
   useEffect(() => {
     const fetchData = async () => {

@@ -394,6 +394,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>react-native-render-html.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>react-native-safe-area-context.xcscheme</key>
 		<dict>
 			<key>isShown</key>

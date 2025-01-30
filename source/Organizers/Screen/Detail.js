@@ -21,7 +21,6 @@ const Detail = () => {
   const pageCount = 6;
   const organizerLoginId = AsyncValue.OrganizerLoginId;
 
-  
   useEffect(() => {
     fetchData();
   }, []);
