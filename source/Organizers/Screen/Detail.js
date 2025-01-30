@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
 import { ARheader } from "../../common";
 import { hei, wid, normalize } from "../../theme";
@@ -16,48 +16,39 @@ const Detail = () => {
   const [data, setData] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState({});
   const { AsyncValue } = useSelector((state) => state.Auth);
-  const pageCount = 10;
+  const pageCount = 6;
   const organizerLoginId = AsyncValue.OrganizerLoginId;
-
-  const events = [
-    {
-      Id: "1",
-      Name: "Bar Crawl,Gurgaon",
-      city: "Grizly X Times Prime",
-      image: Images.comady,
-    },
-    {
-      Id: "2",
-      Name: "Bar Crawl,Gurgaon",
-      city: "Grizly X Times Prime",
-      image: Images.comady,
-    },
-  ];
-
-  const fetchData = async () => {
-    if (isLoading || !hasMore) return;
-    setIsLoading(true);
-    try {
-      const response = await Details(pageIndex, pageCount, organizerLoginId);
-      if (response && response.length > 0) {
-        setData((prevData) => [...prevData, ...response]);
-        setPageIndex((prevPage) => prevPage + 1);
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const response = await Details(pageIndex, pageCount, organizerLoginId);
+      if (response) {
+        setHasMore(response)
+        setData((prevData) => [...prevData, ...response.DIscountDetails]);
+        setPageIndex((pre) => pre + 1);
+        setIsLoading(false)
+      } 
+    } 
+    catch (error) {
+      console.error("Failed to fetch data:", error);
+      setIsLoading(false);
+    } 
+  };
+  
+ console.log('hashdata',hasMore.TotalRecords);
+ console.log(data.length);
+//  console.log(data.EventMasterid);
+ 
+ 
+  
   return (
     <ARcontainer>
       <ARheader
@@ -74,27 +65,29 @@ const Detail = () => {
 
       <View style={style.container}>
         <FlatList
-          data={events}
+          data={data}
           numColumns={2}
           keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <ARbutton
               Touchstyle={style.eventview}
-              onpress={() => navigation.navigate(Navroute.Eventdetail)}
+              onpress={() => navigation.navigate(Navroute.Eventdetail,{Id:item.EventMasterid})}
             >
               <View style={style.imageview}>
-                <ARimage source={item.image} resizemode={"stretch"} />
+                <ARimage source={{uri : item.EventMainImage}} resizemode={"stretch"} />
               </View>
               <View style={style.texts}>
                 <ARtext
-                  children={item.Name}
+                  children={item.EventName}
+                  numline={1}
                   align={""}
                   size={FontSize.font13}
                   fontFamily={FontFamily.Bold}
                   color={Colors.Black}
                 />
                 <ARtext
-                  children={item.city}
+                  children={item.CityName}
                   align={""}
                   size={FontSize.font11}
                   fontFamily={FontFamily.Regular}
@@ -103,10 +96,11 @@ const Detail = () => {
               </View>
             </ARbutton>
           )}
-          // onEndReached={fetchData}
+          onEndReached={() => {hasMore.TotalRecords != data.length ? fetchData()
+           : setIsLoading(true)}}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={
-            isLoading ? <ARtext children="Loading..." /> : null
+          ListFooterComponent={() =>
+            (isLoading ? <ActivityIndicator size={'large'} color={'blue'} /> : null)
           }
         />
       </View>

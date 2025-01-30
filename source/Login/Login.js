@@ -9,7 +9,7 @@ import { ARtextinput } from "../common";
 import { FontFamily, FontSize } from "../theme";
 import { ARbutton } from "../common";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Validation } from "../utils";
+import { Functions, Validation } from "../utils";
 import { useDispatch } from "react-redux";
 import {
   onAuthChange,
@@ -59,6 +59,7 @@ const Login = () => {
         } else if (response.Response === 0) {
           dispatch(onAuthChange(true));
           dispatch(setAsyncStorageValue(response));
+          Functions.setAppData(response)
           setfieldvalidation(false);
         } else if (response.Response === -1) {
           Alert.alert(response.ResponseMessage);
@@ -80,6 +81,7 @@ const Login = () => {
     if (loginotp == otp) {
       dispatch(onAuthChange(true));
       dispatch(setAsyncStorageValue(Logindata));
+      Functions.setAppData(Logindata)
       setfieldvalidation(false);
     } else {
       Alert.alert("Invalid OTP.");

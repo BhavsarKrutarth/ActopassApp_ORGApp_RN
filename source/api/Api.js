@@ -20,7 +20,7 @@ export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
   try {
     const response = await FetchMethod.GET({
       EndPoint: `ORGApp/OrganizerEventList/${PageIndex}/${PageCount}/${OrganizerLoginid}`,
-      NeedToken: true,
+      // NeedToken: true,
     });
     return response;
   } catch (error) {

@@ -10,18 +10,18 @@ import { useNavigation } from "@react-navigation/native";
 import { EventDetails } from "../../api/Api";
 import RenderHtml from "react-native-render-html";
 
-const Eventdetail = () => {
+const Eventdetail = ({route}) => {
   const navigation = useNavigation();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const EventMasterid = 1;
+  const {Id} = route.params;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await EventDetails(EventMasterid);
+        const response = await EventDetails(Id);
         setData(response[0]);
       } catch (error) {
         console.log(error);
