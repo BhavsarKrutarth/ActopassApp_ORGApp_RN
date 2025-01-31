@@ -132,7 +132,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "appmodules::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-appmodules-Debug-c72a7bfff475e3db9a6a.json",
+					"jsonFile" : "target-appmodules-Debug-0a067d7ac5aa568083f3.json",
 					"name" : "appmodules",
 					"projectIndex" : 0
 				},
@@ -160,14 +160,14 @@
 				{
 					"directoryIndex" : 5,
 					"id" : "react_codegen_rnscreens::@25bcbd507e98d3a854ad",
-					"jsonFile" : "target-react_codegen_rnscreens-Debug-d293cf786f72de6e3951.json",
+					"jsonFile" : "target-react_codegen_rnscreens-Debug-2f8929e28f424ebb4415.json",
 					"name" : "react_codegen_rnscreens",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 4,
 					"id" : "react_codegen_safeareacontext::@7984cd80db47aa7b952a",
-					"jsonFile" : "target-react_codegen_safeareacontext-Debug-5f1f7db5721e0d400087.json",
+					"jsonFile" : "target-react_codegen_safeareacontext-Debug-07fe92bd24cb66eba75a.json",
 					"name" : "react_codegen_safeareacontext",
 					"projectIndex" : 0
 				}
@@ -177,7 +177,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/4e1n1l4d/x86",
+		"build" : "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/4e1n1l4d/x86_64",
 		"source" : "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup"
 	},
 	"version" : 

@@ -12,14 +12,20 @@ import {
 } from "../../theme";
 import Images from "../../Image/Images";
 import { Inputdata, Scbutton, Uploadphoto } from "../../Commoncompoenent";
-import { ARcontainer, ARheader } from "../../common";
+import { ARcontainer, ARheader, ARLoader } from "../../common";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ImagePicker from "react-native-image-crop-picker";
 import { Profilemodal } from "../../Commoncompoenent";
+import { Validation } from "../../utils";
+import { useSelector } from "react-redux";
+import { Addnewseller } from "../../api/Api";
 
 const Createseller = () => {
   const navigation = useNavigation();
-  const [state, setState] = useState({
+  const { AsyncValue } = useSelector((state) => state.Auth);
+  const [Fieldvalidation, setfieldvalidation] = useState(false);
+  const [Loading, setlodading] = useState(false);
+  const [Input, setInput] = useState({
     Name: "",
     password: "",
     Email: "",
@@ -31,45 +37,103 @@ const Createseller = () => {
     setmodel: false,
   });
 
-  
+  const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
+  const Emailvalidation = Fieldvalidation && Validation.isEmailValid(Input.Email);
+  const Mobilevalidation =  Fieldvalidation && Validation.isMobileNumberValid(Input.Number);
+  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.password);
+  const Photo = Fieldvalidation && Input.selectedImage.imageUri == "";
+
+  const validate =
+    !Validation.isEmailValid(Input.Email) &&
+    !Validation.isMobileNumberValid(Input.Number) &&
+    !Validation.issellerpassword(Input.password) &&
+    !Input.selectedImage.imageUri == "" &&
+    !Validation.isName(Input.Name);
+
   const openCamera = () => {
-    setState((pre) => ({ ...pre, setmodel: false }))
     ImagePicker.openCamera({
       width: hei(8),
       height: hei(8),
       cropping: true,
-      includeBase64:true
-    }).then((response) => {
-      console.log(response);
-      setState((pre) => ({...pre, selectedImage:{
-        base64:response.data,
-        imageUri:response.path
-      }}))
-    }
-    ).catch((err) => console.log(err)
-    )
-  }
-
+      includeBase64: true,
+    })
+      .then((response) => {
+        // console.log(response);
+        setInput((pre) => ({ ...pre, setmodel: false }));
+        setInput((pre) => ({
+          ...pre,
+          selectedImage: {
+            base64: response.data,
+            imageUri: response.path,
+          },
+        }));
+      })
+      .catch((err) => console.log(err));
+  };
 
   const opengallary = () => {
-    setState((pre) => ({ ...pre, setmodel: false }))
-      ImagePicker.openPicker({
-        width: hei(8),
-        height: hei(8),
-        cropping: true,
-        includeBase64:true
-      }).then((response) => {
-        console.log(response);
-        setState((pre) => ({...pre, selectedImage:{
-          base64:response.data,
-          imageUri:response.path
-        }}))
+    ImagePicker.openPicker({
+      width: hei(8),
+      height: hei(8),
+      cropping: true,
+      includeBase64: true,
+    })
+      .then((response) => {
+        // console.log(response);
+        setInput((pre) => ({ ...pre, setmodel: false }));
+        setInput((pre) => ({
+          ...pre,
+          selectedImage: {
+            base64: response.data,
+            imageUri: response.path,
+          },
+        }));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const Addseller = async (
+    OrganizerLoginId,
+    Password,
+    Name,
+    Number,
+    Email,
+    Photos
+  ) => {
+    setfieldvalidation(true);
+
+    if (validate) {
+      setlodading(true)
+      const response = await Addnewseller(
+        OrganizerLoginId,
+        Password,
+        Name,
+        Number,
+        Email,
+        Photos
+      );
+      console.log(response);
+      if(response){
+        setlodading(false);
+        setfieldvalidation(false)
+        setInput({
+          Name: "",
+          password: "",
+          Email: "",
+          Number: "",
+          selectedImage: {
+            base64: "",
+            imageUri: "",
+          },
+          setmodel: false,
+        })
       }
-      ).catch((err) => console.log(err)
-      )
+    } else {
+      console.log("Please fill all the blank");
     }
+  };
 
-
+  if (Loading) return <ARLoader visible={Loading} />;
 
   return (
     <ARcontainer backgroundColor={Colors.backgroundcolor}>
@@ -102,51 +166,86 @@ const Createseller = () => {
         <View style={style.containerview}>
           <Uploadphoto
             oneditpress={() => console.log("")}
-            onpress={() => setState((pre) => ({ ...pre, setmodel: true }))}
-            Imagedata={state.selectedImage.imageUri}
+            onpress={() => setInput((pre) => ({ ...pre, setmodel: true }))}
+            Imagedata={Input.selectedImage.imageUri}
+            validate={Photo}
           />
           <View style={style.inputcontainerview}>
             <Inputdata
               txtchildren={"Name"}
               placeholder={"Enter Your Name"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
+              inputvalue={Input.Name}
+              onchange={(v) => setInput((pre) => ({ ...pre, Name: v }))}
+              errormessage={Namevalidation}
+              err={"Please enter your name"}
             />
 
             <Inputdata
               txtchildren={"Password"}
-              placeholder={"012"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
+              placeholder={"Enter Your Password"}
+              inputvalue={Input.password}
+              onchange={(v) => setInput((pre) => ({ ...pre, password: v }))}
+              errormessage={Passwordvalidation}
+              err={"Password must be between 4 to 8 characters."}
             />
 
             <Inputdata
               txtchildren={"Email ID"}
-              placeholder={"Acto123@.com"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
+              placeholder={"Enter Your Email Id"}
+              inputvalue={Input.Email}
+              onchange={(v) => setInput((pre) => ({ ...pre, Email: v }))}
+              errormessage={Emailvalidation}
+              err={"Please enter valid email address"}
             />
 
             <Inputdata
               txtchildren={"Mobile No"}
-              placeholder={"012345678"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
+              placeholder={"Enter Your Mobile Number"}
+              inputvalue={Input.Number}
+              onchange={(v) => setInput((pre) => ({ ...pre, Number: v }))}
+              keyboardType={"numeric"}
+              errormessage={Mobilevalidation}
+              err={"Please enter mobile number must be 10 digit"}
+              maxLength={10}
             />
           </View>
           <Scbutton
-            onsavepress={() => console.log("press")}
-            oncanclepress={() => console.log("pressd")}
+            onsavepress={() =>
+              Addseller(
+                AsyncValue.OrganizerLoginId,
+                Input.password,
+                Input.Name,
+                Input.Number,
+                Input.Email,
+                Input.selectedImage.base64
+              )
+            }
+            oncanclepress={() => {
+              setfieldvalidation(false)
+                  setInput({
+                    Name: "",
+                    password: "",
+                    Email: "",
+                    Number: "",
+                    selectedImage: {
+                      base64: "",
+                      imageUri: "",
+                    },
+                    setmodel: false,
+                  })
+            }}
           />
         </View>
         {/* </ScrollView> */}
       </KeyboardAwareScrollView>
       {/* </KeyboardAvoidingView> */}
       <Profilemodal
-        visible={state.setmodel}
-        close={() => setState((pre) => ({ ...pre, setmodel: false }))}
-        onRequestClose={() => setState((pre) => ({ ...pre, setmodel: false }))}
-        touchableWithoutFeedback={() => setState((pre) => ({ ...pre, setmodel: false }))}
+        visible={Input.setmodel}
+        close={() => setInput((pre) => ({ ...pre, setmodel: false }))}
+        onRequestClose={() => setInput((pre) => ({ ...pre, setmodel: false }))}
+        touchableWithoutFeedback={() =>
+          setInput((pre) => ({ ...pre, setmodel: false }))
+        }
         ongallerypress={opengallary}
         oncamerapress={openCamera}
       />

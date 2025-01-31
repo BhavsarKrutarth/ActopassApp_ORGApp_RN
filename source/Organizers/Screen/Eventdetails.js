@@ -228,7 +228,6 @@ export default Eventdetail;
 const style = StyleSheet.create({
   scrollstyle: {
     flexGrow: 1,
-    // backgroundColor: Colors.Placeholder,
   },
   imageview: {
     // backgroundColor:"red",

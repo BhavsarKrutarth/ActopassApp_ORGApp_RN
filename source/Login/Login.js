@@ -32,8 +32,7 @@ const Login = () => {
 
   const Idvalidation = Fieldvalidation && Validation.isID(Input.Id);
   const Otpvalidation = Fieldvalidation && Validation.isPINValid(Input.OTP);
-  const Passwordvalidation =
-    Fieldvalidation && Validation.isPasswordValid(Input.Password);
+  const Passwordvalidation = Fieldvalidation && Validation.isPasswordValid(Input.Password);
 
   const Login = async (Id, Password) => {
     setfieldvalidation(true);

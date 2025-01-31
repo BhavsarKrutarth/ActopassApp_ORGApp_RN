@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ARcontainer} from '../../common';
 import {ARheader} from '../../common';
-import {hei, wid, normalize, height} from '../../theme';
+import {hei, wid, normalize, height, isIos} from '../../theme';
 import {FontFamily, FontSize} from '../../theme';
 import {Colors} from '../../theme';
 import {ARbutton} from '../../common';
@@ -17,63 +17,24 @@ const Accountcreation = ({}) => {
 
   const tempdata = [
     {
-      id: 1,
+      Id: 1,
       name: 'Seller',
       detail: [
-        {
-          Code: 'SEL-0001',
-          Name: 'ABC',
-          Mobile: '1122334455',
-          Email: 'acto@gmail.com',
-          CratedBy: 'Actopass',
-        },
-        {
-          Code: 'SEL-0002',
-          Name: 'XYZ',
-          Mobile: '0123456789',
-          Email: 'Test@gmail.com',
-          CratedBy: 'Actopass',
-        },
+        
       ],
     },
     {
-      id: 2,
+      Id: 2,
       name: 'Box office',
       detail: [
-        {
-          Code: 'Box-0001',
-          Name: 'DEF',
-          Mobile: '1234567890',
-          Email: 'acto@gmail.com',
-          CratedBy: 'Actopass',
-        },
-        {
-          Code: 'Box-0002',
-          Name: 'GHI',
-          Mobile: '112233445566',
-          Email: 'Test@gmail.com',
-          CratedBy: 'Actopass',
-        },
+        
       ],
     },
     {
-      id: 3,
+      Id: 3,
       name: 'Scanner',
       detail: [
-        {
-          Code: 'Sca-0001',
-          Name: 'JKL',
-          Mobile: '8787878787',
-          Email: 'acto@gmail.com',
-          CratedBy: 'Actopass',
-        },
-        {
-          Code: 'Sca-0002',
-          Name: 'MNO',
-          Mobile: '9090909090',
-          Email: 'Test@gmail.com',
-          CratedBy: 'Actopass',
-        },
+       
       ],
     },
   ];
@@ -82,7 +43,7 @@ const Accountcreation = ({}) => {
   const [sellerdata, setsellerdata] = useState(tempdata[0].detail);
 
   const dataset = item => {
-    setbtn(item.id);
+    setbtn(item.Id);
     setsellerdata(item.detail);
   };
 
@@ -95,6 +56,12 @@ const Accountcreation = ({}) => {
       navigation.navigate(Navroute.Scannerdetail);
     }
   };
+
+    
+
+
+
+
 
   return (
     <ARcontainer>
@@ -114,7 +81,7 @@ const Accountcreation = ({}) => {
           <View style={style.btnview} key={index}>
             <ARbutton
               onpress={() => dataset(item)}
-              backgroundColor={btn === item.id ? Colors.button : Colors.White}
+              backgroundColor={btn === item.Id ? Colors.button : Colors.White}
               height={hei(4.5)}
               Touchstyle={{
                 borderRadius: normalize(9),
@@ -123,7 +90,7 @@ const Accountcreation = ({}) => {
               }}>
               <ARtext
                 children={item.name}
-                color={btn === item.id ? Colors.White : Colors.Placeholder}
+                color={btn === item.Id ? Colors.White : Colors.Placeholder}
                 size={FontSize.font14}
               />
             </ARbutton>
@@ -219,6 +186,20 @@ const Accountcreation = ({}) => {
           </View>
         ))}
       </ScrollView>
+      <View style={style.addbutton}>
+              <ARbutton
+                Touchstyle={{
+                  height: hei(6.5),
+                  width: hei(6.5),
+                  borderRadius: normalize(50),
+                  backgroundColor:""
+                }}
+                onpress={() => navigation.navigate(Navroute.Createseller)}
+              >
+                <ARimage source={Images.accountcreation} 
+                style={{}}/>
+              </ARbutton>
+            </View>
     </ARcontainer>
   );
 };
@@ -273,5 +254,14 @@ const style = StyleSheet.create({
   line: {
     borderWidth: 1,
     borderColor: Colors.bordercolor,
+  },
+  addbutton: {
+    // backgroundColor: "red",
+    height: hei(6.5),
+    width: hei(6.5),
+    borderRadius: normalize(50),
+    position: "absolute",
+    bottom: hei(isIos ? 9 : 11),
+    right: wid(4),
   },
 });

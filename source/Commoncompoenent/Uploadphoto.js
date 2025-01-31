@@ -8,10 +8,10 @@ import Images from '../Image/Images';
 import { FontFamily,FontSize } from '../theme';
 import {ARbutton} from '../common';
 
-const Uploadphoto = ({oneditpress,onpress,Imagedata}) => {
+const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate}) => {
   return (
     <View style={style.uploadview}>
-      <ARbutton Touchstyle={style.imageview} onpress={onpress}>
+      <ARbutton Touchstyle={style.imageview(validate)} onpress={onpress}>
         <ARimage source={Imagedata ? {uri:Imagedata} : Images.man} style={Imagedata ? '' : style.image} />
       </ARbutton>
       <View style={style.uploadtext}>
@@ -28,7 +28,8 @@ const Uploadphoto = ({oneditpress,onpress,Imagedata}) => {
           color={Colors.line}
         />
       </View>
-      <ARbutton
+      {editicontrue && (
+          <ARbutton
               Touchstyle={{
                 height: hei(2),
                 width: hei(2),
@@ -42,8 +43,8 @@ const Uploadphoto = ({oneditpress,onpress,Imagedata}) => {
                 source={Images.edit}
                 style={{height: hei(2), width: hei(2)}}
               />
-            </ARbutton>
-
+          </ARbutton>
+      )}
     </View>
   );
 };
@@ -55,15 +56,17 @@ const style = StyleSheet.create({
     // backgroundColor:'yellow',
     flexDirection: 'row',
   },
-  imageview: {
+  imageview: (validate) => ({
     backgroundColor: Colors.lightgrey,
     justifyContent: 'center',
     alignItems: 'center',
     height: hei(8),
     width: hei(8),
     borderRadius: normalize(50),
-    overflow:"hidden"
-  },
+    overflow:"hidden",
+    borderColor:validate ? 'red' : '',
+    borderWidth:validate ? normalize(1) : normalize(0)
+  }),
   image: {
     height: wid(10),
     width: wid(10),

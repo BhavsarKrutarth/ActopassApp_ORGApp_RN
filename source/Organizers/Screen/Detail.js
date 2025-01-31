@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
 import { ARheader } from "../../common";
-import { hei, wid, normalize } from "../../theme";
+import { hei, wid, normalize, isAndroid } from "../../theme";
 import { Colors } from "../../theme";
 import Images from "../../Image/Images";
 import { FontFamily, FontSize } from "../../theme";
@@ -116,6 +116,7 @@ const style = StyleSheet.create({
     flex: 1,
     // backgroundColor:Colors.Placeholder,
     alignItems: "center",
+    paddingBottom:wid(20)
   },
   eventview: {
     height: hei(25),

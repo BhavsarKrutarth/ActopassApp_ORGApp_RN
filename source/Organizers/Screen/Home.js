@@ -311,20 +311,7 @@ const Home = () => {
           </View>
         </View>
       </View>
-      <View style={styles.addbutton}>
-        <ARbutton
-          Touchstyle={{
-            height: hei(6.5),
-            width: hei(6.5),
-            borderRadius: normalize(50),
-            backgroundColor:""
-          }}
-          onpress={() => navigation.navigate(Navroute.Createseller)}
-        >
-          <ARimage source={Images.accountcreation} 
-          style={{}}/>
-        </ARbutton>
-      </View>
+      
     </ARcontainer>
   );
 };

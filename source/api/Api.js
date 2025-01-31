@@ -1,5 +1,8 @@
 import FetchMethod from "./FetchMethod";
 
+
+
+
 export const loginUser = async (Id, Password) => {
   try {
     const response = await FetchMethod.POST({
@@ -15,6 +18,35 @@ export const loginUser = async (Id, Password) => {
     throw error;
   }
 };
+
+export const Addnewseller = async (
+  OrganizerLoginId,
+  Password,
+  Name,
+  Number,
+  Email,
+  Photos) => {
+  try{
+      const response = await FetchMethod.POST({
+        EndPoint : "ORGApp/SelllerMasterAdd",
+        Params:{
+          SelllerLoginid:0,
+          OrganizerLoginId:OrganizerLoginId,
+          Password:Password,
+          Name:Name,
+          MobileNo:Number,
+          EmailId:Email,
+          PhotoPath:Photos
+        }
+      })
+      return response
+  }catch(error){
+    console.error("Add new seller error",error)
+    throw error;
+  }
+}
+
+
 
 export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
   try {
