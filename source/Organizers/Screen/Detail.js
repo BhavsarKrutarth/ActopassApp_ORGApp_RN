@@ -44,8 +44,8 @@ const Detail = () => {
     } 
   };
   
- console.log('hashdata',hasMore.TotalRecords);
- console.log(data.length);
+//  console.log('hashdata',hasMore.TotalRecords);
+//  console.log(data.length);
 //  console.log(data.EventMasterid);
  
  

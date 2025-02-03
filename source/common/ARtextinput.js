@@ -33,7 +33,8 @@ const ARtextinput = ({
   securetextentry,
   keyboardType,
   editable,
-  maxLength
+  maxLength,
+  color
 }) => {
   const Tistyle = {
     height: Tiheight ?? 30,
@@ -43,6 +44,7 @@ const ARtextinput = ({
     FontFamily: Tifontfamily ?? FontFamily.Regular,
     width:Tiwidth,
     // backgroundColor:'pink'
+    color: color ?? Colors.Black
   };
 
   const Tiprops = {

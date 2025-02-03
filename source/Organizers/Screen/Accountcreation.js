@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {ARcontainer} from '../../common';
+import {ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ARcontainer, ARLoader} from '../../common';
 import {ARheader} from '../../common';
 import {hei, wid, normalize, height, isIos} from '../../theme';
 import {FontFamily, FontSize} from '../../theme';
@@ -11,10 +11,13 @@ import {ARimage} from '../../common';
 import Images from '../../Image/Images';
 import {useNavigation} from '@react-navigation/native';
 import Navroute from '../navigation/Navroute';
+import { deleteseller, getallseller } from '../../api/Api';
+import { useSelector } from 'react-redux';
+import { Responsemodal } from '../../Commoncompoenent';
 
 const Accountcreation = ({}) => {
   const navigation = useNavigation();
-
+  
   const tempdata = [
     {
       Id: 1,
@@ -34,22 +37,35 @@ const Accountcreation = ({}) => {
       Id: 3,
       name: 'Scanner',
       detail: [
-       
+        
       ],
     },
   ];
-
+  
+  const {AsyncValue} = useSelector((state) => state.Auth)
+  const OrganizerLoginId = AsyncValue.OrganizerLoginId
   const [btn, setbtn] = useState(1);
-  const [sellerdata, setsellerdata] = useState(tempdata[0].detail);
+  const [Userid, Setuseid] = useState(0);
+  const [Deletemodal,Setdeletemodal] = useState(false)
+  const [Loading,SetLoading] = useState(false);
+  const [Alldata,Setalldata] = useState({})
+  const [Getdata,SetGetdata] = useState([])
+  const [Pageindex,Setpageindex] = useState(1)
+  const Pagecount = 4;
 
+  useEffect(() => {
+    getseller()
+  },[]);
+  
+  
   const dataset = item => {
     setbtn(item.Id);
-    setsellerdata(item.detail);
+    // setsellerdata(item);
   };
 
-  const typeWiseNavigatios = () => {
+  const typeWiseNavigatios = (item) => {
     if (btn === 1) {
-      navigation.navigate(Navroute.Sellerdetail);
+      navigation.navigate(Navroute.Sellerdetail,{data:item});
     } else if (btn === 2) {
       navigation.navigate(Navroute.Boxofficedatail);
     } else {
@@ -57,10 +73,64 @@ const Accountcreation = ({}) => {
     }
   };
 
-    
+  const getid = (item) => {
+    Setdeletemodal(true)
+    if(btn === 1){
+      Setuseid(item.SelllerLoginid)
+    }else if(btn === 2){
+
+    }else{
+
+    }
+  }
+
+const callfunction = () => {
+  if(btn === 1)
+  {
+    deletedata(Userid)
+  }else if(btn === 2){
+
+  }else{
+
+  }
+}
+  
+  const deletedata = async (id) => {
+    Setdeletemodal(false)
+    try{
+      const response = await deleteseller(id)
+      if(response){
+        console.log('deletesuccess');
+        // Setalldata('')
+        // SetGetdata([])
+        Setpageindex(1)
+        getseller()
+      }
+    }catch(error){
+      console.log('Fetch data error',error);
+    }
+  }
+
+  const getseller = async () => {
+    if(Loading) return;
+    SetLoading(true)
+    try{
+      const response = await getallseller(Pageindex,Pagecount,OrganizerLoginId)
+      if(response){
+        Setalldata(response)
+        SetGetdata((prevData) => ([...prevData, ...response.DIscountDetails]))
+        Setpageindex((pre) => pre + 1)
+        SetLoading(false)
+      }
+    }
+    catch(error){
+      console.log('fetch data error',error)
+      SetLoading(false)
+    }
+  }
 
 
-
+// if (Loading) return <ARLoader visible={Loading}/>
 
 
   return (
@@ -97,8 +167,12 @@ const Accountcreation = ({}) => {
           </View>
         ))}
       </View>
-      <ScrollView style={style.scrollstyle}>
-        {sellerdata.map((item, index) => (
+
+      <FlatList contentContainerStyle={style.scrollstyle}
+        data={Getdata}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item,index) => index.toString()}
+        renderItem={({item, index}) => (
           <View style={[style.mainview]} key={index}>
             <View key={index} style={[style.detailview]}>
               <View style={style.content}>
@@ -112,7 +186,7 @@ const Accountcreation = ({}) => {
                     />
                   </ARtext>
                 </View>
-
+                {/* <Image source={{uri:item.PHOTOPATH}} style={{height:hei(100),width:wid(100)}}/> */}
                 <View style={[style.codeview, {alignItems: 'flex-end'}]}>
                   <View style={style.imageview}>
                     <ARbutton
@@ -120,16 +194,17 @@ const Accountcreation = ({}) => {
                       width={hei(2)}
                       borderRadius={0}
                       backgroundColor={''}
-                      onpress={() => typeWiseNavigatios()}>
+                      onpress={() => typeWiseNavigatios(item)}>
                       <ARimage source={Images.edit} style={style.imagestyle} />
                     </ARbutton>
                     <View style={style.line}></View>
-
                     <ARbutton
                       height={hei(2)}
                       width={hei(2)}
                       borderRadius={0}
-                      backgroundColor={''}>
+                      backgroundColor={''}
+                      onpress={() => getid(item)}
+                      >
                       <ARimage
                         source={Images.delete}
                         style={style.imagestyle}
@@ -154,7 +229,7 @@ const Accountcreation = ({}) => {
                 <ARtext align={''} size={FontSize.font14}>
                   Mobile: {''}
                   <ARtext
-                    children={item.Mobile}
+                    children={item.MobileNo}
                     color={Colors.active}
                     size={FontSize.font14}
                   />
@@ -165,14 +240,14 @@ const Accountcreation = ({}) => {
                 <ARtext align={''} size={FontSize.font14}>
                   Email: {''}
                   <ARtext
-                    children={item.Email}
+                    children={item.EmailId}
                     color={Colors.active}
                     size={FontSize.font14}
                   />
                 </ARtext>
               </View>
 
-              <View style={style.viewmargin}>
+              {/* <View style={style.viewmargin}>
                 <ARtext align={''} size={FontSize.font14}>
                   Crated By:{' '}
                   <ARtext
@@ -181,11 +256,16 @@ const Accountcreation = ({}) => {
                     children={item.CratedBy}
                   />
                 </ARtext>
-              </View>
+              </View> */}
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+        onEndReached={() => {Alldata.TotalRecords != Getdata.length ? getseller() : null}}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={() => (
+         Loading ? <ActivityIndicator size={'large'} color={Colors.Placeholder}/> : null
+        )}
+/>
       <View style={style.addbutton}>
               <ARbutton
                 Touchstyle={{
@@ -200,6 +280,14 @@ const Accountcreation = ({}) => {
                 style={{}}/>
               </ARbutton>
             </View>
+            <Responsemodal 
+                visible={Deletemodal} 
+                Images={Images.delete} 
+                message={'Are you sure that you want to delete seller'}
+                Onok={() => callfunction()}
+                Oncancle={() => Setdeletemodal(false)}
+                button={true}
+            />
     </ARcontainer>
   );
 };
@@ -227,6 +315,8 @@ const style = StyleSheet.create({
   },
   scrollstyle: {
     marginTop: hei(1.5),
+    paddingBottom:wid(18),
+    // backgroundColor:"red"
   },
   mainview: {
     marginTop: hei(1),

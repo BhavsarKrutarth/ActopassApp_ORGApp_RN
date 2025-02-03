@@ -6,7 +6,7 @@ import { hei,normalize } from "../theme";
 import { FontFamily,FontSize } from "../theme";
 import {Colors} from "../theme";
 
-const Inputdata = ({txtchildren,inputvalue,onchange,placeholder,keyboardType,editable,errormessage,err,maxLength}) => {
+const Inputdata = ({txtchildren,inputvalue,onchange,placeholder,keyboardType,editable,errormessage,err,maxLength,color}) => {
     return (
         <View style={style.textinputview}>
               <ARtext children={txtchildren} align={''} size={FontSize.font14} />
@@ -27,6 +27,7 @@ const Inputdata = ({txtchildren,inputvalue,onchange,placeholder,keyboardType,edi
                 Tiflex={1}
                 editable={editable}
                 maxLength={maxLength}
+                color={color}
               />
               { errormessage && (
               <View>

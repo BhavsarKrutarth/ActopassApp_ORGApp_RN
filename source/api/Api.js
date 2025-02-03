@@ -1,8 +1,6 @@
 import FetchMethod from "./FetchMethod";
 
 
-
-
 export const loginUser = async (Id, Password) => {
   try {
     const response = await FetchMethod.POST({
@@ -72,3 +70,58 @@ export const EventDetails = async (EventMasterid) => {
     throw error;
   }
 };
+
+
+export const getallseller = async (PageIndex,PageCount,OrganizerLoginid) => {
+  try{
+    // console.log(PageIndex,PageCount,OrganizerLoginid);
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGApp/SelllerMasterList/${PageIndex}/${PageCount}/${OrganizerLoginid}`
+    });
+    return response;
+  }catch(error){
+    console.error("Sellerget error",error)
+    throw error;
+  }
+}
+
+
+export const editsellerdata = async (SelllerLoginid,OrganizerLoginId,Password,Name,MobileNo,EmailId,PhotoPath) => 
+  {
+    try{
+      const response = await FetchMethod.PUT({
+        EndPoint: 'ORGApp/SelllerMasterUpdate',
+        Params:
+        {
+          SelllerLoginid: SelllerLoginid,
+          OrganizerLoginId: OrganizerLoginId,
+          Password: Password,
+          Name: Name,
+          MobileNo: MobileNo,
+          EmailId: EmailId,
+          PhotoPath: PhotoPath
+        }
+      })
+      return response
+    }catch(error){
+      console.error("Editsellerdatav error",error)
+      throw error
+    }
+  }
+
+
+  export const deleteseller = async (id) =>
+  {
+    try{
+      const response = await FetchMethod.DELETE({
+        EndPoint:'ORGApp/Delete_SelllerMaster',
+        Params:{
+            SelllerLoginid: id
+          }
+      })
+      return response
+    }catch(error){
+      console.error("Delete data succesfully")
+      throw error
+    }
+  }

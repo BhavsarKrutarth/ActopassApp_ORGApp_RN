@@ -13,7 +13,7 @@ const isName = name => name.length < 3
 
 const isPasswordValid = Password => Password.length < 1;
 
-const issellerpassword = password => password.length < 4 || password.length > 8 
+const issellerpassword = password => password.length < 4;
 
 const isID = id => id.length < 1
 

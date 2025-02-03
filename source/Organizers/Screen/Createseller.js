@@ -11,7 +11,7 @@ import {
   wid,
 } from "../../theme";
 import Images from "../../Image/Images";
-import { Inputdata, Scbutton, Uploadphoto } from "../../Commoncompoenent";
+import { Inputdata, Responsemodal, Scbutton, Uploadphoto } from "../../Commoncompoenent";
 import { ARcontainer, ARheader, ARLoader } from "../../common";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ImagePicker from "react-native-image-crop-picker";
@@ -25,6 +25,7 @@ const Createseller = () => {
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Loading, setlodading] = useState(false);
+  const [Successmodal,setSuccessmodal] = useState(false)
   const [Input, setInput] = useState({
     Name: "",
     password: "",
@@ -33,14 +34,18 @@ const Createseller = () => {
     selectedImage: {
       base64: "",
       imageUri: "",
+      filename: "",
     },
     setmodel: false,
   });
 
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
-  const Emailvalidation = Fieldvalidation && Validation.isEmailValid(Input.Email);
-  const Mobilevalidation =  Fieldvalidation && Validation.isMobileNumberValid(Input.Number);
-  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.password);
+  const Emailvalidation =
+    Fieldvalidation && Validation.isEmailValid(Input.Email);
+  const Mobilevalidation =
+    Fieldvalidation && Validation.isMobileNumberValid(Input.Number);
+  const Passwordvalidation =
+    Fieldvalidation && Validation.issellerpassword(Input.password);
   const Photo = Fieldvalidation && Input.selectedImage.imageUri == "";
 
   const validate =
@@ -65,6 +70,7 @@ const Createseller = () => {
           selectedImage: {
             base64: response.data,
             imageUri: response.path,
+            filename: response.filename,
           },
         }));
       })
@@ -86,6 +92,7 @@ const Createseller = () => {
           selectedImage: {
             base64: response.data,
             imageUri: response.path,
+            filename: response.filename,
           },
         }));
       })
@@ -101,35 +108,41 @@ const Createseller = () => {
     Photos
   ) => {
     setfieldvalidation(true);
-
-    if (validate) {
-      setlodading(true)
-      const response = await Addnewseller(
-        OrganizerLoginId,
-        Password,
-        Name,
-        Number,
-        Email,
-        Photos
-      );
-      console.log(response);
-      if(response){
-        setlodading(false);
-        setfieldvalidation(false)
-        setInput({
-          Name: "",
-          password: "",
-          Email: "",
-          Number: "",
-          selectedImage: {
-            base64: "",
-            imageUri: "",
-          },
-          setmodel: false,
-        })
+    try {
+      if (validate) {
+        setlodading(true);
+        const response = await Addnewseller(
+          OrganizerLoginId,
+          Password,
+          Name,
+          Number,
+          Email,
+          Photos
+        );
+        console.log(response);
+        if (response) {
+          setlodading(false);
+          setfieldvalidation(false);
+          setInput({
+            Name: "",
+            password: "",
+            Email: "",
+            Number: "",
+            selectedImage: {
+              base64: "",
+              imageUri: "",
+            },
+            setmodel: false,
+          });
+          setSuccessmodal(true)
+        }
+      } else {
+        console.log("Please fill all the blank");
       }
-    } else {
-      console.log("Please fill all the blank");
+    } catch (error) {
+      setlodading(false);
+      setfieldvalidation(false);
+      console.log("Faield to fetch data", error);
     }
   };
 
@@ -169,6 +182,8 @@ const Createseller = () => {
             onpress={() => setInput((pre) => ({ ...pre, setmodel: true }))}
             Imagedata={Input.selectedImage.imageUri}
             validate={Photo}
+            Addphotoicon={true}
+            subtext={Input.selectedImage.filename}
           />
           <View style={style.inputcontainerview}>
             <Inputdata
@@ -177,7 +192,7 @@ const Createseller = () => {
               inputvalue={Input.Name}
               onchange={(v) => setInput((pre) => ({ ...pre, Name: v }))}
               errormessage={Namevalidation}
-              err={"Please enter your name"}
+              err={"Please enter your name must be 3 characters."}
             />
 
             <Inputdata
@@ -195,7 +210,7 @@ const Createseller = () => {
               inputvalue={Input.Email}
               onchange={(v) => setInput((pre) => ({ ...pre, Email: v }))}
               errormessage={Emailvalidation}
-              err={"Please enter valid email address"}
+              err={"Please enter valid email address."}
             />
 
             <Inputdata
@@ -205,7 +220,7 @@ const Createseller = () => {
               onchange={(v) => setInput((pre) => ({ ...pre, Number: v }))}
               keyboardType={"numeric"}
               errormessage={Mobilevalidation}
-              err={"Please enter mobile number must be 10 digit"}
+              err={"Please enter mobile number must be 10 digit."}
               maxLength={10}
             />
           </View>
@@ -221,18 +236,18 @@ const Createseller = () => {
               )
             }
             oncanclepress={() => {
-              setfieldvalidation(false)
-                  setInput({
-                    Name: "",
-                    password: "",
-                    Email: "",
-                    Number: "",
-                    selectedImage: {
-                      base64: "",
-                      imageUri: "",
-                    },
-                    setmodel: false,
-                  })
+              setfieldvalidation(false);
+              setInput({
+                Name: "",
+                password: "",
+                Email: "",
+                Number: "",
+                selectedImage: {
+                  base64: "",
+                  imageUri: "",
+                },
+                setmodel: false,
+              });
             }}
           />
         </View>
@@ -248,6 +263,12 @@ const Createseller = () => {
         }
         ongallerypress={opengallary}
         oncamerapress={openCamera}
+      />
+      <Responsemodal 
+      visible={Successmodal} 
+      onpress={() => setSuccessmodal(false)} 
+      message={'Create Seller Successfully'} 
+      Images={Images.clock}
       />
     </ARcontainer>
   );
