@@ -55,17 +55,6 @@ const Eventdetail = ({route}) => {
           />
         </View>
         <View style={style.contentview}>
-          {/* <View style={style.showtexts}>
-            <View style={style.showcontent}>
-              <ARtext
-                children={"COMADY SHOWS"}
-                align={""}
-                size={FontSize.font13}
-                color={Colors.Placeholder}
-              />
-            </View>
-          </View> */}
-
           <View style={style.eventview}>
             <ARtext
               children={data.EventName}

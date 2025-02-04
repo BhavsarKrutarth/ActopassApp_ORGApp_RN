@@ -49,7 +49,7 @@ export default Scbutton;
 
 const style = StyleSheet.create({
     buttonview: {
-        backgroundColor: 'green',
+        // backgroundColor: 'green',
         marginVertical: hei(2),
         flexDirection: 'row',
         justifyContent: 'space-between',

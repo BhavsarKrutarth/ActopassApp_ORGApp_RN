@@ -20,8 +20,9 @@ import { Validation } from "../../utils";
 import { useSelector } from "react-redux";
 import { Addnewseller } from "../../api/Api";
 
-const Createseller = () => {
+const Createseller = ({route}) => {
   const navigation = useNavigation();
+  const {Id} = route.params  
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Loading, setlodading] = useState(false);
@@ -63,7 +64,6 @@ const Createseller = () => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
         setInput((pre) => ({ ...pre, setmodel: false }));
         setInput((pre) => ({
           ...pre,
@@ -85,7 +85,6 @@ const Createseller = () => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
         setInput((pre) => ({ ...pre, setmodel: false }));
         setInput((pre) => ({
           ...pre,
@@ -105,7 +104,8 @@ const Createseller = () => {
     Name,
     Number,
     Email,
-    Photos
+    Photos,
+    Id
   ) => {
     setfieldvalidation(true);
     try {
@@ -117,7 +117,8 @@ const Createseller = () => {
           Name,
           Number,
           Email,
-          Photos
+          Photos,
+          Id
         );
         console.log(response);
         if (response) {
@@ -152,7 +153,7 @@ const Createseller = () => {
     <ARcontainer backgroundColor={Colors.backgroundcolor}>
       <ARheader
         lefttch={{ paddingLeft: wid(1) }}
-        texts={"Create Seller"}
+        texts={Id === 1 ? 'Create Seller' : Id === 2 ? 'Create Boxoffice' : 'Create Seller'}
         size={FontSize.font18}
         textcolor={Colors.Black}
         textfontfamily={FontFamily.SemiBold}
@@ -232,7 +233,8 @@ const Createseller = () => {
                 Input.Name,
                 Input.Number,
                 Input.Email,
-                Input.selectedImage.base64
+                Input.selectedImage.base64,
+                Id
               )
             }
             oncanclepress={() => {
@@ -251,9 +253,7 @@ const Createseller = () => {
             }}
           />
         </View>
-        {/* </ScrollView> */}
       </KeyboardAwareScrollView>
-      {/* </KeyboardAvoidingView> */}
       <Profilemodal
         visible={Input.setmodel}
         close={() => setInput((pre) => ({ ...pre, setmodel: false }))}
@@ -265,10 +265,11 @@ const Createseller = () => {
         oncamerapress={openCamera}
       />
       <Responsemodal 
-      visible={Successmodal} 
-      onpress={() => setSuccessmodal(false)} 
-      message={'Create Seller Successfully'} 
-      Images={Images.clock}
+        visible={Successmodal} 
+        onpress={() => setSuccessmodal(false)} 
+        message={`${Id === 1 ? 'Seller' : Id === 2 ? 'Boxoffice' : 'Scanner' } account has been created successfully.`} 
+        subtext={'!Oh Yeah'}
+        Images={Images.success}
       />
     </ARcontainer>
   );

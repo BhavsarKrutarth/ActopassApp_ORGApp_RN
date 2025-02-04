@@ -43,6 +43,11 @@ const Images = {
     otp:require('../Image/otp.png'),
     camera:require('../Image/CameraIcon.png'),
     gallary:require('../Image/gallary.png'),
+    success:require('../Image/success.png'),
+    editdata:require('../Image/editdata.png'),
+    deletedata:require('../Image/deletedata.png'),
+    sorry:require('../Image/sorry.png')
+
 }
 
 export default Images;

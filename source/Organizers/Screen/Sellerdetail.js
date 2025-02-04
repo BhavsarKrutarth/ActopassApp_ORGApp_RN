@@ -21,7 +21,6 @@ import {
   isIos,
 } from "../../theme";
 import Images from "../../Image/Images";
-import { ScrollView } from "react-native-gesture-handler";
 import {
   Eventdropdown,
   Inputdata,
@@ -35,8 +34,7 @@ import ImagePicker from "react-native-image-crop-picker";
 import { Validation } from "../../utils";
 import { editsellerdata } from "../../api/Api";
 
-const Sellerdetail = ({ route }) => {
-  // console.log(route.params.data);
+const Sellerdetail = ({route}) => {
   const navigation = useNavigation();
   const {
     Code,
@@ -48,7 +46,8 @@ const Sellerdetail = ({ route }) => {
     PHOTOPATH,
     Password,
     SelllerLoginid,
-  } = route.params.data;
+  } = route.params.data
+
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Loading, SetLoading] = useState(false);
@@ -67,8 +66,7 @@ const Sellerdetail = ({ route }) => {
   });
 
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
-  const Passwordvalidation =
-    Fieldvalidation && Validation.issellerpassword(Input.Password);
+  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.Password);
 
   const validate =
     !Validation.isName(Input.Name) &&

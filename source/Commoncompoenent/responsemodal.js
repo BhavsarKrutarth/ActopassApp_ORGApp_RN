@@ -23,7 +23,11 @@ const Responsemodal = ({
   message,
   button,
   Oncancle,
-  Onok
+  Onok,
+  subtext,
+  subcolor,
+  subfamily,
+  subsize
 }) => {
   return (
     <Modal
@@ -34,53 +38,90 @@ const Responsemodal = ({
     >
       <View style={style.modalContainer}>
         <View style={style.modalContent}>
-          <ARimage source={Images} style={{ height: hei(8), width: hei(8) }} />
-          <ARtext
-            children={message}
-            size={FontSize.font14}
-            fontFamily={FontFamily.SemiBold}
-          />
+          <View style={{
+            backgroundColor:'',
+            alignItems:"center",
+            rowGap:hei(2.5),
+            }}>
+            <ARimage source={Images} style={{ height: hei(12), width: hei(12) }} />
+          </View>
+          <View style={{marginTop:hei(3.5)}}>
+            <ARtext
+              children={subtext}
+              color={subcolor ?? Colors.btncolor}
+              size={subsize ?? FontSize.font26}
+              fontFamily={subfamily ?? FontFamily.SemiBold}
+              />
+          </View>
+          <View style={{
+            marginTop:hei(2),
+            paddingBottom:hei(4),
+            backgroundColor:'',
+            paddingHorizontal:wid(6),
+            borderBottomWidth:normalize(1.5),
+            borderBottomColor:Colors.inactive
+            }}>
+            <ARtext
+              children={message}
+              size={FontSize.font14}
+              fontFamily={FontFamily.SemiBold}
+              color={Colors.Text}
+              align={'center'}
+            />
+          </View>
           {button ? (
           <View style={{
             flexDirection:"row",
             justifyContent:"space-evenly",
-            // backgroundColor:"red",
-            width:wid(78)
+            // width:wid(78),
+            paddingVertical:hei(2)
             }}>
             <ARbutton
               Touchstyle={{
-                backgroundColor: Colors.btncolor,
+                backgroundColor: '#c1c1c1',
                 height: hei(5),
                 width: wid(30),
                 borderRadius: normalize(6),
               }}
               onpress={Oncancle}
             >
-              <ARtext children={"Cancle"} />
+              <ARtext 
+              children={"Cancle"} 
+              color={Colors.White}
+              fontFamily={FontFamily.SemiBold}
+              />
             </ARbutton>
             <ARbutton
               Touchstyle={{
-                backgroundColor: 'red',
+                backgroundColor: Colors.delete,
                 height: hei(5),
                 width: wid(30),
                 borderRadius: normalize(6),
               }}
               onpress={Onok}
             >
-              <ARtext children={"OK"} />
+              <ARtext 
+              children={"OK"} 
+              color={Colors.White}
+              fontFamily={FontFamily.SemiBold}
+              />
             </ARbutton>
           </View>
           ) : (
             <ARbutton
               Touchstyle={{
-                backgroundColor: Colors.btncolor,
-                height: hei(5),
-                width: wid(73),
+                backgroundColor:'',
+                height: hei(7),
                 borderRadius: normalize(6),
+                borderTopwidth:normalize(1)
               }}
               onpress={onpress}
             >
-              <ARtext children={"OK"} />
+              <ARtext 
+              children={"OK"} 
+              color={Colors.Placeholder}
+              size={FontSize.font14}
+              />
             </ARbutton>
           )}
         </View>
@@ -95,16 +136,13 @@ const style = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
+    alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingHorizontal: wid(6),
   },
   modalContent: {
     backgroundColor: Colors.White,
-    paddingHorizontal: wid(5),
-    borderRadius: normalize(8),
-    paddingVertical: hei(2),
-    alignItems: "center",
-    rowGap: hei(2),
+    borderRadius: normalize(15),
+    paddingTop: hei(6),
+    width:wid(72),
   },
 });

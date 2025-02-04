@@ -11,13 +11,13 @@ import {ARimage} from '../../common';
 import Images from '../../Image/Images';
 import {useNavigation} from '@react-navigation/native';
 import Navroute from '../navigation/Navroute';
-import { deleteseller, getallseller } from '../../api/Api';
-import { useSelector } from 'react-redux';
-import { Responsemodal } from '../../Commoncompoenent';
+import Sellerlist from './sellerlist';
+import Boxofficelist from './boxofficelist';
+
 
 const Accountcreation = ({}) => {
   const navigation = useNavigation();
-  
+  const [btn, setbtn] = useState(1);
   const tempdata = [
     {
       Id: 1,
@@ -42,93 +42,10 @@ const Accountcreation = ({}) => {
     },
   ];
   
-  const {AsyncValue} = useSelector((state) => state.Auth)
-  const OrganizerLoginId = AsyncValue.OrganizerLoginId
-  const [btn, setbtn] = useState(1);
-  const [Userid, Setuseid] = useState(0);
-  const [Deletemodal,Setdeletemodal] = useState(false)
-  const [Loading,SetLoading] = useState(false);
-  const [Alldata,Setalldata] = useState({})
-  const [Getdata,SetGetdata] = useState([])
-  const [Pageindex,Setpageindex] = useState(1)
-  const Pagecount = 4;
-
-  useEffect(() => {
-    getseller()
-  },[]);
-  
-  
   const dataset = item => {
     setbtn(item.Id);
     // setsellerdata(item);
   };
-
-  const typeWiseNavigatios = (item) => {
-    if (btn === 1) {
-      navigation.navigate(Navroute.Sellerdetail,{data:item});
-    } else if (btn === 2) {
-      navigation.navigate(Navroute.Boxofficedatail);
-    } else {
-      navigation.navigate(Navroute.Scannerdetail);
-    }
-  };
-
-  const getid = (item) => {
-    Setdeletemodal(true)
-    if(btn === 1){
-      Setuseid(item.SelllerLoginid)
-    }else if(btn === 2){
-
-    }else{
-
-    }
-  }
-
-const callfunction = () => {
-  if(btn === 1)
-  {
-    deletedata(Userid)
-  }else if(btn === 2){
-
-  }else{
-
-  }
-}
-  
-  const deletedata = async (id) => {
-    Setdeletemodal(false)
-    try{
-      const response = await deleteseller(id)
-      if(response){
-        console.log('deletesuccess');
-        // Setalldata('')
-        // SetGetdata([])
-        Setpageindex(1)
-        getseller()
-      }
-    }catch(error){
-      console.log('Fetch data error',error);
-    }
-  }
-
-  const getseller = async () => {
-    if(Loading) return;
-    SetLoading(true)
-    try{
-      const response = await getallseller(Pageindex,Pagecount,OrganizerLoginId)
-      if(response){
-        Setalldata(response)
-        SetGetdata((prevData) => ([...prevData, ...response.DIscountDetails]))
-        Setpageindex((pre) => pre + 1)
-        SetLoading(false)
-      }
-    }
-    catch(error){
-      console.log('fetch data error',error)
-      SetLoading(false)
-    }
-  }
-
 
 // if (Loading) return <ARLoader visible={Loading}/>
 
@@ -167,105 +84,9 @@ const callfunction = () => {
           </View>
         ))}
       </View>
-
-      <FlatList contentContainerStyle={style.scrollstyle}
-        data={Getdata}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item,index) => index.toString()}
-        renderItem={({item, index}) => (
-          <View style={[style.mainview]} key={index}>
-            <View key={index} style={[style.detailview]}>
-              <View style={style.content}>
-                <View style={style.codeview}>
-                  <ARtext align={''} size={FontSize.font14}>
-                    Code: {''}
-                    <ARtext
-                      children={item.Code}
-                      color={Colors.active}
-                      size={FontSize.font14}
-                    />
-                  </ARtext>
-                </View>
-                {/* <Image source={{uri:item.PHOTOPATH}} style={{height:hei(100),width:wid(100)}}/> */}
-                <View style={[style.codeview, {alignItems: 'flex-end'}]}>
-                  <View style={style.imageview}>
-                    <ARbutton
-                      height={hei(2)}
-                      width={hei(2)}
-                      borderRadius={0}
-                      backgroundColor={''}
-                      onpress={() => typeWiseNavigatios(item)}>
-                      <ARimage source={Images.edit} style={style.imagestyle} />
-                    </ARbutton>
-                    <View style={style.line}></View>
-                    <ARbutton
-                      height={hei(2)}
-                      width={hei(2)}
-                      borderRadius={0}
-                      backgroundColor={''}
-                      onpress={() => getid(item)}
-                      >
-                      <ARimage
-                        source={Images.delete}
-                        style={style.imagestyle}
-                      />
-                    </ARbutton>
-                  </View>
-                </View>
-              </View>
-
-              <View style={style.viewmargin}>
-                <ARtext align={''} size={FontSize.font14}>
-                  Name: {''}
-                  <ARtext
-                    children={item.Name}
-                    color={Colors.active}
-                    size={FontSize.font14}
-                  />
-                </ARtext>
-              </View>
-
-              <View style={style.viewmargin}>
-                <ARtext align={''} size={FontSize.font14}>
-                  Mobile: {''}
-                  <ARtext
-                    children={item.MobileNo}
-                    color={Colors.active}
-                    size={FontSize.font14}
-                  />
-                </ARtext>
-              </View>
-
-              <View style={style.viewmargin}>
-                <ARtext align={''} size={FontSize.font14}>
-                  Email: {''}
-                  <ARtext
-                    children={item.EmailId}
-                    color={Colors.active}
-                    size={FontSize.font14}
-                  />
-                </ARtext>
-              </View>
-
-              {/* <View style={style.viewmargin}>
-                <ARtext align={''} size={FontSize.font14}>
-                  Crated By:{' '}
-                  <ARtext
-                    color={Colors.active}
-                    size={FontSize.font14}
-                    children={item.CratedBy}
-                  />
-                </ARtext>
-              </View> */}
-            </View>
-          </View>
-        )}
-        onEndReached={() => {Alldata.TotalRecords != Getdata.length ? getseller() : null}}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() => (
-         Loading ? <ActivityIndicator size={'large'} color={Colors.Placeholder}/> : null
-        )}
-/>
+      
+        {btn === 1 ? <Sellerlist /> : btn === 2 ? <Boxofficelist/> : ''}
+     
       <View style={style.addbutton}>
               <ARbutton
                 Touchstyle={{
@@ -274,20 +95,13 @@ const callfunction = () => {
                   borderRadius: normalize(50),
                   backgroundColor:""
                 }}
-                onpress={() => navigation.navigate(Navroute.Createseller)}
+                onpress={() => navigation.navigate(Navroute.Createseller,{Id:btn})}
               >
                 <ARimage source={Images.accountcreation} 
                 style={{}}/>
               </ARbutton>
-            </View>
-            <Responsemodal 
-                visible={Deletemodal} 
-                Images={Images.delete} 
-                message={'Are you sure that you want to delete seller'}
-                Onok={() => callfunction()}
-                Oncancle={() => Setdeletemodal(false)}
-                button={true}
-            />
+      </View>
+            
     </ARcontainer>
   );
 };

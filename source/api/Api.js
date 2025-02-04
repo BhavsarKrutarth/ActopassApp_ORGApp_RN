@@ -23,12 +23,13 @@ export const Addnewseller = async (
   Name,
   Number,
   Email,
-  Photos) => {
+  Photos,
+  Id) => {
   try{
       const response = await FetchMethod.POST({
-        EndPoint : "ORGApp/SelllerMasterAdd",
+        EndPoint : Id === 1 ? "ORGApp/SelllerMasterAdd" : Id === 2 ? 'ORGApp_BoxOffice/BoxofficeUser_LoginAdd' : '',
         Params:{
-          SelllerLoginid:0,
+          ...(Id === 1 ? {SelllerLoginid:0} : Id === 2 ? {BoxofficeUserId:0} : {}),
           OrganizerLoginId:OrganizerLoginId,
           Password:Password,
           Name:Name,
@@ -38,38 +39,36 @@ export const Addnewseller = async (
         }
       })
       return response
-  }catch(error){
-    console.error("Add new seller error",error)
-    throw error;
+    }catch(error){
+      console.error(Id === 1 ? "Add new seller error" : Id === 2 ? 'Add new boxoffice error' : '',error)
+      throw error;
+    }
   }
-}
-
-
-
-export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
-  try {
-    const response = await FetchMethod.GET({
-      EndPoint: `ORGApp/OrganizerEventList/${PageIndex}/${PageCount}/${OrganizerLoginid}`,
-      // NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    console.error("Details API Error:", error);
-    throw error;
-  }
-};
-
-export const EventDetails = async (EventMasterid) => {
-  try {
-    const response = await FetchMethod.GET({
-      EndPoint: `HomeScreen/get_eventmasterbyid/${EventMasterid}`,
-    });
-    return response;
-  } catch (error) {
-    console.log("Login API Error:", error);
-    throw error;
-  }
-};
+  
+  export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
+    try {
+      const response = await FetchMethod.GET({
+        EndPoint: `ORGApp/OrganizerEventList/${PageIndex}/${PageCount}/${OrganizerLoginid}`,
+        // NeedToken: true,
+      });
+      return response;
+    } catch (error) {
+      console.error("Details API Error:", error);
+      throw error;
+    }
+  };
+  
+  export const EventDetails = async (EventMasterid) => {
+    try {
+      const response = await FetchMethod.GET({
+        EndPoint: `HomeScreen/get_eventmasterbyid/${EventMasterid}`,
+      });
+      return response;
+    } catch (error) {
+      console.log("Login API Error:", error);
+      throw error;
+    }
+  };
 
 
 export const getallseller = async (PageIndex,PageCount,OrganizerLoginid) => {
@@ -125,3 +124,42 @@ export const editsellerdata = async (SelllerLoginid,OrganizerLoginId,Password,Na
       throw error
     }
   }
+
+
+  export const getboxoffice = async (PageIndex,PageCount,OrganizerLoginId) => {
+    try{
+        const response = await FetchMethod.GET({
+          EndPoint:`ORGApp_BoxOffice/BoxOfficeUserList/${PageIndex}/${PageCount}/${OrganizerLoginId}`,
+        })
+        return response
+    }catch(error){
+      console.error('Getboxoffice Boxoffice error',error);
+      throw error
+    }
+  } 
+
+
+  export const editboxdata = async (BoxofficeUserId,OrganizerLoginId,Password,Name,MobileNo,EmailId,PhotoPath) => 
+    {
+      try{
+        const response = await FetchMethod.PUT({
+          EndPoint: 'ORGApp_BoxOffice/BoxofficeUser_Update',
+          Params:
+          {
+            BoxofficeUserId: BoxofficeUserId,
+            OrganizerLoginId: OrganizerLoginId,
+            Password: Password,
+            Name: Name,
+            MobileNo: MobileNo,
+            EmailId:EmailId,
+            PhotoPath: PhotoPath
+          }
+        })
+        return response
+      }catch(error){
+        console.error("editboxoffice error",error)
+        throw error
+      }
+    }
+
+  
