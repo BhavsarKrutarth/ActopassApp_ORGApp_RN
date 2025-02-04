@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Image,
   StyleSheet,
@@ -6,13 +6,13 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import Images from '../Image/Images';
-import {hei, normalize, wid} from '../theme/Responsive';
-import Colors from '../theme/Color';
-import {height} from '../../sources/Theme';
-import {FontFamily, FontSize} from '../theme/Fonts';
-import ARimage from './ARimage';
+} from "react-native";
+import Images from "../Image/Images";
+import { hei, normalize, wid } from "../theme/Responsive";
+import Colors from "../theme/Color";
+import { height } from "../../sources/Theme";
+import { FontFamily, FontSize } from "../theme/Fonts";
+import ARimage from "./ARimage";
 
 const ARtextinput = ({
   Lefticon,
@@ -31,6 +31,8 @@ const ARtextinput = ({
   value,
   onchangetext,
   securetextentry,
+  editable,
+  onInputPress,
 }) => {
   const Tistyle = {
     height: Tiheight ?? 30,
@@ -38,12 +40,12 @@ const ARtextinput = ({
     flex: Tiflex ?? 1,
     fontSize: Tifontsize ?? FontSize.font16,
     FontFamily: Tifontfamily ?? FontFamily.Regular,
-    width:Tiwidth,
+    width: Tiwidth,
     // backgroundColor:'pink'
   };
 
   const Tiprops = {
-    placeholder: Tiplaceholder ?? '',
+    placeholder: Tiplaceholder ?? "",
     placeholderTextColor: Tiplacrholdertextcolor ?? Colors.Placeholder,
   };
 
@@ -57,6 +59,8 @@ const ARtextinput = ({
         value={value}
         onChangeText={onchangetext}
         secureTextEntry={securetextentry}
+        editable={editable}
+        onPress={onInputPress}
       />
       {Righticon ? (
         <TouchableOpacity onPress={onPress}>
@@ -71,8 +75,8 @@ export default ARtextinput;
 
 const style = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderColor: Colors.bordercolor,
     paddingHorizontal: wid(1.7),
