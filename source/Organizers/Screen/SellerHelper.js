@@ -85,7 +85,6 @@ export const updateTicketQty = async (
   SelllerMasterDetailsid,
   eventId,
   TicketTypeid,
-  Balance,
   SellerTicketQty,
   setError
 ) => {

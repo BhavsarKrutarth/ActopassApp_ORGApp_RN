@@ -152,12 +152,86 @@ export const TicketQtyUpdate = async (
 
 export const TicketQtyDelete = async (SelllerMasterDetailsid) => {
   try {
-    console.log(SelllerMasterDetailsid);
-
     const response = await FetchMethod.DELETE({
       EndPoint: `ORGApp/Selllermasterdetails_Delete`,
       Params: {
         SelllerMasterDetailsid: SelllerMasterDetailsid,
+      },
+      NeedToken: true,
+    });
+    return response;
+  } catch (error) {
+    console.log("TicketQty API Error:", error);
+    throw error;
+  }
+};
+
+export const GetDiscount_Box = async (BoxofficeUserId, EventMasterid) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGApp_BoxOffice/GetBoxofficediscount_ListById/${BoxofficeUserId}/${EventMasterid}`,
+      NeedToken: true,
+    });
+    return response;
+  } catch (error) {
+    console.log("box office API Error:", error);
+    throw error;
+  }
+};
+
+export const AddDiscount_Box = async (eventId, data, setError) => {
+  try {
+    const response = await FetchMethod.POST({
+      EndPoint: `ORGApp_BoxOffice/Add_Boxofficediscount`,
+      Params: {
+        BoxOfficeDiscountid: data.BoxOfficeDiscountid,
+        ToAmount: data.ToAmount,
+        FromAmount: data.FromAmount,
+        DiscountAmount: data.DiscountAmount,
+        eventId: eventId,
+        BoxofficeUserId: data.BoxofficeUserId,
+      },
+      NeedToken: true,
+    });
+    if (response.ResponseCode === 0) {
+      setError("");
+    } else if (response.ResponseCode === -1) {
+      setError(response.ResponseMessage);
+    }
+  } catch (error) {
+    setError("An error occurred while processing the request.");
+    throw error;
+  }
+};
+
+export const UpdateDiscount_Box = async (data) => {
+  try {
+    console.log("data", data);
+    const response = await FetchMethod.PUT({
+      EndPoint: `ORGApp_BoxOffice/UpdateBoxofficediscount`,
+      Params: {
+        BoxOfficeDiscountid: data.BoxOfficeDiscountid,
+        ToAmount: data.ToAmount,
+        FromAmount: data.FromAmount,
+        DiscountAmount: data.DiscountAmount,
+        BoxofficeUserId: data.BoxofficeUserId,
+      },
+      NeedToken: true,
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log("TicketQty API Error:", error);
+    throw error;
+  }
+};
+
+export const DeleteDiscount_Box = async (BoxOfficeDiscountid) => {
+  try {
+    const response = await FetchMethod.DELETE({
+      EndPoint: `ORGApp_BoxOffice/DeleteBoxofficediscount`,
+      Params: {
+        BoxOfficeDiscountid: BoxOfficeDiscountid,
       },
       NeedToken: true,
     });

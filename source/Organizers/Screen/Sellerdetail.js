@@ -26,14 +26,6 @@ import {
 } from "../../Commoncompoenent";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {
-  TicketBalance,
-  TicketData,
-  TicketQtyAdd,
-  TicketQtyDelete,
-  TicketQtyUpdate,
-  TicketType,
-} from "../../api/Api";
 import { Dropdown } from "react-native-element-dropdown";
 import {
   addTicketQty,

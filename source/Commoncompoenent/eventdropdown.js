@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { hei, wid, normalize } from "../theme";
 import { Colors } from "../theme";
 import { FontFamily, FontSize } from "../theme";
-import { ARbutton, ARimage, ARstyle, ARtext } from "../common";
+import { ARimage, ARtext } from "../common";
 import { Dropdown } from "react-native-element-dropdown";
 import { useSelector } from "react-redux";
 import { EventList } from "../api/Api";
@@ -23,8 +18,6 @@ const Eventdropdown = ({ eventpress, onSelectEvent, onPressAdd }) => {
   const fetchData = async () => {
     try {
       const response = await EventList(AsyncValue.OrganizerLoginId);
-      console.log(response);
-
       setData(
         response?.map((item) => ({
           label: item.EventName,
