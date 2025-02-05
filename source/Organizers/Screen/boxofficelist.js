@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ARbutton, ARcontainer, ARimage, ARtext } from '../../common'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { getboxoffice } from '../../api/Api'
+import { deleteboxoffice, getboxoffice } from '../../api/Api'
 import { FontFamily, FontSize, hei, normalize, wid,Colors } from '../../theme'
 import Navroute from '../navigation/Navroute'
 import { Responsemodal } from '../../Commoncompoenent'
@@ -11,7 +11,7 @@ import Images from '../../Image/Images'
 
 const Boxofficelist = () => {
   const navigation = useNavigation()
-  const [Alldata,Setalldata] = useState(false)
+  const [Hasmore,Sethasmore] = useState(false)
   const [Getdata,SetGetdata] = useState([])
   const {AsyncValue} = useSelector((state) => state.Auth)
   const OrganizerLoginId = AsyncValue.OrganizerLoginId
@@ -31,14 +31,32 @@ const Boxofficelist = () => {
 };
 
   const getid = (item) => {
+    console.log(item);
+    
     Setdeletemodal(true)
-    Setuseid(item.SelllerLoginid)
+    Setuseid(item.BoxofficeUserId)
   }
 
   const callfunction = () => {
     deletedata(Userid)
   }
 
+ const deletedata = async (id) => {
+        Setdeletemodal(false)
+        try{
+          const response = await deleteboxoffice(id)
+          if(response.ResponseCode === "-1"){
+            SetResponse(response.ResponseMessage)
+            Setdeletemodal(true)
+            console.log('Respone',response.ResponseMessage)
+          }else{
+            SetGetdata((pre) => pre.filter((data) => data.BoxofficeUserId != id))
+            console.log('deletesuccess');
+          }
+        }catch(error){
+          console.log('Fetch data error',error);
+        }
+      }
 
   const getseller = async () => {
       if(Loading) return
@@ -50,12 +68,13 @@ const Boxofficelist = () => {
           SetGetdata((prevData) => ([...prevData, ...response.DIscountDetails]))
           Setpageindex((pre) => pre + 1)
           SetLoading(false)
-          Setalldata(true)
+          Sethasmore(true)
         }else{
           SetLoading(false)
         }
       }catch(error){
         console.log('Fetch data error',error);
+        Sethasmore(false)
         SetLoading(false)
       }
   }
@@ -65,8 +84,8 @@ const Boxofficelist = () => {
     Setdeletemodal(false)
 }
 
-// console.log('Conditional',Alldata.TotalRecords !== Getdata.length);
-// console.log(Alldata.TotalRecords);
+// console.log('Conditional',Hasmore.TotalRecords !== Getdata.length);
+// console.log(Hasmore.TotalRecords);
 // console.log(Getdata.length);
 
 
@@ -153,8 +172,8 @@ const Boxofficelist = () => {
             </View>
           </View>
         )}
-        onEndReached={() => {Alldata ?  getseller() : null}}
-        onEndReachedThreshold={500}
+        onEndReached={() => {Hasmore ?  getseller() : null}}
+        onEndReachedThreshold={0.5}
         ListFooterComponent={() => (
          Loading ? <ActivityIndicator size={'large'} color={Colors.Placeholder}/> : null
         )}
@@ -164,7 +183,7 @@ const Boxofficelist = () => {
         visible={Deletemodal} 
         Images={Response ? Images.sorry : Images.deletedata} 
         message={Response ? Response : 'Are you sure that you want to delete seller ?'}
-        subtext={Response ? '' : 'Are You Sure?'}
+        subtext={Response ? 'Sorry!' : 'Are You Sure?'}
         subcolor={Colors.Placeholder}
         subfamily={FontFamily.Regular}
         subsize={FontSize.font20}

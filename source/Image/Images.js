@@ -46,7 +46,7 @@ const Images = {
     success:require('../Image/success.png'),
     editdata:require('../Image/editdata.png'),
     deletedata:require('../Image/deletedata.png'),
-    sorry:require('../Image/sorry.png')
+    sorry:require('../Image/sorrys.png')
 
 }
 

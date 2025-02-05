@@ -67,6 +67,7 @@ const Boxofficedetail = ({ route }) => {
   });
 
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
+  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.Password);
 
   const validate =
     !Validation.isName(Input.Name) &&
@@ -220,6 +221,16 @@ const Boxofficedetail = ({ route }) => {
               editable={false}
               color={Colors.Placeholder}
               // onchange={(v) => console.log(v)}
+            />
+            <Inputdata
+                txtchildren={"Password"}
+                placeholder={"125896325"}
+                inputvalue={Input.Password}
+                onchange={(v) => SetInput((pre) => ({ ...pre, Password: v }))}
+                editable={Inputdisable}
+                color={Inputdisable ? Colors.Black : Colors.Placeholder}
+                errormessage={Passwordvalidation}
+                err={"Password must be between 4 to 8 characters."}
             />
             <Inputdata
               txtchildren={"Mobile No"}

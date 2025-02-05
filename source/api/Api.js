@@ -1,6 +1,8 @@
 import FetchMethod from "./FetchMethod";
 
 
+// =========== Login ==============
+
 export const loginUser = async (Id, Password) => {
   try {
     const response = await FetchMethod.POST({
@@ -16,6 +18,10 @@ export const loginUser = async (Id, Password) => {
     throw error;
   }
 };
+
+
+// =========== Add Seller,Boxoffice,Scanner =============
+
 
 export const Addnewseller = async (
   OrganizerLoginId,
@@ -45,6 +51,8 @@ export const Addnewseller = async (
     }
   }
   
+ // ============ Eventlist get, and detail =============
+
   export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
     try {
       const response = await FetchMethod.GET({
@@ -69,6 +77,9 @@ export const Addnewseller = async (
       throw error;
     }
   };
+
+
+// =========== Seller get, Edit, delete ==============
 
 
 export const getallseller = async (PageIndex,PageCount,OrganizerLoginid) => {
@@ -125,7 +136,8 @@ export const editsellerdata = async (SelllerLoginid,OrganizerLoginId,Password,Na
     }
   }
 
-
+// =========== BoxOffice get, Edit, delete ==============
+  
   export const getboxoffice = async (PageIndex,PageCount,OrganizerLoginId) => {
     try{
         const response = await FetchMethod.GET({
@@ -162,4 +174,19 @@ export const editsellerdata = async (SelllerLoginid,OrganizerLoginId,Password,Na
       }
     }
 
+
+    export const deleteboxoffice = async (Id) => {
+      try{
+        const response = await FetchMethod.DELETE({
+          EndPoint:'ORGApp_BoxOffice/Delete_BoxofficeUser',
+          Params:{
+            BoxofficeUserId:Id
+          }
+        })
+        return response;
+      }catch(error){
+        console.error("dleteboxofficeerror", error);
+        throw error
+      }
+    }
   

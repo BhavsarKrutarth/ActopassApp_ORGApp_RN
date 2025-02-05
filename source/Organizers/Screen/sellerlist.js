@@ -11,7 +11,7 @@ import Images from '../../Image/Images'
 
 const Sellerlist = () => {
     const navigation = useNavigation()
-    const [Alldata,Setalldata] = useState({})
+    const [Hasmore,Sethasmore] = useState(false)
     const [Getdata,SetGetdata] = useState([])
     const {AsyncValue} = useSelector((state) => state.Auth)
     const OrganizerLoginId = AsyncValue.OrganizerLoginId
@@ -20,7 +20,7 @@ const Sellerlist = () => {
     const [Loading,SetLoading] = useState(false);
     const [Response,SetResponse] = useState('')
     const [Pageindex,Setpageindex] = useState(1)
-    const Pagecount = 4;
+    const Pagecount = 10;
 
 
     useEffect(() => {
@@ -50,13 +50,10 @@ const Sellerlist = () => {
             Setdeletemodal(true)
             console.log('Respone',response.ResponseMessage)
           }else{
-            Setalldata((pre) => ({...pre, TotalRecords:pre.TotalRecords - 1}))
             SetGetdata((pre) => pre.filter((data) => data.SelllerLoginid != id))
-            console.log(id);
             console.log('deletesuccess');
           }
         }catch(error){
-
           console.log('Fetch data error',error);
         }
       }
@@ -67,15 +64,16 @@ const Sellerlist = () => {
         try{
           const response = await getallseller(Pageindex,Pagecount,OrganizerLoginId)      
           if(response){
-            Setalldata(response)
             SetGetdata((prevData) => ([...prevData, ...response.DIscountDetails]))
             Setpageindex((pre) => pre + 1)
             SetLoading(false)
+            Sethasmore(true)
           }
         }
         catch(error){
           console.log('fetch data error',error)
           SetLoading(false)
+          Sethasmore(false)
         }
       }
     
@@ -166,7 +164,7 @@ const Sellerlist = () => {
             </View>
           </View>
         )}
-        // onEndReached={() => {Alldata.TotalRecords != Getdata.length ? getseller() : null}}
+        onEndReached={() => { Hasmore ? getseller() : null}}
         onEndReachedThreshold={500}
         ListFooterComponent={() => (
          Loading ? <ActivityIndicator size={'large'} color={Colors.Placeholder}/> : null
