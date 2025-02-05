@@ -17,8 +17,12 @@
     "ios": "8.0"
   },
   "dependencies": {
-    "React-Core": [],
-    "React-RCTImage": [],
+    "React-Core": [
+
+    ],
+    "React-RCTImage": [
+
+    ],
     "TOCropViewController": [
       "~> 2.7.4"
     ]

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -7,10 +7,13 @@ import {
   Text,
   Platform,
   Dimensions,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import {
   ARbutton,
   ARcontainer,
+  ARimage,
   ARLoader,
   ARtext,
   ARtextinput,
@@ -50,7 +53,7 @@ const Boxofficedetail = ({ route }) => {
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
-  const [Successmodal, Setsuccesmodal] = useState(false)
+  const [Successmodal, Setsuccesmodal] = useState(false);
   const [Loading, SetLoading] = useState(false);
   const [Input, SetInput] = useState({
     Code: Code,
@@ -65,13 +68,27 @@ const Boxofficedetail = ({ route }) => {
     },
     setmodel: false,
   });
-
+  const [data, setData] = useState({});
+  const [isError, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [emptyView, setEmptyView] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState({
+    eventName: "",
+    eventId: "",
+  });
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
-  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.Password);
+  const Passwordvalidation =
+    Fieldvalidation && Validation.issellerpassword(Input.Password);
 
   const validate =
     !Validation.isName(Input.Name) &&
     !Validation.issellerpassword(Input.Password);
+
+  useEffect(() => {
+    if (selectedEvent.eventId) {
+      getDiscount_Box();
+    }
+  }, [selectedEvent.eventId]);
 
   const openCamera = () => {
     ImagePicker.openCamera({
@@ -142,7 +159,7 @@ const Boxofficedetail = ({ route }) => {
         if (response) {
           SetLoading(false);
           setfieldvalidation(false);
-          Setsuccesmodal(true)
+          Setsuccesmodal(true);
           console.log("Fetch response", response);
         }
       } else {
@@ -152,6 +169,62 @@ const Boxofficedetail = ({ route }) => {
       SetLoading(false);
       setfieldvalidation(false);
       console.log("Failed to fetch data", error);
+    }
+  };
+
+  const getDiscount_Box = async () => {
+    try {
+      setLoading(true);
+      const response = await GetDiscount_Box(11, selectedEvent.eventId);
+      if (response && response.length > 0) {
+        setData(response[0]);
+      } else {
+        setData({});
+      }
+    } catch (error) {
+      console.error("Error fetching discount box:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addDiscount_Box = async () => {
+    setLoading(true);
+    try {
+      const response = await AddDiscount_Box(data, selectedEvent.eventId);
+      console.log(response);
+    } catch (error) {
+      console.error("Error adding discount box:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateDiscount_Box = async () => {
+    setLoading(true);
+    try {
+      const response = await UpdateDiscount_Box(data);
+      if (response.ResponseCode === 0) {
+        setError("");
+      } else {
+        setError(response.ResponseMessage);
+      }
+    } catch (error) {
+      console.error("Error updating discount box:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteDiscount_Box = async () => {
+    setLoading(true);
+    try {
+      const response = await DeleteDiscount_Box(data.BoxOfficeDiscountid);
+      if (response) getDiscount_Box();
+    } catch (error) {
+      console.error("Error deleting discount box:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -223,14 +296,14 @@ const Boxofficedetail = ({ route }) => {
               // onchange={(v) => console.log(v)}
             />
             <Inputdata
-                txtchildren={"Password"}
-                placeholder={"125896325"}
-                inputvalue={Input.Password}
-                onchange={(v) => SetInput((pre) => ({ ...pre, Password: v }))}
-                editable={Inputdisable}
-                color={Inputdisable ? Colors.Black : Colors.Placeholder}
-                errormessage={Passwordvalidation}
-                err={"Password must be between 4 to 8 characters."}
+              txtchildren={"Password"}
+              placeholder={"125896325"}
+              inputvalue={Input.Password}
+              onchange={(v) => SetInput((pre) => ({ ...pre, Password: v }))}
+              editable={Inputdisable}
+              color={Inputdisable ? Colors.Black : Colors.Placeholder}
+              errormessage={Passwordvalidation}
+              err={"Password must be between 4 to 8 characters."}
             />
             <Inputdata
               txtchildren={"Mobile No"}
@@ -269,65 +342,24 @@ const Boxofficedetail = ({ route }) => {
               })
             }
           />
-          <Eventdropdown eventpress={() => console.log("press")} />
-          <View style={[style.inputcontainerview, { marginTop: hei(1) }]}>
-            <View style={style.eventview}>
-              <ARtextinput
-                Containerstyle={{
-                  borderWidth: 1,
-                  //   borderTopLeftRadius: normalize(6),
-                  backgroundColor: Colors.backgroundcolor,
-                  width: wid(70),
-                }}
-                Tipadding={7}
-                Tifontsize={FontSize.font12}
-                Tiheight={hei(4)}
-                Tiplaceholder={"Event Name"}
-                Tiplacrholdertextcolor={Colors.lable}
-                value={""}
-                onchangetext={(v) => console.log("s")}
-              />
-              <ARbutton
-                Touchstyle={{
-                  height: hei(4.1),
-                  backgroundColor: Colors.purple,
-                  width: wid(14),
-                  borderRadius: 0,
-                }}
-              >
-                <ARtext children={"Reset"} color={Colors.White} />
-              </ARbutton>
-            </View>
-            <Inputdata
-              txtchildren={"Name"}
-              placeholder={"Actoscript"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
-            />
-            <Inputdata
-              txtchildren={"To Amount"}
-              placeholder={"10"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
-            />
-            <Inputdata
-              txtchildren={"From Amount"}
-              placeholder={"100"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
-            />
-            <Inputdata
-              txtchildren={"Discount"}
-              placeholder={"10"}
-              inputvalue={""}
-              onchange={(v) => console.log(v)}
-            />
-          </View>
-          <Scbutton
-            onsavepress={() => console.log("press")}
-            oncanclepress={() => console.log("pressd")}
-            styles={{ marginVertical: hei(3) }}
+          <Eventdropdown
+            eventpress={() => console.log("Event Pressed")}
+            onSelectEvent={(eventName, eventId) =>
+              setSelectedEvent({ eventName, eventId })
+            }
+            onPressAdd={() => setEmptyView(true)}
           />
+          {isLoading ? (
+            <ARLoader visible={isLoading} />
+          ) : (
+            <DiscountInputView
+              data={data}
+              setData={setData}
+              addDiscount_Box={addDiscount_Box}
+              updateDiscount_Box={updateDiscount_Box}
+              deleteDiscount_Box={deleteDiscount_Box}
+            />
+          )}
         </View>
       </KeyboardAwareScrollView>
       <Profilemodal
@@ -340,13 +372,43 @@ const Boxofficedetail = ({ route }) => {
         ongallerypress={opengallary}
         oncamerapress={openCamera}
       />
-      <Responsemodal 
-        visible={Successmodal} 
-        onpress={() => Setsuccesmodal(false)} 
-        message={'Data has been edited successfully'} 
-        subtext={'!Oh Yeah'}
+      <Responsemodal
+        visible={Successmodal}
+        onpress={() => Setsuccesmodal(false)}
+        message={"Data has been edited successfully"}
+        subtext={"!Oh Yeah"}
         Images={Images.editdata}
       />
+      <Modal
+        visible={emptyView}
+        transparent
+        animationType="slide"
+        onDismiss={() => setEmptyView(false)}
+      >
+        <View style={style.modalContainer}>
+          <View style={style.modalContent}>
+            <TouchableOpacity onPress={() => setEmptyView(false)}>
+              <ARimage
+                source={Images.backarrow}
+                style={{
+                  width: wid(6),
+                  height: wid(6),
+                  marginBottom: hei(4),
+                }}
+              />
+            </TouchableOpacity>
+            <DiscountInputView
+              data={data}
+              setData={setData}
+              addDiscount_Box={addDiscount_Box}
+              updateDiscount_Box={updateDiscount_Box}
+              deleteDiscount_Box={deleteDiscount_Box}
+              emptyView={emptyView}
+              eventName={selectedEvent.eventName}
+            />
+          </View>
+        </View>
+      </Modal>
     </ARcontainer>
   );
 };
@@ -380,4 +442,73 @@ const style = StyleSheet.create({
     borderRadius: normalize(6),
     marginVertical: hei(1),
   },
+  modalContainer: {
+    backgroundColor: "rgba(0,0,0,0.5)",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: wid(100),
+    height: hei(100),
+    backgroundColor: "white",
+    paddingVertical: hei(8),
+    paddingHorizontal: wid(4),
+    borderRadius: 10,
+  },
 });
+
+const DiscountInputView = ({
+  data,
+  setData,
+  addDiscount_Box,
+  updateDiscount_Box,
+  deleteDiscount_Box,
+  emptyView,
+  eventName,
+}) => {
+  const handleInputChange = useCallback((field, value) => {
+    setData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  }, []);
+
+  return (
+    <>
+      <View style={[style.inputcontainerview, { marginTop: hei(1) }]}>
+        <Inputdata
+          txtchildren={"Name"}
+          placeholder={"Actoscript"}
+          inputvalue={emptyView ? eventName : data?.EventName || ""}
+          editable={false}
+        />
+        <Inputdata
+          txtchildren={"To Amount"}
+          placeholder={"10"}
+          inputvalue={data?.ToAmount?.toString() || ""}
+          onchange={(v) => handleInputChange("ToAmount", v)}
+        />
+        <Inputdata
+          txtchildren={"From Amount"}
+          placeholder={"100"}
+          inputvalue={data?.FromAmount?.toString() || ""}
+          onchange={(v) => handleInputChange("FromAmount", v)}
+        />
+        <Inputdata
+          txtchildren={"Discount"}
+          placeholder={"10"}
+          inputvalue={data?.DiscountAmount?.toString() || ""}
+          onchange={(v) => handleInputChange("DiscountAmount", v)}
+        />
+      </View>
+      <Scbutton
+        onsavepress={emptyView ? addDiscount_Box : updateDiscount_Box}
+        oncanclepress={emptyView ? "" : deleteDiscount_Box}
+        styles={{ marginVertical: hei(3), gap: wid(1) }}
+        backgroundColor={emptyView ? Colors.Black : Colors.Red}
+        children={emptyView ? "Cancel" : "Delete"}
+      />
+    </>
+  );
+};
