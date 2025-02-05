@@ -23,6 +23,7 @@ import {
   Uploadphoto,
 } from "../../Commoncompoenent";
 import {
+  AddDiscount_Box,
   DeleteDiscount_Box,
   GetDiscount_Box,
   UpdateDiscount_Box,
@@ -61,12 +62,24 @@ const Boxofficedetail = () => {
     }
   };
 
+  const addDiscount_Box = async () => {
+    setLoading(true);
+    try {
+      const response = await AddDiscount_Box(data, selectedEvent.eventId);
+      console.log(response);
+    } catch (error) {
+      console.error("Error adding discount box:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const updateDiscount_Box = async () => {
     setLoading(true);
     try {
       const response = await UpdateDiscount_Box(data);
       if (response.ResponseCode === 0) {
-        setError("0");
+        setError("");
       } else {
         setError(response.ResponseMessage);
       }
@@ -150,6 +163,7 @@ const Boxofficedetail = () => {
               <DiscountInputView
                 data={data}
                 setData={setData}
+                addDiscount_Box={addDiscount_Box}
                 updateDiscount_Box={updateDiscount_Box}
                 deleteDiscount_Box={deleteDiscount_Box}
               />
@@ -177,9 +191,11 @@ const Boxofficedetail = () => {
               <DiscountInputView
                 data={data}
                 setData={setData}
+                addDiscount_Box={addDiscount_Box}
                 updateDiscount_Box={updateDiscount_Box}
                 deleteDiscount_Box={deleteDiscount_Box}
                 emptyView={emptyView}
+                eventName={selectedEvent.eventName}
               />
             </View>
           </View>
@@ -224,9 +240,11 @@ const style = StyleSheet.create({
 const DiscountInputView = ({
   data,
   setData,
+  addDiscount_Box,
   updateDiscount_Box,
   deleteDiscount_Box,
   emptyView,
+  eventName,
 }) => {
   const handleInputChange = useCallback((field, value) => {
     setData((prevData) => ({
@@ -241,7 +259,7 @@ const DiscountInputView = ({
         <Inputdata
           txtchildren={"Name"}
           placeholder={"Actoscript"}
-          inputvalue={data?.EventName || ""}
+          inputvalue={emptyView ? eventName : data?.EventName || ""}
           editable={false}
         />
         <Inputdata
@@ -264,7 +282,7 @@ const DiscountInputView = ({
         />
       </View>
       <Scbutton
-        onsavepress={emptyView ?  : updateDiscount_Box}
+        onsavepress={emptyView ? addDiscount_Box : updateDiscount_Box}
         oncanclepress={emptyView ? "" : deleteDiscount_Box}
         styles={{ marginVertical: hei(3), gap: wid(1) }}
         backgroundColor={emptyView ? Colors.Black : Colors.Red}

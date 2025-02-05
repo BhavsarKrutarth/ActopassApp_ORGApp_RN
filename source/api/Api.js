@@ -179,7 +179,7 @@ export const GetDiscount_Box = async (BoxofficeUserId, EventMasterid) => {
   }
 };
 
-export const AddDiscount_Box = async (eventId, data, setError) => {
+export const AddDiscount_Box = async (data, eventId) => {
   try {
     const response = await FetchMethod.POST({
       EndPoint: `ORGApp_BoxOffice/Add_Boxofficediscount`,
@@ -188,18 +188,13 @@ export const AddDiscount_Box = async (eventId, data, setError) => {
         ToAmount: data.ToAmount,
         FromAmount: data.FromAmount,
         DiscountAmount: data.DiscountAmount,
-        eventId: eventId,
+        EventMasterid: eventId,
         BoxofficeUserId: data.BoxofficeUserId,
       },
       NeedToken: true,
     });
-    if (response.ResponseCode === 0) {
-      setError("");
-    } else if (response.ResponseCode === -1) {
-      setError(response.ResponseMessage);
-    }
+    console.log("response", response);
   } catch (error) {
-    setError("An error occurred while processing the request.");
     throw error;
   }
 };
