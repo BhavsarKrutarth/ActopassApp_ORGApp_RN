@@ -23,9 +23,10 @@ const Colors = {
     quantity:'#ebefff',
     Golden:'#F3E9BF',
     platnium:'#F2E1FF',
-    grid:'#BFCEF3'
+    grid:'#BFCEF3',
+    delete:'#F5225d'
   };
-  '#dcdcdc'
+  '#e9e9e9'
   
   export default Colors;
   

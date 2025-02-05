@@ -8,27 +8,28 @@ import Images from '../Image/Images';
 import { FontFamily,FontSize } from '../theme';
 import {ARbutton} from '../common';
 
-const Uploadphoto = ({oneditpress}) => {
+const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addphotoicon,maintext,subtext}) => {
   return (
     <View style={style.uploadview}>
-      <View style={style.imageview}>
-        <ARimage source={Images.man} style={style.image} />
-      </View>
+      <ARbutton Touchstyle={style.imageview(validate)} disable={true}>
+        <ARimage source={Imagedata ? {uri:Imagedata} : Images.man} style={Imagedata ? '' : style.image} />
+      </ARbutton>
       <View style={style.uploadtext}>
         <ARtext
-          children={'Upload Photo'}
+          children={maintext ?? 'Upload Photo'}
           align={''}
           fontFamily={FontFamily.Bold}
           size={FontSize.font14}
         />
         <ARtext
-          children={'Please add your photo'}
+          children={subtext ?? 'Please add your photo'}
           align={''}
           size={FontSize.font14}
           color={Colors.line}
         />
       </View>
-      <ARbutton
+      {editicontrue && (
+          <ARbutton
               Touchstyle={{
                 height: hei(2),
                 width: hei(2),
@@ -42,8 +43,27 @@ const Uploadphoto = ({oneditpress}) => {
                 source={Images.edit}
                 style={{height: hei(2), width: hei(2)}}
               />
-            </ARbutton>
+          </ARbutton>
+      )}
 
+      {Addphotoicon && (
+          <ARbutton
+              Touchstyle={{
+                height: hei(2),
+                width: hei(2),
+                position: 'absolute',
+                top: hei(5.3),
+                left: hei(6),
+              }}
+              backgroundColor={''}
+              onpress={onpress}>
+              <ARimage
+                source={Images.creation}
+                style={{height: hei(2), width: hei(2)}}
+                // tintColor={''}
+              />
+          </ARbutton>
+      )}
     </View>
   );
 };
@@ -55,17 +75,20 @@ const style = StyleSheet.create({
     // backgroundColor:'yellow',
     flexDirection: 'row',
   },
-  imageview: {
+  imageview: (validate) => ({
     backgroundColor: Colors.lightgrey,
     justifyContent: 'center',
     alignItems: 'center',
     height: hei(8),
-    width: wid(17),
+    width: hei(8),
     borderRadius: normalize(50),
-  },
+    overflow:"hidden",
+    borderColor:validate ? 'red' : '',
+    borderWidth:validate ? normalize(1) : normalize(0)
+  }),
   image: {
-    height: wid(10),
-    width: wid(10),
+    height: wid(8.5),
+    width: wid(8.5),
   },
   uploadtext: {
     // backgroundColor:Colors.purple,

@@ -1,48 +1,55 @@
-import React, { useEffect } from "react";
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
 import { ARheader } from "../../common";
-import { hei, wid, normalize, height, width } from "../../theme";
+import { hei, wid, normalize, isAndroid } from "../../theme";
 import { Colors } from "../../theme";
 import Images from "../../Image/Images";
 import { FontFamily, FontSize } from "../../theme";
 import { useNavigation } from "@react-navigation/native";
 import Navroute from "../navigation/Navroute";
 import { Details } from "../../api/Api";
+import { useSelector } from "react-redux";
 
 const Detail = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState([]);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState({});
+  const { AsyncValue } = useSelector((state) => state.Auth);
+  const pageCount = 6;
+  const organizerLoginId = AsyncValue.OrganizerLoginId;
 
-  const events = [
-    {
-      Id: "1",
-      Name: "Bar Crawl,Gurgaon",
-      city: "Grizly X Times Prime",
-      image: Images.comady,
-    },
-    {
-      Id: "2",
-      Name: "Bar Crawl,Gurgaon",
-      city: "Grizly X Times Prime",
-      image: Images.comady,
-    },
-  ];
-
+  
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await Details(PageIndex, PageCount, OrganizerLoginid);
-      console.log(response);
-    };
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const response = await Details(pageIndex, pageCount, organizerLoginId);
+      if (response) {
+        setHasMore(response)
+        setData((prevData) => [...prevData, ...response.DIscountDetails]);
+        setPageIndex((pre) => pre + 1);
+        setIsLoading(false)
+      } 
+    } 
+    catch (error) {
+      console.error("Failed to fetch data:", error);
+      setIsLoading(false);
+    } 
+  };
+  
+//  console.log('hashdata',hasMore.TotalRecords);
+//  console.log(data.length);
+//  console.log(data.EventMasterid);
+ 
+ 
+  
   return (
     <ARcontainer>
       <ARheader
@@ -59,27 +66,29 @@ const Detail = () => {
 
       <View style={style.container}>
         <FlatList
-          data={events}
+          data={data}
           numColumns={2}
           keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <ARbutton
               Touchstyle={style.eventview}
-              onpress={() => navigation.navigate(Navroute.Eventdetail)}
+              onpress={() => navigation.navigate(Navroute.Eventdetail,{Id:item.EventMasterid})}
             >
               <View style={style.imageview}>
-                <ARimage source={item.image} resizemode={"stretch"} />
+                <ARimage source={{uri : item.EventMainImage}} resizemode={"stretch"} />
               </View>
               <View style={style.texts}>
                 <ARtext
-                  children={item.Name}
+                  children={item.EventName}
+                  numline={1}
                   align={""}
                   size={FontSize.font13}
                   fontFamily={FontFamily.Bold}
                   color={Colors.Black}
                 />
                 <ARtext
-                  children={item.city}
+                  children={item.CityName}
                   align={""}
                   size={FontSize.font11}
                   fontFamily={FontFamily.Regular}
@@ -88,6 +97,12 @@ const Detail = () => {
               </View>
             </ARbutton>
           )}
+          onEndReached={() => {hasMore.TotalRecords != data.length ? fetchData()
+           : null}}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={() =>
+            (isLoading ? <ActivityIndicator size={'large'} color={Colors.Placeholder} /> : null)
+          }
         />
       </View>
     </ARcontainer>
@@ -101,6 +116,7 @@ const style = StyleSheet.create({
     flex: 1,
     // backgroundColor:Colors.Placeholder,
     alignItems: "center",
+    paddingBottom:wid(20)
   },
   eventview: {
     height: hei(25),

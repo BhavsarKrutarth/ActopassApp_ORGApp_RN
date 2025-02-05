@@ -1,26 +1,26 @@
 {
-  "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN",
-  "reactNativePath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native",
+  "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN",
+  "reactNativePath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native",
   "reactNativeVersion": "0.76",
   "dependencies": {
     "@react-native-async-storage/async-storage": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage",
       "name": "@react-native-async-storage/async-storage",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/RNCAsyncStorage.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/RNCAsyncStorage.podspec",
           "version": "2.1.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/android",
           "packageImportPath": "import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;",
           "packageInstance": "new AsyncStoragePackage()",
           "buildTypes": [],
           "libraryName": "rnasyncstorage",
           "componentDescriptors": [],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -29,22 +29,49 @@
       }
     },
     "@react-native-masked-view/masked-view": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view",
       "name": "@react-native-masked-view/masked-view",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/RNCMaskedView.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/RNCMaskedView.podspec",
           "version": "0.3.2",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/android",
           "packageImportPath": "import org.reactnative.maskedview.RNCMaskedViewPackage;",
           "packageInstance": "new RNCMaskedViewPackage()",
           "buildTypes": [],
           "componentDescriptors": [],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/@react-native-masked-view/masked-view/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "lottie-react-native": {
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native",
+      "name": "lottie-react-native",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/lottie-react-native.podspec",
+          "version": "7.2.2",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android",
+          "packageImportPath": "import com.airbnb.android.react.lottie.LottiePackage;",
+          "packageInstance": "new LottiePackage()",
+          "buildTypes": [],
+          "libraryName": "lottiereactnative",
+          "componentDescriptors": [
+            "LottieAnimationViewComponentDescriptor"
+          ],
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -53,17 +80,17 @@
       }
     },
     "react-native-gesture-handler": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler",
       "name": "react-native-gesture-handler",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/RNGestureHandler.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/RNGestureHandler.podspec",
           "version": "2.22.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android",
           "packageImportPath": "import com.swmansion.gesturehandler.RNGestureHandlerPackage;",
           "packageInstance": "new RNGestureHandlerPackage()",
           "buildTypes": [],
@@ -72,7 +99,31 @@
             "RNGestureHandlerButtonComponentDescriptor",
             "RNGestureHandlerRootViewComponentDescriptor"
           ],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "react-native-image-crop-picker": {
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker",
+      "name": "react-native-image-crop-picker",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/RNImageCropPicker.podspec",
+          "version": "0.42.0",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/android",
+          "packageImportPath": "import com.reactnative.ivpusic.imagepicker.PickerPackage;",
+          "packageInstance": "new PickerPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-image-crop-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -81,22 +132,22 @@
       }
     },
     "react-native-linear-gradient": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient",
       "name": "react-native-linear-gradient",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/BVLinearGradient.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/BVLinearGradient.podspec",
           "version": "2.8.3",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/android",
           "packageImportPath": "import com.BV.LinearGradient.LinearGradientPackage;",
           "packageInstance": "new LinearGradientPackage()",
           "buildTypes": [],
           "componentDescriptors": [],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -105,23 +156,23 @@
       }
     },
     "react-native-reanimated": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated",
       "name": "react-native-reanimated",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/RNReanimated.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/RNReanimated.podspec",
           "version": "3.16.7",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/android",
           "packageImportPath": "import com.swmansion.reanimated.ReanimatedPackage;",
           "packageInstance": "new ReanimatedPackage()",
           "buildTypes": [],
           "libraryName": "rnreanimated",
           "componentDescriptors": [],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-reanimated/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -129,18 +180,31 @@
         }
       }
     },
+    "react-native-render-html": {
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-render-html",
+      "name": "react-native-render-html",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-render-html/react-native-render-html.podspec",
+          "version": "6.3.4",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": null
+      }
+    },
     "react-native-safe-area-context": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context",
       "name": "react-native-safe-area-context",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/react-native-safe-area-context.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/react-native-safe-area-context.podspec",
           "version": "5.1.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/android",
           "packageImportPath": "import com.th3rdwave.safeareacontext.SafeAreaContextPackage;",
           "packageInstance": "new SafeAreaContextPackage()",
           "buildTypes": [],
@@ -149,7 +213,7 @@
             "RNCSafeAreaProviderComponentDescriptor",
             "RNCSafeAreaViewComponentDescriptor"
           ],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -158,17 +222,17 @@
       }
     },
     "react-native-screens": {
-      "root": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-screens",
+      "root": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-screens",
       "name": "react-native-screens",
       "platforms": {
         "ios": {
-          "podspecPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-screens/RNScreens.podspec",
+          "podspecPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-screens/RNScreens.podspec",
           "version": "4.5.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-screens/android",
+          "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-screens/android",
           "packageImportPath": "import com.swmansion.rnscreens.RNScreensPackage;",
           "packageInstance": "new RNScreensPackage()",
           "buildTypes": [],
@@ -186,7 +250,7 @@
             "RNSScreenContentWrapperComponentDescriptor",
             "RNSModalScreenComponentDescriptor"
           ],
-          "cmakeListsPath": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -352,7 +416,7 @@
         {
           "name": "--path <path>",
           "description": "Path to the React Native project root.",
-          "default": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN"
+          "default": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN"
         },
         {
           "name": "--platform <string>",
@@ -403,7 +467,8 @@
         },
         {
           "name": "--terminal <string>",
-          "description": "Launches the Metro Bundler in a new window using the specified terminal path."
+          "description": "Launches the Metro Bundler in a new window using the specified terminal path.",
+          "default": "Apple_Terminal"
         },
         {
           "name": "--binary-path <string>",
@@ -562,7 +627,8 @@
         },
         {
           "name": "--terminal <string>",
-          "description": "Launches the Metro Bundler in a new window using the specified terminal path."
+          "description": "Launches the Metro Bundler in a new window using the specified terminal path.",
+          "default": "Apple_Terminal"
         },
         {
           "name": "--appId <string>",
@@ -639,7 +705,7 @@
   ],
   "project": {
     "ios": {
-      "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/ios",
+      "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/ios",
       "xcodeProject": {
         "name": "ActopassReporting.xcworkspace",
         "path": ".",
@@ -649,7 +715,7 @@
       "assets": []
     },
     "android": {
-      "sourceDir": "/Users/hp/ReactNative/ActopassApp_ORGApp_RN/android",
+      "sourceDir": "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android",
       "appName": "app",
       "packageName": "com.actopassreporting",
       "applicationId": "com.actopassreporting",
