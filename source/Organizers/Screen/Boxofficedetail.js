@@ -35,7 +35,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Validation } from "../../utils";
 import ImagePicker from "react-native-image-crop-picker";
-import { editboxdata } from "../../api/Api";
+import { AddDiscount_Box, editboxdata, GetDiscount_Box, UpdateDiscount_Box } from "../../api/Api";
 
 const Boxofficedetail = ({ route }) => {
   const navigation = useNavigation();
@@ -50,6 +50,8 @@ const Boxofficedetail = ({ route }) => {
     Password,
     BoxofficeUserId,
   } = route.params.data;
+  console.log(BoxofficeUserId);
+  
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
@@ -156,7 +158,7 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
-        if (response) {
+        if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);

@@ -13,4 +13,4 @@ export {default as Setting} from "./Screen/Setting";
 export {default as Createseller} from "./Screen/Createseller";
 export {default as Sellerlist} from "./Screen/sellerlist";
 export {default as Boxofficelist} from "./Screen/boxofficelist";
-export {default as scannerlist} from "./Screen/scannerlist";
+export {default as Scannerlist} from "./Screen/scannerlist";

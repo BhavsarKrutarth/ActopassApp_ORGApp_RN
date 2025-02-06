@@ -37,7 +37,7 @@ const Profilemodal = ({ visible, onRequestClose, close, oncamerapress, ongallery
                   <TouchableOpacity onPress={close} hitSlop={20}>
                     <ARimage
                       style={{ width: wid(4), height: wid(4) }}
-                      source={Images.activehistory}
+                      source={Images.close}
                     />
                   </TouchableOpacity>
                   <ARtext style={styles.title}>Profile Photo</ARtext>

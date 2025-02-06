@@ -13,7 +13,6 @@ export const loginUser = async (Id, Password) => {
     });
     return response;
   } catch (error) {
-    console.log("Login API Error:", error);
     throw error;
   }
 };
@@ -36,13 +35,13 @@ export const Addnewseller = async (
           ? "ORGApp/SelllerMasterAdd"
           : Id === 2
           ? "ORGApp_BoxOffice/BoxofficeUser_LoginAdd"
-          : "",
+          : "ORGApp_ScannerAccount/ScannerAdd",
       Params: {
         ...(Id === 1
           ? { SelllerLoginid: 0 }
           : Id === 2
           ? { BoxofficeUserId: 0 }
-          : {}),
+          : {ScannerLoginId: 0}),
         OrganizerLoginId: OrganizerLoginId,
         Password: Password,
         Name: Name,
@@ -55,10 +54,10 @@ export const Addnewseller = async (
   } catch (error) {
     console.error(
       Id === 1
-        ? "Add new seller error"
+        ? "Add New seller data error"
         : Id === 2
-        ? "Add new boxoffice error"
-        : "",
+        ? "Add new boxoffice data error"
+        : "Add new scanner data error",
       error
     );
     throw error;
@@ -75,7 +74,6 @@ export const Details = async (PageIndex, PageCount, OrganizerLoginid) => {
     });
     return response;
   } catch (error) {
-    console.error("Details API Error:", error);
     throw error;
   }
 };
@@ -87,7 +85,6 @@ export const EventDetails = async (EventMasterid) => {
     });
     return response;
   } catch (error) {
-    console.log("Login API Error:", error);
     throw error;
   }
 };
@@ -102,7 +99,6 @@ export const getallseller = async (PageIndex, PageCount, OrganizerLoginid) => {
     });
     return response;
   } catch (error) {
-    console.error("Sellerget error", error);
     throw error;
   }
 };
@@ -131,7 +127,6 @@ export const editsellerdata = async (
     });
     return response;
   } catch (error) {
-    console.error("Editsellerdatav error", error);
     throw error;
   }
 };
@@ -146,7 +141,6 @@ export const deleteseller = async (id) => {
     });
     return response;
   } catch (error) {
-    console.error("Delete data succesfully");
     throw error;
   }
 };
@@ -160,7 +154,6 @@ export const getboxoffice = async (PageIndex, PageCount, OrganizerLoginId) => {
     });
     return response;
   } catch (error) {
-    console.error("Getboxoffice Boxoffice error", error);
     throw error;
   }
 };
@@ -189,7 +182,6 @@ export const editboxdata = async (
     });
     return response;
   } catch (error) {
-    console.error("editboxoffice error", error);
     throw error;
   }
 };
@@ -204,10 +196,59 @@ export const deleteboxoffice = async (Id) => {
     });
     return response;
   } catch (error) {
-    console.error("dleteboxofficeerror", error);
     throw error;
   }
 };
+
+// ============= scanner get,update,delete =================
+
+
+export const getscanner = async (PageIndex,PageCount,OrganizerLoginId) => {
+  try{
+      const response = await FetchMethod.GET({
+        EndPoint:`ORGApp_ScannerAccount/GetScannerList/${PageIndex}/${PageCount}/${OrganizerLoginId}`
+      })
+      return response
+  }catch(error){
+    throw error
+  }
+}
+
+
+export const editscnnerdata = async (ScannerLoginId,OrganizerLoginId,Password,Name,MobileNo,EmailId,PhotoPath) => {
+  try{
+    const response = await FetchMethod.PUT({
+      EndPoint:'ORGApp_ScannerAccount/Update_Scanner',
+      Params:{
+        ScannerLoginId: ScannerLoginId,
+        OrganizerLoginId: OrganizerLoginId,
+        Password: Password,
+        Name: Name,
+        MobileNo:MobileNo,
+        EmailId:EmailId,
+        PhotoPath: PhotoPath
+      }
+    })
+    return response
+  }catch(error){
+    throw error
+  }
+}
+
+export const deletescannerdata = async (Id) => {
+  try {
+    const response = await FetchMethod.DELETE({
+      EndPoint: "ORGApp_ScannerAccount/Delete_ScannerAccount",
+      Params: {
+        ScannerLoginId: Id,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export const EventList = async (OrganizerLoginId) => {
   try {
@@ -217,7 +258,6 @@ export const EventList = async (OrganizerLoginId) => {
     });
     return response;
   } catch (error) {
-    console.log("Login API Error:", error);
     throw error;
   }
 };
@@ -232,7 +272,6 @@ export const TicketType = async (EventMasterid) => {
     });
     return response;
   } catch (error) {
-    console.log("TicketType API Error:", error);
     throw error;
   }
 };
@@ -245,7 +284,6 @@ export const TicketData = async (SelllerLoginid, EventMasterid) => {
     });
     return response;
   } catch (error) {
-    console.log("TicketType API Error:", error);
     throw error;
   }
 };
@@ -262,7 +300,6 @@ export const TicketBalance = async (
     });
     return response;
   } catch (error) {
-    console.log("TicketType API Error:", error);
     throw error;
   }
 };
@@ -288,7 +325,6 @@ export const TicketQtyAdd = async (
     });
     return response;
   } catch (error) {
-    console.log("TicketQty API Error:", error);
     throw error;
   }
 };
@@ -314,7 +350,6 @@ export const TicketQtyUpdate = async (
     });
     return response;
   } catch (error) {
-    console.log("TicketQty API Error:", error);
     throw error;
   }
 };
@@ -330,7 +365,6 @@ export const TicketQtyDelete = async (SelllerMasterDetailsid) => {
     });
     return response;
   } catch (error) {
-    console.log("TicketQty API Error:", error);
     throw error;
   }
 };
@@ -343,7 +377,6 @@ export const GetDiscount_Box = async (BoxofficeUserId, EventMasterid) => {
     });
     return response;
   } catch (error) {
-    console.log("box office API Error:", error);
     throw error;
   }
 };
@@ -362,7 +395,6 @@ export const AddDiscount_Box = async (data, eventId) => {
       },
       NeedToken: true,
     });
-    console.log("response", response);
   } catch (error) {
     throw error;
   }
@@ -382,10 +414,8 @@ export const UpdateDiscount_Box = async (data) => {
       },
       NeedToken: true,
     });
-    console.log(response);
     return response;
   } catch (error) {
-    console.log("TicketQty API Error:", error);
     throw error;
   }
 };
@@ -401,7 +431,6 @@ export const DeleteDiscount_Box = async (BoxOfficeDiscountid) => {
     });
     return response;
   } catch (error) {
-    console.log("TicketQty API Error:", error);
     throw error;
   }
 };

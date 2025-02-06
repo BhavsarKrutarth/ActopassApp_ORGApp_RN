@@ -37,6 +37,31 @@ if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   file(TOUCH_NOCREATE "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/4e1n1l4d/x86/CMakeFiles/cmake.verify_globs")
 endif()
 
+# react_codegen_SRCS at /Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/*.cpp")
+set(OLD_GLOB
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/lottiereactnative-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/4e1n1l4d/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
+# react_codegen_SRCS at /Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
+file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/*.cpp")
+set(OLD_GLOB
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/ComponentDescriptors.cpp"
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/EventEmitters.cpp"
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/Props.cpp"
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/ShadowNodes.cpp"
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/States.cpp"
+  "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/lottie-react-native/android/build/generated/source/codegen/jni/react/renderer/components/lottiereactnative/lottiereactnativeJSI-generated.cpp"
+  )
+if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
+  message("-- GLOB mismatch!")
+  file(TOUCH_NOCREATE "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/android/app/.cxx/Debug/4e1n1l4d/x86/CMakeFiles/cmake.verify_globs")
+endif()
+
 # react_codegen_SRCS at /Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt:9 (file)
 file(GLOB NEW_GLOB LIST_DIRECTORIES true "/Users/linux/Desktop/liveproject/Actopassreporting/application/ActopassApp_ORGApp_RN/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/*.cpp")
 set(OLD_GLOB
