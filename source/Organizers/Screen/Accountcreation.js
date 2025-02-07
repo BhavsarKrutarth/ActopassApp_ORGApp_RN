@@ -28,7 +28,7 @@ const Accountcreation = ({}) => {
   const navigation = useNavigation();
   const [btn, setbtn] = useState(1);
   const [Addusermodal, Setaddusermodal] = useState(false);
-  const [Sellerrefresh, Setsellerrefresh] = useState(0);
+  const [Sellerrefresh, Setsellerrefresh] = useState(false);
   const tempdata = [
     {
       Id: 1,
@@ -52,8 +52,8 @@ const Accountcreation = ({}) => {
   };
 
   const refreshdata = (v) => {
-    Setsellerrefresh(v);
-    // Setaddusermodal(false);    
+    Setaddusermodal(false);
+    Setsellerrefresh(true);
   };
 
   return (
@@ -93,9 +93,15 @@ const Accountcreation = ({}) => {
       </View>
 
       {btn === 1 ? (
-        <Sellerlist NewRefreshdata={1} Ids={btn} />
+        <Sellerlist
+          Ids={btn}
+          // Sellerrefresh={Sellerrefresh}
+          // Sellernotrefresh={() => Setsellerrefresh(false)}
+        />
       ) : btn === 2 ? (
-        <Boxofficelist />
+        <Boxofficelist 
+        
+        />
       ) : (
         <Scannerlist />
       )}
@@ -104,7 +110,8 @@ const Accountcreation = ({}) => {
         visible={Addusermodal}
         Id={btn}
         closemodal={() => Setaddusermodal(false)}
-        saveclose={v => refreshdata(v)}
+        saveclose={(v) => refreshdata(v)}
+        onRequestClose={() => Setaddusermodal(false)}
       />
 
       <View style={style.addbutton}>

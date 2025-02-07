@@ -20,7 +20,7 @@ import { Validation } from "../../utils";
 import { useSelector } from "react-redux";
 import { Addnewseller } from "../../api/Api";
 
-const Createseller = ({Id,visible,onRequestClose,leftpress,closemodal,saveclose}) => {
+const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
   const navigation = useNavigation();
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
@@ -111,7 +111,9 @@ const Createseller = ({Id,visible,onRequestClose,leftpress,closemodal,saveclose}
   }
   const onsuccesspress = (Id) => {
       setSuccessmodal(false)
-      saveclose(Id)
+      setTimeout(() => {
+        saveclose(Id)
+      }, 1000);
   }
 
   const Addseller = async (
@@ -279,10 +281,11 @@ const Createseller = ({Id,visible,onRequestClose,leftpress,closemodal,saveclose}
       />
       <Responsemodal 
         visible={Successmodal} 
-        onpress={() => onsuccesspress(Id)} 
+        onpress={() =>{onsuccesspress(Id)}} 
         message={`${Id === 1 ? 'Seller' : Id === 2 ? 'Boxoffice' : 'Scanner' } account has been created successfully.`} 
         subtext={'!Oh Yeah'}
         Images={Images.success}
+        onrequestclose={() => setSuccessmodal(false)}
       />
       </ARcontainer>
     </Modal>

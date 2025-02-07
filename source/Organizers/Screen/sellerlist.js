@@ -7,7 +7,15 @@ import {
   Text,
   View,
 } from "react-native";
-import { Colors, FontFamily, FontSize, hei, normalize, wid } from "../../theme";
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  hei,
+  normalize,
+  wid,
+  isIos,
+} from "../../theme";
 import { deleteseller, getallseller } from "../../api/Api";
 import { ARcontainer, ARtext, ARbutton, ARimage } from "../../common";
 import { Responsemodal } from "../../Commoncompoenent";
@@ -17,8 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 import Images from "../../Image/Images";
 import LottieView from "lottie-react-native";
 
-const Sellerlist = ({NewRefreshdata,Ids}) => {
-  console.log(NewRefreshdata, Ids);
+const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   const navigation = useNavigation();
   const [Refresh, Setrefresh] = useState(false);
   const [Hasmore, Sethasmore] = useState(false);
@@ -33,18 +40,18 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
   const Pagecount = 4;
 
   useEffect(() => {
-    if(NewRefreshdata === Ids)
-    {
-      SetGetdata([])
-      getseller(1)      
-      console.log('match');
+    // if(Sellerrefresh)
+    // {
+    //   SetGetdata([])
+    //   getseller(1)
+    //   Sellernotrefresh()
+    //   console.log('Data match');
       
-    }else{
-      getseller();
-      console.log('Not Match');
-    }
-  }, [NewRefreshdata]);
-
+    // }else{
+    getseller();
+    console.log("Data not Match");
+    // }
+  }, []);
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Sellerdetail, { data: item });
@@ -58,7 +65,12 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
   const callfunction = () => {
     deletedata(Userid);
   };
-  
+
+  const getsellerdata = () => {
+    getseller()
+    console.log('Hashmore call',Pageindex);
+    
+  }
   const deletedata = async (id) => {
     Setdeletemodal(false);
     try {
@@ -76,18 +88,17 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
       console.log("Fetch data error", error);
     }
   };
-  
-  const getseller = async (value,Refresh) => {
+
+  const getseller = async (value, Refresh) => {
+    console.log('Api',Pageindex);
     if (Refresh) {
       SetLoading(false);
-    } 
-    else 
-    {
+    } else {
       SetLoading(true);
     }
     try {
       const response = await getallseller(
-        value || Pageindex,
+        value ? value : Pageindex,
         Pagecount,
         OrganizerLoginId
       );
@@ -102,7 +113,7 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
       console.log("fetch data error", error);
       SetLoading(false);
       Sethasmore(false);
-      Setrefresh(false)
+      Setrefresh(false);
     }
   };
 
@@ -110,7 +121,9 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
     SetResponse("");
     Setdeletemodal(false);
   };
-// console.log(Pageindex);
+  console.log('Out Page index',Pageindex);
+
+  
 
   return (
     <ARcontainer>
@@ -119,18 +132,20 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
         data={Getdata}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={Refresh}
+            onRefresh={() => {
+              SetGetdata([]);
+              Setrefresh(true);
+              getseller(1, true);
+            }}
+            tintColor={Colors.purple}
+            colors={[Colors.purple]}
+          />
+        }
         renderItem={({ item, index }) => (
           <View style={[style.mainview]} key={index}>
-            <RefreshControl
-              refreshing={Refresh}
-              onRefresh={() => {
-                SetGetdata([]); 
-                Setrefresh(true); 
-                getseller(1, true); 
-              }}
-              tintColor={Colors.purple}
-              colors={[Colors.purple]}
-            />
             <View key={index} style={[style.detailview]}>
               <View style={style.content}>
                 <View style={style.codeview}>
@@ -208,9 +223,11 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
           </View>
         )}
         onEndReached={() => {
-          Hasmore ? getseller() : null;
+          Hasmore ? getsellerdata()
+          
+          : null;
         }}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.1}
         ListFooterComponent={
           Loading ? (
             <View style={{ marginTop: 0, alignItems: "center" }}>
@@ -218,10 +235,13 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
                 source={Images.loader}
                 autoPlay
                 loop
-                style={{ height: hei(10), width: hei(10) }}
+                resizeMode="cover"
+                style={{ height: hei(6), width: hei(6) }}
               />
             </View>
-          ) : null
+          ) : (
+            <View />
+          )
         }
       />
       <Responsemodal
@@ -236,7 +256,7 @@ const Sellerlist = ({NewRefreshdata,Ids}) => {
         subsize={FontSize.font20}
         onpress={() => clearrsponse()}
         Onok={() => callfunction()}
-        Oncancle={() => Setdeletemodal(false)} 
+        Oncancle={() => Setdeletemodal(false)}
         button={Response ? false : true}
       />
     </ARcontainer>
@@ -266,7 +286,7 @@ const style = StyleSheet.create({
   },
   scrollstyle: {
     marginTop: hei(1.5),
-    paddingBottom: wid(18),
+    paddingBottom: wid(isIos ? 18 : 25),
     // backgroundColor:"red"
   },
   mainview: {

@@ -109,18 +109,20 @@ const Boxofficelist = () => {
         data={Getdata}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl
+            refreshing={Refresh}
+            onRefresh={() => {
+              SetGetdata([]);
+              Setrefresh(true);
+              getseller(1, true);
+            }}
+            tintColor={Colors.purple}
+            colors={[Colors.purple]}
+          />
+        }
         renderItem={({ item, index }) => (
           <View style={[style.mainview]} key={index}>
-            <RefreshControl
-              refreshing={Refresh}
-              onRefresh={() => {
-                SetGetdata([]);
-                Setrefresh(true);
-                getseller(1, true);
-              }}
-              tintColor={Colors.purple}
-              colors={[Colors.purple]}
-            />
             <View key={index} style={[style.detailview]}>
               <View style={style.content}>
                 <View style={style.codeview}>

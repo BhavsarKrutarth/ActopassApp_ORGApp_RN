@@ -35,9 +35,9 @@ const Loginroute = () => {
       />
       <Stack.Screen
         component={Boxofficeroute}
-        name={Loginnavroute.BoxofficeUser}
+        name={Loginnavroute.Seller}
       />
-      <Stack.Screen component={Sellerroute} name={Loginnavroute.Seller} />
+      <Stack.Screen component={Sellerroute} name={Loginnavroute.BoxofficeUser} />
     </Stack.Navigator>
   );
 };
