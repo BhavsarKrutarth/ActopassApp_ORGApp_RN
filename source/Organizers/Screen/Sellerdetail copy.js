@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ARcontainer, ARheader, ARimage, ARLoader, ARtext } from "../../common";
+import { StyleSheet, View } from "react-native";
+import { ARcontainer, ARheader, ARLoader, ARtext } from "../../common";
 import {
   Colors,
   FontSize,
@@ -24,7 +24,7 @@ import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ImagePicker from "react-native-image-crop-picker";
 import { Validation } from "../../utils";
-import { editsellerdata, TicketBalance, TicketType } from "../../api/Api";
+import { editsellerdata } from "../../api/Api";
 import {
   addTicketQty,
   deleteTicketQty,
@@ -66,15 +66,19 @@ const Sellerdetail = ({ route }) => {
     setmodel: false,
   });
   const [data, setData] = useState([]);
+  const [ticketData, setTicketData] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState({
     eventName: "",
     eventId: "",
   });
   const [ticketType, setTicketType] = useState([]);
+  const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
   const [IsError, setError] = useState("");
-  const [emptyView, setEmptyView] = useState(false);
+  const [showEmptyView, setShowEmptyView] = useState(false);
+  const [selectedTicketType, setSelectedTicketType] = useState(null);
+  const [balance, setBalance] = useState({});
+  const [ticketTypeID, setTicketTypeID] = useState("");
   const [Successmodal, Setsuccesmodal] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
   const scrollViewRef = useRef(null);
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
   const Passwordvalidation =
@@ -82,7 +86,14 @@ const Sellerdetail = ({ route }) => {
   const validate =
     !Validation.isName(Input.Name) &&
     !Validation.issellerpassword(Input.Password);
-  const [allTicketTypesExist, setAllTicketTypesExist] = useState(false);
+
+  useEffect(() => {
+    if (openDropdownIndex !== null && scrollViewRef.current) {
+      if (scrollViewRef.current.scrollTo) {
+        scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
+      }
+    }
+  }, [openDropdownIndex]);
 
   const openCamera = () => {
     ImagePicker.openCamera({
@@ -92,6 +103,7 @@ const Sellerdetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
+        // console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -165,51 +177,41 @@ const Sellerdetail = ({ route }) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (selectedEvent.eventId) {
-        await ticketDetails();
-        await fetchTicketData();
-        const checkAllTicketTypesExist = ticketType.every((ticket) =>
-          data.some((event) => event.TicketType === ticket.label)
-        );
-        setAllTicketTypesExist(checkAllTicketTypesExist);
-      }
-    };
-    fetchData();
+    if (data.length > 0) {
+      setTicketType([
+        { TicketType: data[0]?.label, TicketTypeid: data[0]?.value },
+      ]);
+    }
+  }, [data]);
+
+  useEffect(() => {}, [balance]);
+
+  useEffect(() => {
+    if (selectedEvent.eventId) {
+      ticketDetails();
+    }
   }, [selectedEvent.eventId]);
 
   const ticketDetails = async () => {
-    fetchTicketDetails(SelllerLoginid, selectedEvent.eventId, setData);
+    fetchTicketDetails(
+      SelllerLoginid,
+      selectedEvent.eventId,
+      setTicketData,
+      setData
+    );
   };
 
-  const fetchTicketData = async () => {
-    try {
-      const ticketTypesResponse = await TicketType(selectedEvent.eventId);
-      if (!ticketTypesResponse) return;
-      let ticketTypes = ticketTypesResponse.map((item) => ({
-        label: item.TicketType,
-        value: item.EventMaster_TicketTypeid,
-        Balance: 0,
-      }));
-      const updatedTicketTypes = await Promise.all(
-        ticketTypes.map(async (ticket) => {
-          try {
-            const balanceResponse = await TicketBalance(
-              SelllerLoginid,
-              selectedEvent.eventId,
-              ticket.value
-            );
-            return {
-              ...ticket,
-              Balance: balanceResponse?.Available_balance || 0,
-            };
-          } catch (error) {
-            return ticket;
-          }
-        })
-      );
-      setTicketType(updatedTicketTypes);
-    } catch (error) {}
+  const ticketTypes = async () => {
+    fetchTicketTypes(selectedEvent.eventId, setData);
+  };
+
+  const ticketBalance = async (TicketTypeid) => {
+    fetchTicketBalance(
+      SelllerLoginid,
+      selectedEvent.eventId,
+      TicketTypeid,
+      setBalance
+    );
   };
 
   const ticketQtyAdd = async (TicketTypeid, Balance, SellerTicketQty) => {
@@ -220,7 +222,6 @@ const Sellerdetail = ({ route }) => {
       Balance,
       SellerTicketQty,
       setError,
-      setEmptyView
     );
   };
 
@@ -249,7 +250,7 @@ const Sellerdetail = ({ route }) => {
     try {
       await deleteTicketQty(
         SelllerMasterDetailsid,
-        setData,
+        setTicketData,
         setError,
         IsError,
         index
@@ -381,29 +382,132 @@ const Sellerdetail = ({ route }) => {
               setSelectedEvent({ eventName, eventId });
             }}
             eventpress={() => {
-              setData([]);
+              setTicketData([]);
             }}
             onPressAdd={async () => {
               setError("");
-              setEmptyView(true);
-              allTicketTypesExist = { allTicketTypesExist };
+              await ticketTypes();
+              setShowEmptyView(true);
             }}
           />
 
-          <InputView
-            data={data}
-            setData={setData}
-            IsError={IsError}
-            ticketType={ticketType}
-            ticketQtyAdd={ticketQtyAdd}
-            ticketQtyupdate={ticketQtyupdate}
-            ticketQtyDelete={ticketQtyDelete}
-            emptyView={emptyView}
-            setEmptyView={setEmptyView}
-            eventName={selectedEvent.eventName}
-            setSelectedTicket={setSelectedTicket}
-            selectedTicket={selectedTicket}
-          />
+          {ticketData?.length > 0 &&
+            ticketType?.map(
+              (ticket, index) =>
+                ticketData[index]?.isVisible !== false && (
+                  <View key={index}>
+                    <View
+                      style={[style.inputcontainerview, { marginTop: hei(0) }]}
+                    >
+                      <Inputdata
+                        txtchildren={"Name"}
+                        placeholder={"Suvarn Navaratri"}
+                        inputvalue={ticketData[index]?.EventName || ""}
+                        onchange={(v) => console.log(v)}
+                        editable={false}
+                      />
+                      <View style={{ marginVertical: hei(1) }}>
+                        <ARtext children={"Ticket Type"} align={"left"} />
+                        <Dropdown
+                          style={style.dropdown}
+                          placeholder={ticket.TicketType}
+                          data={data}
+                          placeholderStyle={style.placeholderStyle}
+                          selectedTextStyle={[
+                            style.placeholderStyle,
+                            { color: Colors.Black },
+                          ]}
+                          inverted={false}
+                          labelField="label"
+                          valueField="value"
+                          value={ticket.TicketTypeid}
+                          isFocus={openDropdownIndex === index}
+                          onFocus={() => setOpenDropdownIndex(index)}
+                          onBlur={() => setOpenDropdownIndex(null)}
+                          onChange={(item) => {
+                            if (
+                              !ticketType.some(
+                                (t) => t.TicketTypeid === item.value
+                              )
+                            ) {
+                              setTicketType((prev) => [
+                                ...prev,
+                                {
+                                  TicketType: item.label,
+                                  TicketTypeid: item.value,
+                                },
+                              ]);
+                            }
+                            setOpenDropdownIndex(null);
+                          }}
+                        />
+                      </View>
+                      <Inputdata
+                        txtchildren={"Available Ticket"}
+                        placeholder={"0"}
+                        inputvalue={
+                          ticketData[index]?.Available_balance?.toString() ||
+                          "0"
+                        }
+                        onchange={(v) =>
+                          setTicketData((prev) => ({
+                            ...prev,
+                            Available_balance: v,
+                          }))
+                        }
+                        editable={false}
+                      />
+                      <Inputdata
+                        txtchildren={"Ticket Qty"}
+                        placeholder={"0"}
+                        inputvalue={ticketData[index]?.TicketQty || 0}
+                        onchange={(v) =>
+                          setTicketData((prev) => {
+                            const newTicketData = [...prev];
+                            newTicketData[index] = {
+                              ...newTicketData[index],
+                              TicketQty: v,
+                            };
+                            return newTicketData;
+                          })
+                        }
+                      />
+                    </View>
+                    {IsError[index] && (
+                      <ARtext
+                        style={{
+                          paddingVertical: hei(1),
+                          paddingHorizontal: wid(3),
+                        }}
+                        color={Colors.Red}
+                        size={FontSize.font11}
+                        fontFamily={FontFamily.Light}
+                      >
+                        {IsError}
+                      </ARtext>
+                    )}
+                    <Scbutton
+                      onsavepress={() =>
+                        ticketQtyupdate(
+                          index,
+                          ticketData[index]?.SelllerMasterDetailsid,
+                          ticket.TicketTypeid,
+                          ticketData[index]?.Available_balance,
+                          ticketData[index]?.TicketQty
+                        )
+                      }
+                      backgroundColor={Colors.Red}
+                      children={"Delete"}
+                      oncanclepress={() => {
+                        ticketQtyDelete(
+                          ticketData[index]?.SelllerMasterDetailsid,
+                          index
+                        );
+                      }}
+                    />
+                  </View>
+                )
+            )}
         </View>
         {/* </ScrollView> */}
       </KeyboardAwareScrollView>
@@ -418,41 +522,24 @@ const Sellerdetail = ({ route }) => {
         ongallerypress={opengallary}
         oncamerapress={openCamera}
       />
-      <Modal
-        visible={emptyView}
-        transparent
-        animationType="slide"
-        onRequestClose={() => {
-          setEmptyView(false);
-        }}
-      >
-        <View style={style.modalContainer}>
-          <View style={style.modalContent}>
-            <TouchableOpacity
-              onPress={() => {
-                setError([]);
-                setEmptyView(false);
-              }}
-            >
-              <ARimage source={Images.backarrow} style={style.icon} />
-            </TouchableOpacity>
-            <InputView
-              data={data}
-              setData={setData}
-              IsError={IsError}
-              ticketType={ticketType}
-              ticketQtyAdd={ticketQtyAdd}
-              ticketQtyupdate={ticketQtyupdate}
-              ticketQtyDelete={ticketQtyDelete}
-              emptyView={emptyView}
-              setEmptyView={setEmptyView}
-              eventName={selectedEvent.eventName}
-              setSelectedTicket={setSelectedTicket}
-              selectedTicket={selectedTicket}
-            />
-          </View>
-        </View>
-      </Modal>
+      <TicketModal
+        data={data}
+        showEmptyView={showEmptyView}
+        setShowEmptyView={setShowEmptyView}
+        selectedEvent={selectedEvent.eventName}
+        ticketData={ticketData}
+        setTicketData={setTicketData}
+        ticketType={ticketType}
+        setTicketType={setTicketType}
+        setTicketTypeID={setTicketTypeID}
+        ticketBalance={ticketBalance}
+        ticketQtyAdd={ticketQtyAdd}
+        IsError={IsError}
+        setError={setError}
+        selectedTicketType={selectedTicketType}
+        balance={balance?.Available_balance}
+        ticketTypeID={ticketTypeID}
+      />
       <Responsemodal
         visible={Successmodal}
         onpress={() => Setsuccesmodal(false)}
@@ -524,203 +611,20 @@ const style = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: "rgba(0,0,0,0.5)",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   modalContent: {
     width: wid(100),
     height: hei(100),
     backgroundColor: "white",
-    paddingVertical: hei(8),
-    paddingHorizontal: wid(4),
+    padding: 20,
     borderRadius: 10,
+    paddingTop: hei(10),
   },
-  icon: {
-    width: wid(6),
-    height: wid(6),
-    marginBottom: hei(4),
+  closeButton: {
+    backgroundColor: Colors.Black,
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: "center",
   },
 });
-
-const InputView = ({
-  data = [],
-  setData,
-  IsError,
-  ticketType,
-  ticketQtyAdd,
-  ticketQtyupdate,
-  ticketQtyDelete,
-  emptyView,
-  setEmptyView,
-  eventName,
-  setSelectedTicket,
-  selectedTicket,
-}) => {
-  const isSaveDisabled =
-    Array.isArray(data) &&
-    data.some((ticket) => !ticket?.TicketQty || ticket.TicketQty <= 0);
-
-  const unavailableTickets = ticketType.filter(
-    (ticket) =>
-      Array.isArray(data) &&
-      !data.some((item) => item.TicketType === ticket.label)
-  );
-  console.log(selectedTicket);
-
-  return (
-    <>
-      {!emptyView ? (
-        data?.map(
-          (item, index) =>
-            item?.isVisible !== false && (
-              <View key={index}>
-                <View style={[style.inputcontainerview, { marginTop: hei(0) }]}>
-                  <Inputdata
-                    txtchildren="Name"
-                    placeholder="Suvarn Navaratri"
-                    inputvalue={item?.EventName || ""}
-                    editable={false}
-                  />
-                  <Inputdata
-                    txtchildren="Ticket Type"
-                    placeholder="Suvarn Navaratri"
-                    inputvalue={item?.TicketType || ""}
-                    editable={false}
-                  />
-                  <Inputdata
-                    txtchildren="Available Ticket"
-                    placeholder="0"
-                    inputvalue={item?.Available_balance?.toString() || "0"}
-                    editable={false}
-                  />
-                  <Inputdata
-                    txtchildren="Ticket Qty"
-                    placeholder="0"
-                    inputvalue={item?.TicketQty}
-                    onchange={(v) =>
-                      setData((prev) => {
-                        const newTicketData = [...prev];
-                        newTicketData[index] = {
-                          ...newTicketData[index],
-                          TicketQty: v,
-                        };
-                        return newTicketData;
-                      })
-                    }
-                  />
-                </View>
-
-                {IsError[index] && (
-                  <ARtext
-                    style={{
-                      paddingVertical: hei(1),
-                      paddingHorizontal: wid(3),
-                    }}
-                    color={Colors.Red}
-                    size={FontSize.font11}
-                    fontFamily={FontFamily.Light}
-                  >
-                    {IsError[index]}
-                  </ARtext>
-                )}
-
-                <Scbutton
-                  onsavepress={() =>
-                    ticketQtyupdate(
-                      index,
-                      item?.SelllerMasterDetailsid,
-                      ticketType[index]?.value,
-                      item?.Available_balance,
-                      item?.TicketQty
-                    )
-                  }
-                  backgroundColor={Colors.Red}
-                  children="Delete"
-                  oncanclepress={() =>
-                    ticketQtyDelete(item?.SelllerMasterDetailsid, index)
-                  }
-                  disabled={isSaveDisabled}
-                />
-              </View>
-            )
-        )
-      ) : (
-        <View>
-          <View style={[style.inputcontainerview, { marginTop: hei(0) }]}>
-            <Inputdata
-              txtchildren="Name"
-              placeholder="Suvarn Navaratri"
-              inputvalue={eventName || ""}
-              editable={false}
-            />
-            <View style={{ marginVertical: hei(1) }}>
-              <ARtext children={"Ticket Type"} align={"left"} />
-              <Dropdown
-                style={style.dropdown}
-                data={unavailableTickets}
-                placeholderStyle={style.placeholderStyle}
-                selectedTextStyle={[
-                  style.placeholderStyle,
-                  { color: Colors.Black },
-                ]}
-                labelField="label"
-                valueField="value"
-                value={selectedTicket?.value}
-                onChange={(selectedItem) => {
-                  setSelectedTicket(selectedItem);
-                }}
-              />
-            </View>
-            <Inputdata
-              txtchildren="Available Ticket"
-              placeholder="0"
-              inputvalue={selectedTicket?.Balance.toString() || "0"}
-              editable={false}
-            />
-
-            <Inputdata
-              txtchildren="Ticket Qty"
-              placeholder="0"
-              inputvalue={data[0]?.TicketQty?.toString() || ""}
-              onchange={(v) =>
-                setData((prev) => {
-                  const newData = [...prev];
-                  newData[0] = { ...(newData[0] || {}), TicketQty: v };
-                  return newData;
-                })
-              }
-            />
-          </View>
-          {IsError.length > 0 && (
-            <ARtext
-              style={{
-                paddingVertical: hei(1),
-                paddingHorizontal: wid(3),
-              }}
-              color={Colors.Red}
-              size={FontSize.font11}
-              fontFamily={FontFamily.Light}
-            >
-              {IsError}
-            </ARtext>
-          )}
-          <Scbutton
-            onsavepress={() =>
-              ticketQtyAdd(
-                selectedTicket?.value,
-                selectedTicket?.Balance,
-                data[0]?.TicketQty
-              )
-            }
-            children="Cancel"
-            oncanclepress={() => {
-              setEmptyView(true);
-            }}
-            disabled={isSaveDisabled}
-          />
-        </View>
-      )}
-    </>
-  );
-};

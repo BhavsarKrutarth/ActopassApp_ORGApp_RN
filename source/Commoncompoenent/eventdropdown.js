@@ -10,7 +10,12 @@ import { useSelector } from "react-redux";
 import Images from "../Image/Images";
 import { EventList } from "../api/Api";
 
-const Eventdropdown = ({ eventpress, onSelectEvent, onPressAdd }) => {
+const Eventdropdown = ({
+  eventpress,
+  onSelectEvent,
+  onPressAdd,
+  allTicketTypesExist,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
@@ -62,7 +67,7 @@ const Eventdropdown = ({ eventpress, onSelectEvent, onPressAdd }) => {
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
           }}
-          dropdownPosition={"top"}
+          dropdownPosition={selectedValue ? "bottom" : "top"}
           selectedTextProps={{ numberOfLines: 1 }}
           labelField="label"
           valueField="value"
@@ -84,8 +89,11 @@ const Eventdropdown = ({ eventpress, onSelectEvent, onPressAdd }) => {
         />
         <TouchableOpacity
           onPress={onPressAdd}
-          disabled={!selectedValue}
-          style={{ opacity: selectedValue ? 1 : 0.2, paddingBottom: hei(0.5) }}
+          disabled={allTicketTypesExist}
+          style={{
+            opacity: allTicketTypesExist ? .2 : 1,
+            paddingBottom: hei(0.5),
+          }}
         >
           <ARimage
             source={Images.Add}
@@ -112,7 +120,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   dropdown: {
-    zIndex: 9999,
+    // zIndex: 9999,
     width: wid(30),
     backgroundColor: Colors.lightgrey,
     padding: wid(2),
