@@ -43,7 +43,7 @@ const Ticketsend = () => {
       Id:'2',
       Type:'PLATNIUM ZONE',
       Price:'400'
-    }
+    },
   ]
   
   const [QTYdata, SetQTYdata] = useState([]);

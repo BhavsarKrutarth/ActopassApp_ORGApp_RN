@@ -26,7 +26,7 @@ const Colors = {
   grid: "#BFCEF3",
   delete: "#F5225d",
   Red: "#e60000",
+  drop:"#3c3c3c"
 };
-("#e9e9e9");
 
 export default Colors;

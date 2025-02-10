@@ -25,8 +25,8 @@ const Login = () => {
   const [Logindata, Setlogindata] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
-    Id: "SEL-0001",
-    Password: "56789",
+    Id: "BOX-0017",
+    Password: "E7F63348",
     OTP: "",
   });
 

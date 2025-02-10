@@ -1,5 +1,8 @@
 const Sellernavroute = {
-    Home : 'Home'
+    Sellerbottomindex:'Sellerbottomindex',
+    Home : 'Home',
+    History:'Hostory',
+    Sellerpersonaldetails:'Details'
 }
 
 export default Sellernavroute;
