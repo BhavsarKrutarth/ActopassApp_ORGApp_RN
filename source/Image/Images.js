@@ -41,6 +41,7 @@ const Images = {
   ticket: require("../Image/ticket.png"),
   disc: require("../Image/disc.png"),
   payact: require("../Image/payact.png"),
+  paydec: require("../Image/paydec.png"),
   help: require("../Image/help.png"),
   otp: require("../Image/otp.png"),
   camera: require("../Image/CameraIcon.png"),
@@ -49,6 +50,8 @@ const Images = {
   editdata: require("../Image/editdata.png"),
   deletedata: require("../Image/deletedata.png"),
   sorry: require("../Image/sorrys.png"),
+  loader: require("../Image/loader.json"),
+  tickets: require("../Image/Tickets.json")
 };
 
 export default Images;
