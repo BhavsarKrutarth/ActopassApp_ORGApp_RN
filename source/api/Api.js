@@ -261,74 +261,50 @@ export const EventList = async (OrganizerLoginId) => {
   }
 };
 
-export const TicketType = async (EventMasterid) => {
+export const fetchAPI = async (method, endpoint, params = {}) => {
   try {
-    console.log("SelllerLoginid, EventMasterid", EventMasterid);
-
-    const response = await FetchMethod.GET({
-      EndPoint: `ORGApp/GetEventMaster_TicketTypeList/${EventMasterid}`,
+    return await FetchMethod[method]({
+      EndPoint: endpoint,
+      Params: params,
       NeedToken: true,
     });
-    return response;
   } catch (error) {
     throw error;
   }
 };
 
-export const TicketData = async (SelllerLoginid, EventMasterid) => {
-  try {
-    const response = await FetchMethod.GET({
-      EndPoint: `ORGApp/TicketTypeWise_available_balanceList/${SelllerLoginid}/${EventMasterid}`,
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
 
-export const TicketBalance = async (
-  SelllerLoginid,
-  EventMasterid,
-  TicketTypeid
-) => {
-  try {
-    const response = await FetchMethod.GET({
-      EndPoint: `ORGApp/TicketTypeWise_available_balance/${SelllerLoginid}/${EventMasterid}/${TicketTypeid}`,
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
+// Organizer Ticket API
+export const TicketType = (EventMasterid) =>
+  fetchAPI("GET", `ORGApp/GetEventMaster_TicketTypeList/${EventMasterid}`);
 
-export const TicketQtyAdd = async (
+export const TicketData = (SelllerLoginid, EventMasterid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp/TicketTypeWise_available_balanceList/${SelllerLoginid}/${EventMasterid}`
+  );
+
+export const TicketBalance = (SelllerLoginid, EventMasterid, TicketTypeid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp/TicketTypeWise_available_balance/${SelllerLoginid}/${EventMasterid}/${TicketTypeid}`
+  );
+
+export const TicketQtyAdd = (
   SelllerLoginid,
   EventMasterid,
   TicketTypeid,
   SellerTicketQty
-) => {
-  try {
-    console.log(SelllerLoginid, EventMasterid, TicketTypeid, SellerTicketQty);
+) =>
+  fetchAPI("POST", "ORGApp/Selllermasterdetails_ADD", {
+    SelllerLoginid,
+    EventMasterid,
+    EventMaster_TicketTypeid: TicketTypeid,
+    SellerTicketQty,
+  });
 
-    const response = await FetchMethod.POST({
-      EndPoint: `ORGApp/Selllermasterdetails_ADD`,
-      Params: {
-        SelllerLoginid: SelllerLoginid,
-        EventMasterid: EventMasterid,
-        EventMaster_TicketTypeid: TicketTypeid,
-        SellerTicketQty: SellerTicketQty,
-      },
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
 
-export const TicketQtyUpdate = async (
+export const TicketQtyUpdate = (
   SelllerMasterDetailsid,
   SelllerLoginid,
   EventMasterid,
@@ -512,3 +488,110 @@ export const getboxhistory = async (PageIndex,PageCount,Boxofficediscountid) => 
     
   }
 }
+) =>
+  fetchAPI("PUT", "ORGApp/Selllermasterdetails_Edit", {
+    SelllerMasterDetailsid,
+    SelllerLoginid,
+    EventMasterid,
+    EventMaster_TicketTypeid: TicketTypeid,
+    SellerTicketQty,
+  });
+
+export const TicketQtyDelete = (SelllerMasterDetailsid) =>
+  fetchAPI("DELETE", "ORGApp/Selllermasterdetails_Delete", {
+    SelllerMasterDetailsid,
+  });
+
+export const GetDiscount_Box = (BoxofficeUserId, EventMasterid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_BoxOffice/GetBoxofficediscount_ListById/${BoxofficeUserId}/${EventMasterid}`
+  );
+
+export const AddDiscount_Box = (
+  { ToAmount, FromAmount, DiscountAmount },
+  BoxofficeUserId,
+  EventMasterid
+) =>
+  fetchAPI("POST", "ORGApp_BoxOffice/Add_Boxofficediscount", {
+    BoxOfficeDiscountid: 0,
+    ToAmount,
+    FromAmount,
+    DiscountAmount,
+    EventMasterid,
+    BoxofficeUserId,
+  });
+
+export const UpdateDiscount_Box = (
+  {
+    BoxOfficeDiscountid,
+    ToAmount,
+    FromAmount,
+    DiscountAmount,
+    BoxofficeUserId,
+  },
+  EventMasterid
+) =>
+  fetchAPI("PUT", "ORGApp_BoxOffice/UpdateBoxofficediscount", {
+    BoxOfficeDiscountid,
+    ToAmount,
+    FromAmount,
+    DiscountAmount,
+    EventMasterid,
+    BoxofficeUserId,
+  });
+
+export const DeleteDiscount_Box = (BoxOfficeDiscountid) =>
+  fetchAPI("DELETE", "ORGApp_BoxOffice/DeleteBoxofficediscount", {
+    BoxOfficeDiscountid,
+  });
+
+// Seller Ticket Book
+export const SEL_UpComingEvents = (SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_Seller_event_List/${SelllerLoginid}`
+  );
+
+export const SEL_EventDate = (EventMasterid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_Seller_eventDate_List/${EventMasterid}`
+  );
+
+export const SEL_TicketType = (EventMasterid, SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_seller_tickettype_List/${EventMasterid}/${SelllerLoginid}`
+  );
+
+export const SEL_TicketBook = (
+  sellerLoginId,
+  mobileNo,
+  bookingTicketQty,
+  bookingAmount,
+  eventMasterId,
+  bookTicketName,
+  remark,
+  confirmMobileNo,
+  eventDate,
+  ticketTypes
+) =>
+  fetchAPI("POST", "ORGApp_SellerTicketBook/SellerTicketBooking", {
+    SelllerLoginid: sellerLoginId,
+    MobileNo: mobileNo,
+    BookingTicketQty: bookingTicketQty,
+    BookingAmount: bookingAmount,
+    EventMasterid: eventMasterId,
+    BookTicket_Name: bookTicketName,
+    Remark: remark,
+    Confirm_Moblie_No: confirmMobileNo,
+    EventDate: eventDate,
+    TicketTypes: ticketTypes,
+  });
+
+export const SEL_History = (PageIndex, PageCount, SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Sellerticketbook_history_List/0/10/11`
+  );
