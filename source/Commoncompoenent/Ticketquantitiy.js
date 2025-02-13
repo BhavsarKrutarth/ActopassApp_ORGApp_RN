@@ -28,6 +28,11 @@ const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
         ondecrese({...decreseitem,QTY:Math.max(Quantity - 1,0)})
     }
 
+    const QTYon = (item) => {
+        setIsQTY(!isQTY)
+        increase(item)
+    }
+// console.log(Quantity);
 
   return (
     <View>
@@ -40,7 +45,7 @@ const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
             borderWidth: normalize(1),
             borderColor:item.Colorcode
           }}
-            onpress={() => setIsQTY(!isQTY)}
+            onpress={() => QTYon(item)}
         >
           <ARtext
             children={item.TicketType}

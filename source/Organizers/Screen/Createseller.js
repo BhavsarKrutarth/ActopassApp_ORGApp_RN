@@ -221,7 +221,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
               inputvalue={Input.Name}
               onchange={(v) => setInput((pre) => ({ ...pre, Name: v }))}
               errormessage={Namevalidation}
-              err={"Please enter your name must be 3 characters."}
+              err={"Please enter your name must be 2 characters."}
             />
 
             <Inputdata

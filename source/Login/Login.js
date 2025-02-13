@@ -26,7 +26,7 @@ const Login = () => {
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
     Id: "BOX-0017",
-    Password: "E7F63348",
+    Password: "12345",
     OTP: "",
   });
 
@@ -36,7 +36,6 @@ const Login = () => {
 
   const Login = async (Id, Password) => {
     setfieldvalidation(true);
-
     if (!Id) return;
     if (Passwordfield == true) {
       if (!Id || !Password) {
@@ -44,7 +43,6 @@ const Login = () => {
         return;
       }
     }
-
     setLoading(true);
     try {
       const response = await loginUser(Id, Password);
@@ -62,6 +60,9 @@ const Login = () => {
           setfieldvalidation(false);
         } else if (response.Response === -1) {
           Alert.alert(response.ResponseMessage);
+        }
+        if(response.Response === 2 || response.Response === 0){
+
         }
       }
     } catch (error) {

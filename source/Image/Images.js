@@ -50,7 +50,8 @@ const Images = {
   editdata: require("../Image/editdata.png"),
   deletedata: require("../Image/deletedata.png"),
   sorry: require("../Image/sorrys.png"),
-  loader: require("../Image/loader.json")
+  loader: require("../Image/loader.json"),
+  tickets: require("../Image/Tickets.json")
 };
 
 export default Images;

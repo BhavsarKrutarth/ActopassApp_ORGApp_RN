@@ -469,7 +469,7 @@ export const ticketget = async (EventMasterid) => {
     })
     return response
   }catch(error){
-    console.log('Event Type Get Error',error);
+    console.log('Event Ticket Type Get Error',error);
     throw error;
   }
 }
@@ -485,3 +485,30 @@ export const applydis = async (BoxuserId,Amount,EventId) => {
     throw error;
   }
 } 
+
+
+export const bookingtickets = async (sendobject) => {
+  // console.log(JSON.stringify(sendobject, null, 2));
+  try{
+    const response = await FetchMethod.POST({
+      EndPoint:'ORGAPP_BoxOfficeTicketBook/TicketBooking',
+      Params:sendobject
+    }) 
+    return response;
+  }catch(error){
+    console.log('Booking Ticket Error',error);
+    throw error
+  }
+}
+
+export const getboxhistory = async (PageIndex,PageCount,Boxofficediscountid) => {
+  try{  
+    const response = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/GetBoxOfficeUserHistoryList/${PageIndex}/${PageCount}/${Boxofficediscountid}`,
+    })
+    return response
+  }catch(error){
+    console.log('GetBox History error',error);
+    
+  }
+}

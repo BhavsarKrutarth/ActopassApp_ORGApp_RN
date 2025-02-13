@@ -83,13 +83,16 @@ const Boxofficelist = () => {
         Setpageindex((pre) => (value ? value + 1 : pre + 1));
         SetLoading(false);
         Sethasmore(true);
+        Setrefresh(false);
       } else {
         SetLoading(false);
+        Setrefresh(false);
       }
     } catch (error) {
       console.log("Fetch data error", error);
       Sethasmore(false);
       SetLoading(false);
+      Setrefresh(false);
     }
   };
 

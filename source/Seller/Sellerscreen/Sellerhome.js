@@ -27,15 +27,28 @@ import {
 } from "../../theme";
 import { useNavigation } from "@react-navigation/native";
 import Images from "../../Image/Images";
-import { Inputdata, Ticketquantitiy } from "../../Commoncompoenent";
+import {
+  Inputdata,
+  Responsemodal,
+  Ticketquantitiy,
+} from "../../Commoncompoenent";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Dropdown } from "react-native-element-dropdown";
-import { applydis, geteventdate, geteventlist, ticketget } from "../../api/Api";
+import {
+  applydis,
+  bookingtickets,
+  geteventdate,
+  geteventlist,
+  ticketget,
+} from "../../api/Api";
 import { useSelector } from "react-redux";
+import { Validation } from "../../utils";
+import LottieView from "lottie-react-native";
 
 const Sellerhome = () => {
   const { AsyncValue } = useSelector((state) => state.Auth);
-  // const Tickets = [];
+  // console.log(AsyncValue);
+  
   const payarry = [
     {
       Id: 1,
@@ -47,18 +60,30 @@ const Sellerhome = () => {
     },
   ];
 
-  const [Selectedvalue, Setselectedvalue] = useState({});
+  const [Selectedvalue, Setselectedvalue] = useState({
+    label: "",
+    value: "",
+    EventDaysType: "",
+  });
   const [Data, SetEventData] = useState([]);
-  const [Senddate, Setsenddate] = useState({});
-  const [Selecteddate, Setselecteddate] = useState([])
-  const [Tickets,SetTickets] = useState([])
+  const [Senddate, Setsenddate] = useState({
+    label: "",
+    value: "",
+  });
+  const [Selecteddate, Setselecteddate] = useState([]);
+  const [Tickets, SetTickets] = useState([]);
   const [Discount, Setdiscount] = useState(false);
   const [Pmethod, Setpmethod] = useState(0);
   const [QTYdata, SetQTYdata] = useState([]);
   const [Disable, SetDisable] = useState(false);
-  const [AfterDiscount,SetafterDiscount] = useState(0);
-  const [Discountdetail, SetDiscountdetail] = useState({})
-  const [Input, SttInput] = useState({
+  const [Discountdetail, SetDiscountdetail] = useState({
+    BOXOFFICEDISCOUNTID: 0,
+    DISCOUNTPRECENTAGE: 0,
+    DISCOUNTAMOUNT: 0,
+    TOTALAMOUNT: 0,
+  });
+  const [Fieldvalidation, setFieldvalidation] = useState(false);
+  const [Input, SetInput] = useState({
     Name: "",
     MobileNo: "",
     ConfirmMobileNo: "",
@@ -69,6 +94,9 @@ const Sellerhome = () => {
     TQTY: 0,
     TPRICE: 0,
   });
+  const [responsemodal, setresponsemodal] = useState(false);
+  const [Loader, Setloader] = useState(false);
+  const [Waiting, Setwaiting] = useState(false);
 
   useEffect(() => {
     const getevent = async (BoxofficeUserId) => {
@@ -88,8 +116,6 @@ const Sellerhome = () => {
     getevent(AsyncValue.BoxofficeUserId);
   }, []);
 
-
-
   useEffect(() => {
     let totalprice = 0;
     let totqty = 0;
@@ -103,44 +129,68 @@ const Sellerhome = () => {
     });
   }, [QTYdata]);
 
+  useEffect(() => {
+    if (TotalQty.TQTY === 0) {
+      // console.log('call');
+      setFieldvalidation(false);
+      Setpmethod(0);
+    }
+  }, [TotalQty.TQTY]);
 
   const getdate = async (EventMasterid) => {
-    try{
-      const responses = await geteventdate(EventMasterid)
-      if(responses.length > 0){
-        Setselecteddate(responses.map((data) => ({
-          label:data.EVENTDATE,
-          value:data.DISPLAYDATE
-        })))
-      }else{
-        console.log('No Event date found');
-      } 
-    }catch(error){
-      console.log('Get Event date error',error);
+    try {
+      const responses = await geteventdate(EventMasterid);
+      if (responses.length > 0) {
+        Setselecteddate(
+          responses.map((data) => ({
+            label: data.EVENTDATE,
+            value: data.DISPLAYDATE,
+          }))
+        );
+      } else {
+        console.log("No Event date found");
+      }
+    } catch (error) {
+      console.log("Get Event date error", error);
       // throw error;
     }
-  }
+  };
 
   const gettickettype = async (EventMasterid) => {
-    try{
-      const Ticketresponse = await ticketget(EventMasterid)
-      if(Ticketresponse.length > 0){
-        console.log(JSON.stringify(Ticketresponse,null,2));
-        SetTickets(Ticketresponse)
-      }else{
-        console.log('No TicketType Found');
+    try {
+      const Ticketresponse = await ticketget(EventMasterid);
+      if (Ticketresponse.length > 0) {
+        // console.log(JSON.stringify(Ticketresponse,null,2));
+        SetTickets(Ticketresponse);
+      } else {
+        console.log("No TicketType Found");
       }
-    }catch(error){
-      console.log('Get Ticket Type error',error);
+    } catch (error) {
+      // Setloader(false)
+      console.log("Get Ticket Type error", error);
     }
-  }
+  };
 
   const payment = (item) => {
     Setpmethod(item.Id);
   };
 
-  const increaseQTY = (v) => {    
-    
+  const increaseQTY = (v, Discount) => {
+    // console.log(v);
+    if (v.QTY == 0) {
+      SetQTYdata((pre) =>
+        pre.filter((item) => item.TicketType != v.TicketType)
+      );
+    }
+    if (Discount) {
+      SetDiscountdetail({
+        BOXOFFICEDISCOUNTID: 0,
+        DISCOUNTPRECENTAGE: 0,
+        DISCOUNTAMOUNT: 0,
+        TOTALAMOUNT: 0,
+      });
+      Setdiscount(false);
+    }
     if (QTYdata.length === 0) {
       SetQTYdata([v]);
     } else {
@@ -163,30 +213,150 @@ const Sellerhome = () => {
     }
   };
 
-  const Applydiscount = (BoxuserId,Amount,EventId) => {    
-      Setdiscount(!Discount)
-      if(!Discount){
-          getdiscount(BoxuserId,Amount,EventId)
-      }
-      
-  }
-  const getdiscount = async (BoxuserId,Amount,EventId) => {
-    try{
-      const Disresponse = await applydis(BoxuserId,Amount,EventId)
-      if(Disresponse){
-        SetDiscountdetail(Disresponse)
-        // console.log(Disresponse);
-        
-      }else{
-
-      }
-    }catch(error){
-      console.log('GetDiscout Error',error);
-      
+  const Applydiscount = (BoxuserId, Amount, EventId) => {
+    Setdiscount(!Discount);
+    if (!Discount) {
+      getdiscount(BoxuserId, Amount, EventId);
+    } else {
+      SetDiscountdetail({
+        BOXOFFICEDISCOUNTID: 0,
+        DISCOUNTPRECENTAGE: 0,
+        DISCOUNTAMOUNT: 0,
+        TOTALAMOUNT: 0,
+      });
     }
-  }
-  console.log('Discount',Discountdetail);
-  
+  };
+
+  const getdiscount = async (BoxuserId, Amount, EventId) => {
+    try {
+      Setwaiting(true);
+      const Disresponse = await applydis(BoxuserId, Amount, EventId);
+      if (Disresponse) {
+        SetDiscountdetail(Disresponse);
+        Setwaiting(false);
+        // console.log('Discount',Disresponse);
+      } else {
+        Setwaiting(false);
+      }
+    } catch (error) {
+      Setwaiting(false);
+      console.log("GetDiscout Error", error);
+    }
+  };
+
+  const cleandata = (param) => {
+    if (!param) Setselecteddate([]);
+    if (!param)
+      Setsenddate({
+        label: "",
+        value: "",
+      });
+
+    setFieldvalidation(false);
+    SetInput({
+      Name: "",
+      MobileNo: "",
+      ConfirmMobileNo: "",
+      Remark: "",
+      Date: "",
+    });
+    SetTickets([]);
+    SetToatalQty({
+      TQTY: 0,
+      TPRICE: 0,
+    });
+    Setdiscount(false);
+    SetDiscountdetail({
+      BOXOFFICEDISCOUNTID: 0,
+      DISCOUNTPRECENTAGE: 0,
+      DISCOUNTAMOUNT: 0,
+      TOTALAMOUNT: 0,
+    });
+    Setpmethod(0);
+    SetQTYdata([]);
+  };
+
+  const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
+  const Mobilevalidation =
+    Fieldvalidation && Validation.isMobileNumberValid(Input.MobileNo);
+  const ConfirmMobilevalidation =
+    Fieldvalidation &&
+    Validation.isSameMobileNumber(Input.MobileNo, Input.ConfirmMobileNo);
+  const remark = Fieldvalidation && Input.Remark.length < 1;
+  const selectdate = Fieldvalidation && Senddate.label == "";
+  const Checkpatmenymethod = Fieldvalidation && Pmethod == 0;
+
+  const validate =
+    !Validation.isName(Input.Name) &&
+    !Validation.isMobileNumberValid(Input.MobileNo) &&
+    !Validation.isSameMobileNumber(Input.MobileNo, Input.ConfirmMobileNo) &&
+    !Input.Remark.length < 1 &&
+    !Senddate.label == "";
+
+  const sendobject = {
+    Boxofficeuserid: AsyncValue.BoxofficeUserId,
+    MobileNo: Input.MobileNo,
+    BookingTicketQty: TotalQty.TQTY,
+    BookingAmount: TotalQty.TPRICE - Discountdetail.DISCOUNTAMOUNT,
+    EventMasterid: Selectedvalue.value,
+    BookTicket_Name: Selectedvalue.label,
+    Remark: Input.Remark,
+    Confirm_Moblie_No: Input.ConfirmMobileNo,
+    Boxofficediscountid: Discountdetail.BOXOFFICEDISCOUNTID,
+    Discountamount: Discountdetail.DISCOUNTAMOUNT,
+    Discountpersenttage: Discountdetail.DISCOUNTPRECENTAGE,
+    Paymenttype:
+      Pmethod === 1 ? "OnlinePayment" : Pmethod === 2 ? "CashPayment" : "",
+    EventDate: Senddate.label,
+    TicketTypes: [
+      ...QTYdata.map((item) => ({
+        Boxofficeuserid: AsyncValue.BoxofficeUserId,
+        Eventmasterid: Selectedvalue.value,
+        Eventdate: Senddate.label,
+        Bookingticketqty: item.QTY,
+        Bookingamount: item.Price,
+        Eventmaster_tickettypeid: item.EventMaster_TicketTypeid,
+        Tickettype: item.TicketType,
+      })),
+    ],
+  };
+
+  const booktickets = async (sendobject, id) => {
+    setFieldvalidation(true);
+    if (validate) {
+      Setloader(true);
+      try {
+        const respone = await bookingtickets(sendobject);
+        if (respone.responsecode === "0") {
+          Setloader(false);
+          setresponsemodal(true);
+          cleandata(true);
+          setTimeout(() => {
+            gettickettype(id);
+          }, 1000);
+        }
+      } catch (error) {
+        Setloader(false);
+        console.log("Ticket booking error", error);
+        throw error;
+      }
+    } else {
+      console.log("please fill the ");
+    }
+  };
+
+  if (Loader)
+    return (
+      <ARcontainer style={{ justifyContent: "center", alignItems: "center" }}>
+        <LottieView
+          source={Images.tickets}
+          autoPlay
+          loop
+          style={{ height: hei(18), width: hei(18) }}
+        />
+      </ARcontainer>
+    );
+
   return (
     <ARcontainer backgroundColor={Colors.backgroundcolor}>
       <View>
@@ -236,10 +406,11 @@ const Sellerhome = () => {
                 labelField="label"
                 valueField="value"
                 placeholder="Select Event"
-                onChange={(item) => {    
+                onChange={(item) => {
+                  cleandata(false);
                   Setselectedvalue(item);
-                  getdate(item.value)
-                  gettickettype(item.value)
+                  getdate(item.value);
+                  gettickettype(item.value);
                 }}
                 renderLeftIcon={() => (
                   <ARimage
@@ -287,7 +458,7 @@ const Sellerhome = () => {
                 <ARtext size={FontSize.font13}>
                   Event Id: {""}
                   <ARtext
-                    children={Selectedvalue?.value}
+                    children={Selectedvalue.value}
                     size={FontSize.font14}
                     fontFamily={FontFamily.SemiBold}
                     align={""}
@@ -304,7 +475,7 @@ const Sellerhome = () => {
                 <ARtext size={FontSize.font13} align={""}>
                   Event Name: {""}
                   <ARtext
-                    children={Selectedvalue?.label}
+                    children={Selectedvalue.label}
                     size={FontSize.font14}
                     fontFamily={FontFamily.SemiBold}
                     align={""}
@@ -319,26 +490,40 @@ const Sellerhome = () => {
           <Inputdata
             txtchildren={"Name"}
             placeholder={"Enter Your Name"}
-            inputvalue={""}
-            onchange={(v) => console.log(v)}
+            inputvalue={Input.Name}
+            onchange={(v) => SetInput((pre) => ({ ...pre, Name: v }))}
+            errormessage={Namevalidation}
+            err={"Please enter your name must be 2 characters."}
           />
           <Inputdata
             txtchildren={"Mobile No"}
             placeholder={"Enter Your Number"}
-            inputvalue={""}
-            onchange={(v) => console.log(v)}
+            inputvalue={Input.MobileNo}
+            onchange={(v) => SetInput((pre) => ({ ...pre, MobileNo: v }))}
+            err={"Please enter mobile number must be 10 digit."}
+            errormessage={Mobilevalidation}
+            keyboardType={"numeric"}
+            maxLength={10}
           />
           <Inputdata
             txtchildren={"Confirm Mobile No"}
             placeholder={"Enter Your Number"}
-            inputvalue={""}
-            onchange={(v) => console.log(v)}
+            inputvalue={Input.ConfirmMobileNo}
+            onchange={(v) =>
+              SetInput((pre) => ({ ...pre, ConfirmMobileNo: v }))
+            }
+            errormessage={ConfirmMobilevalidation}
+            err={"Mobile No and confirm Mobile No are not match"}
+            keyboardType={"numeric"}
+            maxLength={10}
           />
           <Inputdata
             txtchildren={"Remark"}
             placeholder={"125896325"}
-            inputvalue={""}
-            onchange={(v) => console.log(v)}
+            inputvalue={Input.Remark}
+            err={"Please Enter remark"}
+            errormessage={remark}
+            onchange={(v) => SetInput((pre) => ({ ...pre, Remark: v }))}
           />
           <View style={{ marginVertical: hei(1), rowGap: hei(0.6) }}>
             <ARtext
@@ -354,22 +539,35 @@ const Sellerhome = () => {
                   borderRadius: normalize(6),
                   height: hei(4),
                   backgroundColor: Colors.backgroundcolor,
-                  borderColor:Colors.bordercolor
+                  borderColor:
+                    Selecteddate.length < 1
+                      ? Colors.inactive
+                      : Colors.bordercolor,
                 },
               ]}
               itemTextStyle={{ color: Colors.Placeholder }}
               placeholderStyle={[
                 styles.placeholderStyle,
-                { fontSize: FontSize.font12, color:Colors.lable },
+                {
+                  fontSize: FontSize.font12,
+                  color: Selecteddate.length < 1 ? Colors.line : Colors.lable,
+                },
               ]}
               selectedTextStyle={[
                 styles.selectedTextStyle,
                 { fontSize: FontSize.font12 },
               ]}
-              iconStyle={styles.iconStyle}
+              iconStyle={[
+                styles.iconStyle,
+                {
+                  tintColor:
+                    Selecteddate.length < 1 ? Colors.line : Colors.Placeholder,
+                },
+              ]}
               showsVerticalScrollIndicator={false}
               containerStyle={styles.ContainerStyle}
               data={Selecteddate}
+              disable={Selecteddate.length < 1 ?? true}
               maxHeight={hei(20)}
               labelField="label"
               valueField="value"
@@ -390,6 +588,13 @@ const Sellerhome = () => {
               //   />
               // )}
             />
+            {selectdate ? (
+              <ARtext
+                children={"Plesase select date"}
+                align={""}
+                color={"red"}
+              />
+            ) : null}
           </View>
           {/* <Inputdata
             txtchildren={'Select Date'}
@@ -410,8 +615,8 @@ const Sellerhome = () => {
             <Ticketquantitiy
               key={index}
               item={item}
-              onincrese={(v) => increaseQTY(v)}
-              ondecrese={(v) => increaseQTY(v)}
+              onincrese={(v) => increaseQTY(v, Discount)}
+              ondecrese={(v) => increaseQTY(v, Discount)}
             />
           ))}
         </View>
@@ -442,6 +647,7 @@ const Sellerhome = () => {
                     </View>
                   </View>
                 ))}
+
                 <View style={styles.discountview}>
                   <ARbutton
                     Touchstyle={{
@@ -453,9 +659,13 @@ const Sellerhome = () => {
                       backgroundColor: "",
                     }}
                     onpress={() => {
-                      Applydiscount(AsyncValue.BoxofficeUserId,TotalQty.TPRICE,Selectedvalue.value)
+                      Applydiscount(
+                        AsyncValue.BoxofficeUserId,
+                        TotalQty.TPRICE,
+                        Selectedvalue.value
+                      );
                     }}
-                 >
+                  >
                     {Discount ? (
                       <ARimage
                         source={Images.disc}
@@ -463,7 +673,19 @@ const Sellerhome = () => {
                       />
                     ) : null}
                   </ARbutton>
-                  <ARtext children={`Apply Discount - ${Discount ? Discountdetail?.DISCOUNTPRECENTAGE : 0}%`} align={""} />
+                  {Waiting ? (
+                    (<ARtext
+                      children={'Just a waiting'}
+                      align={""}
+                    />)
+                  ) : (
+                    <ARtext
+                      children={`Apply Discount - ${
+                        Discount ? Discountdetail.DISCOUNTPRECENTAGE : 0
+                      }%`}
+                      align={""}
+                    />
+                  )}
                 </View>
                 <View style={styles.paymentmainview}>
                   {payarry.map((item, index) => (
@@ -489,7 +711,17 @@ const Sellerhome = () => {
                     </View>
                   ))}
                 </View>
+                {Checkpatmenymethod ? (
+                  <View style={{ paddingHorizontal: wid(6) }}>
+                    <ARtext
+                      children={"please select payment method"}
+                      color={"red"}
+                      align={""}
+                    />
+                  </View>
+                ) : null}
               </View>
+
               <View style={styles.btnview}>
                 <View style={{ rowGap: hei(0.4) }}>
                   <ARtext
@@ -500,7 +732,11 @@ const Sellerhome = () => {
                     color={Colors.Placeholder}
                   />
                   <ARtext
-                    children={`₹${Discount ? TotalQty.TPRICE - Discountdetail.DISCOUNTAMOUNT : TotalQty.TPRICE}`}
+                    children={`₹${
+                      Discount
+                        ? TotalQty.TPRICE - Discountdetail.DISCOUNTAMOUNT
+                        : TotalQty.TPRICE
+                    }`}
                     size={FontSize.font17}
                     fontFamily={FontFamily.Bold}
                     align={""}
@@ -514,6 +750,7 @@ const Sellerhome = () => {
                       width: wid(60),
                       borderRadius: normalize(7),
                     }}
+                    onpress={() => booktickets(sendobject, Selectedvalue.value)}
                   >
                     <ARtext
                       children={"Book Now"}
@@ -527,6 +764,14 @@ const Sellerhome = () => {
             </View>
           ) : null}
         </View>
+        <Responsemodal
+          visible={responsemodal}
+          onrequestclose={() => setresponsemodal(false)}
+          onpress={() => setresponsemodal(false)}
+          Images={Images.success}
+          subtext={"!Oh Yeah"}
+          message={"Tickets book successfully."}
+        />
       </KeyboardAwareScrollView>
     </ARcontainer>
   );
@@ -683,7 +928,7 @@ const styles = StyleSheet.create({
   gridlist: {
     paddingHorizontal: wid(3),
     paddingVertical: hei(2),
-    rowGap: hei(1.5),
+    rowGap: hei(1),
     backgroundColor: Colors.White,
     borderTopLeftRadius: normalize(10),
     borderTopRightRadius: normalize(10),
@@ -715,7 +960,7 @@ const styles = StyleSheet.create({
   },
   paymentmainview: {
     flexDirection: "row",
-    marginVertical: hei(1),
+    // marginVertical: hei(0),
     justifyContent: "space-evenly",
     alignItems: "center",
     // backgroundColor: 'red',
