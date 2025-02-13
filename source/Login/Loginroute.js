@@ -33,11 +33,11 @@ const Loginroute = () => {
         component={Organzerrouteoute}
         name={Loginnavroute.Organizer}
       />
+      <Stack.Screen component={Boxofficeroute} name={Loginnavroute.Seller} />
       <Stack.Screen
-        component={Boxofficeroute}
+        component={Sellerroute}
         name={Loginnavroute.BoxofficeUser}
       />
-      <Stack.Screen component={Sellerroute} name={Loginnavroute.Seller} />
     </Stack.Navigator>
   );
 };
