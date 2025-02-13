@@ -41,7 +41,7 @@ export const Addnewseller = async (
           ? { SelllerLoginid: 0 }
           : Id === 2
           ? { BoxofficeUserId: 0 }
-          : {ScannerLoginId: 0}),
+          : { ScannerLoginId: 0 }),
         OrganizerLoginId: OrganizerLoginId,
         Password: Password,
         Name: Name,
@@ -201,38 +201,44 @@ export const deleteboxoffice = async (Id) => {
 
 // ============= scanner get,update,delete =================
 
-
-export const getscanner = async (PageIndex,PageCount,OrganizerLoginId) => {
-  try{
-      const response = await FetchMethod.GET({
-        EndPoint:`ORGApp_ScannerAccount/GetScannerList/${PageIndex}/${PageCount}/${OrganizerLoginId}`
-      })
-      return response
-  }catch(error){
-    throw error
+export const getscanner = async (PageIndex, PageCount, OrganizerLoginId) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGApp_ScannerAccount/GetScannerList/${PageIndex}/${PageCount}/${OrganizerLoginId}`,
+    });
+    return response;
+  } catch (error) {
+    throw error;
   }
-}
+};
 
-
-export const editscnnerdata = async (ScannerLoginId,OrganizerLoginId,Password,Name,MobileNo,EmailId,PhotoPath) => {
-  try{
+export const editscnnerdata = async (
+  ScannerLoginId,
+  OrganizerLoginId,
+  Password,
+  Name,
+  MobileNo,
+  EmailId,
+  PhotoPath
+) => {
+  try {
     const response = await FetchMethod.PUT({
-      EndPoint:'ORGApp_ScannerAccount/Update_Scanner',
-      Params:{
+      EndPoint: "ORGApp_ScannerAccount/Update_Scanner",
+      Params: {
         ScannerLoginId: ScannerLoginId,
         OrganizerLoginId: OrganizerLoginId,
         Password: Password,
         Name: Name,
-        MobileNo:MobileNo,
-        EmailId:EmailId,
-        PhotoPath: PhotoPath
-      }
-    })
-    return response
-  }catch(error){
-    throw error
+        MobileNo: MobileNo,
+        EmailId: EmailId,
+        PhotoPath: PhotoPath,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
   }
-}
+};
 
 export const deletescannerdata = async (Id) => {
   try {
@@ -247,7 +253,6 @@ export const deletescannerdata = async (Id) => {
     throw error;
   }
 };
-
 
 export const EventList = async (OrganizerLoginId) => {
   try {
@@ -273,7 +278,6 @@ export const fetchAPI = async (method, endpoint, params = {}) => {
   }
 };
 
-
 // Organizer Ticket API
 export const TicketType = (EventMasterid) =>
   fetchAPI("GET", `ORGApp/GetEventMaster_TicketTypeList/${EventMasterid}`);
@@ -290,6 +294,85 @@ export const TicketBalance = (SelllerLoginid, EventMasterid, TicketTypeid) =>
     `ORGApp/TicketTypeWise_available_balance/${SelllerLoginid}/${EventMasterid}/${TicketTypeid}`
   );
 
+// ==================== BoxofficeTicketsend ======================
+
+export const geteventlist = async (BoxofficeUserId) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGAPP_BoxOfficeTicketBook/ToDayEvent_BoxOffice/${BoxofficeUserId}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Get EventList Error", error);
+    throw error;
+  }
+};
+
+export const geteventdate = async (EventMasterid) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeeventdateList/${EventMasterid}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Event Date Get Error", error);
+    throw error;
+  }
+};
+
+export const ticketget = async (EventMasterid) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_tickettypeList/${EventMasterid}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Event Ticket Type Get Error", error);
+    throw error;
+  }
+};
+
+export const applydis = async (BoxuserId, Amount, EventId) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_discountchk/${BoxuserId}/${Amount}/${EventId}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Discount Apply Error", error);
+    throw error;
+  }
+};
+
+export const bookingtickets = async (sendobject) => {
+  // console.log(JSON.stringify(sendobject, null, 2));
+  try {
+    const response = await FetchMethod.POST({
+      EndPoint: "ORGAPP_BoxOfficeTicketBook/TicketBooking",
+      Params: sendobject,
+    });
+    return response;
+  } catch (error) {
+    console.log("Booking Ticket Error", error);
+    throw error;
+  }
+};
+
+export const getboxhistory = async (
+  PageIndex,
+  PageCount,
+  Boxofficediscountid
+) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGAPP_BoxOfficeTicketBook/GetBoxOfficeUserHistoryList/${PageIndex}/${PageCount}/${Boxofficediscountid}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("GetBox History error", error);
+  }
+};
+
 export const TicketQtyAdd = (
   SelllerLoginid,
   EventMasterid,
@@ -303,191 +386,12 @@ export const TicketQtyAdd = (
     SellerTicketQty,
   });
 
-
 export const TicketQtyUpdate = (
   SelllerMasterDetailsid,
   SelllerLoginid,
   EventMasterid,
   TicketTypeid,
   SellerTicketQty
-) => {
-  try {
-    const response = await FetchMethod.PUT({
-      EndPoint: `ORGApp/Selllermasterdetails_Edit`,
-      Params: {
-        SelllerMasterDetailsid: SelllerMasterDetailsid,
-        SelllerLoginid: SelllerLoginid,
-        EventMasterid: EventMasterid,
-        EventMaster_TicketTypeid: TicketTypeid,
-        SellerTicketQty: SellerTicketQty,
-      },
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const TicketQtyDelete = async (SelllerMasterDetailsid) => {
-  try {
-    const response = await FetchMethod.DELETE({
-      EndPoint: `ORGApp/Selllermasterdetails_Delete`,
-      Params: {
-        SelllerMasterDetailsid: SelllerMasterDetailsid,
-      },
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const GetDiscount_Box = async (BoxofficeUserId, EventMasterid) => {
-  try {
-    const response = await FetchMethod.GET({
-      EndPoint: `ORGApp_BoxOffice/GetBoxofficediscount_ListById/${BoxofficeUserId}/${EventMasterid}`,
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const AddDiscount_Box = async (data, eventId) => {
-  try {
-    const response = await FetchMethod.POST({
-      EndPoint: `ORGApp_BoxOffice/Add_Boxofficediscount`,
-      Params: {
-        BoxOfficeDiscountid: data.BoxOfficeDiscountid,
-        ToAmount: data.ToAmount,
-        FromAmount: data.FromAmount,
-        DiscountAmount: data.DiscountAmount,
-        EventMasterid: eventId,
-        BoxofficeUserId: data.BoxofficeUserId,
-      },
-      NeedToken: true,
-    });
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const UpdateDiscount_Box = async (data) => {
-  try {
-    console.log("data", data);
-    const response = await FetchMethod.PUT({
-      EndPoint: `ORGApp_BoxOffice/UpdateBoxofficediscount`,
-      Params: {
-        BoxOfficeDiscountid: data.BoxOfficeDiscountid,
-        ToAmount: data.ToAmount,
-        FromAmount: data.FromAmount,
-        DiscountAmount: data.DiscountAmount,
-        BoxofficeUserId: data.BoxofficeUserId,
-      },
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const DeleteDiscount_Box = async (BoxOfficeDiscountid) => {
-  try {
-    const response = await FetchMethod.DELETE({
-      EndPoint: `ORGApp_BoxOffice/DeleteBoxofficediscount`,
-      Params: {
-        BoxOfficeDiscountid: BoxOfficeDiscountid,
-      },
-      NeedToken: true,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-// ==================== BoxofficeTicketsend ======================
-
-export const geteventlist = async (BoxofficeUserId) => {
-  try{
-    const response = await FetchMethod.GET({
-      EndPoint:`ORGAPP_BoxOfficeTicketBook/ToDayEvent_BoxOffice/${BoxofficeUserId}`,
-    })
-    return response
-  }catch(error){
-    console.log('Get EventList Error',error);
-    throw error
-  }
-}
-
-export const geteventdate = async (EventMasterid) => {
-  try{
-    const response  = await FetchMethod.GET({
-      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeeventdateList/${EventMasterid}`
-    })
-    return response;
-  }catch(error){
-    console.log('Event Date Get Error',error);
-    throw error;
-  }
-}
-
-
-export const ticketget = async (EventMasterid) => {
-  try{
-    const response = await FetchMethod.GET({
-      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_tickettypeList/${EventMasterid}`
-    })
-    return response
-  }catch(error){
-    console.log('Event Ticket Type Get Error',error);
-    throw error;
-  }
-}
-
-export const applydis = async (BoxuserId,Amount,EventId) => {
-  try{
-    const response = await FetchMethod.GET({
-      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_discountchk/${BoxuserId}/${Amount}/${EventId}`
-    })
-    return response
-  }catch(error){
-    console.log('Discount Apply Error',error);
-    throw error;
-  }
-} 
-
-
-export const bookingtickets = async (sendobject) => {
-  // console.log(JSON.stringify(sendobject, null, 2));
-  try{
-    const response = await FetchMethod.POST({
-      EndPoint:'ORGAPP_BoxOfficeTicketBook/TicketBooking',
-      Params:sendobject
-    }) 
-    return response;
-  }catch(error){
-    console.log('Booking Ticket Error',error);
-    throw error
-  }
-}
-
-export const getboxhistory = async (PageIndex,PageCount,Boxofficediscountid) => {
-  try{  
-    const response = await FetchMethod.GET({
-      EndPoint:`ORGAPP_BoxOfficeTicketBook/GetBoxOfficeUserHistoryList/${PageIndex}/${PageCount}/${Boxofficediscountid}`,
-    })
-    return response
-  }catch(error){
-    console.log('GetBox History error',error);
-    
-  }
-}
 ) =>
   fetchAPI("PUT", "ORGApp/Selllermasterdetails_Edit", {
     SelllerMasterDetailsid,
