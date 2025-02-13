@@ -34,6 +34,7 @@ import {
   updateTicketQty,
 } from "./SellerHelper";
 import { Dropdown } from "react-native-element-dropdown";
+import { all } from "axios";
 
 const Sellerdetail = ({ route }) => {
   const navigation = useNavigation();
@@ -82,7 +83,7 @@ const Sellerdetail = ({ route }) => {
   const validate =
     !Validation.isName(Input.Name) &&
     !Validation.issellerpassword(Input.Password);
-  const [allTicketTypesExist, setAllTicketTypesExist] = useState(false);
+  const [allTicketTypesExist, setAllTicketTypesExist] = useState(true);
 
   const openCamera = () => {
     ImagePicker.openCamera({
@@ -168,15 +169,17 @@ const Sellerdetail = ({ route }) => {
     const fetchData = async () => {
       if (selectedEvent.eventId) {
         await ticketDetails();
+        console.log("data", data);
         await fetchTicketData();
         const checkAllTicketTypesExist = ticketType.every((ticket) =>
           data.some((event) => event.TicketType === ticket.label)
         );
+        console.log("checkAllTicketTypesExist", checkAllTicketTypesExist);
         setAllTicketTypesExist(checkAllTicketTypesExist);
       }
     };
     fetchData();
-  }, [selectedEvent.eventId]);
+  }, [selectedEvent.eventId, emptyView, ticketQtyDelete]);
 
   const ticketDetails = async () => {
     fetchTicketDetails(SelllerLoginid, selectedEvent.eventId, setData);
@@ -377,6 +380,7 @@ const Sellerdetail = ({ route }) => {
           />
 
           <Eventdropdown
+            eventDataLength={data.length}
             onSelectEvent={(eventName, eventId) => {
               setSelectedEvent({ eventName, eventId });
             }}
@@ -386,8 +390,8 @@ const Sellerdetail = ({ route }) => {
             onPressAdd={async () => {
               setError("");
               setEmptyView(true);
-              allTicketTypesExist = { allTicketTypesExist };
             }}
+            allTicketTypesExist={allTicketTypesExist}
           />
 
           <InputView

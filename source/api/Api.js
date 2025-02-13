@@ -233,13 +233,13 @@ export const fetchAPI = async (method, endpoint, params = {}) => {
   }
 };
 
-// Seller Ticket API
+// Organizer Ticket API
 export const TicketType = (EventMasterid) =>
   fetchAPI("GET", `ORGApp/GetEventMaster_TicketTypeList/${EventMasterid}`);
 
 export const TicketData = (SelllerLoginid, EventMasterid) =>
   fetchAPI(
-    "GET", 
+    "GET",
     `ORGApp/TicketTypeWise_available_balanceList/${SelllerLoginid}/${EventMasterid}`
   );
 
@@ -325,3 +325,53 @@ export const DeleteDiscount_Box = (BoxOfficeDiscountid) =>
   fetchAPI("DELETE", "ORGApp_BoxOffice/DeleteBoxofficediscount", {
     BoxOfficeDiscountid,
   });
+
+// Seller Ticket Book
+export const SEL_UpComingEvents = (SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_Seller_event_List/${SelllerLoginid}`
+  );
+
+export const SEL_EventDate = (EventMasterid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_Seller_eventDate_List/${EventMasterid}`
+  );
+
+export const SEL_TicketType = (EventMasterid, SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Upcoming_seller_tickettype_List/${EventMasterid}/${SelllerLoginid}`
+  );
+
+export const SEL_TicketBook = (
+  sellerLoginId,
+  mobileNo,
+  bookingTicketQty,
+  bookingAmount,
+  eventMasterId,
+  bookTicketName,
+  remark,
+  confirmMobileNo,
+  eventDate,
+  ticketTypes
+) =>
+  fetchAPI("POST", "ORGApp_SellerTicketBook/SellerTicketBooking", {
+    SelllerLoginid: sellerLoginId,
+    MobileNo: mobileNo,
+    BookingTicketQty: bookingTicketQty,
+    BookingAmount: bookingAmount,
+    EventMasterid: eventMasterId,
+    BookTicket_Name: bookTicketName,
+    Remark: remark,
+    Confirm_Moblie_No: confirmMobileNo,
+    EventDate: eventDate,
+    TicketTypes: ticketTypes,
+  });
+
+export const SEL_History = (PageIndex, PageCount, SelllerLoginid) =>
+  fetchAPI(
+    "GET",
+    `ORGApp_SellerTicketBook/Sellerticketbook_history_List/0/10/11`
+  );

@@ -11,6 +11,8 @@ import {
 export const fetchTicketDetails = async (SelllerLoginid, eventId, setData) => {
   try {
     const response = await TicketData(SelllerLoginid, eventId);
+    console.log("response", response.Details);
+
     if (response.Response === 0) {
       setData(response.Details);
     }
@@ -60,7 +62,6 @@ export const addTicketQty = async (
       );
       if (response.Response == 0) {
         setError("");
-        setData()
         Alert.alert("Data add successfully.");
         setEmptyView(false);
       } else {

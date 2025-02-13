@@ -11,15 +11,16 @@ import Images from "../Image/Images";
 import { EventList } from "../api/Api";
 
 const Eventdropdown = ({
+  eventDataLength,
   eventpress,
   onSelectEvent,
   onPressAdd,
   allTicketTypesExist,
 }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
   const { AsyncValue } = useSelector((state) => state.Auth);
+  console.log("allTicketTypesExist", allTicketTypesExist);
 
   const fetchData = async () => {
     try {
@@ -67,7 +68,7 @@ const Eventdropdown = ({
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
           }}
-          dropdownPosition={selectedValue ? "bottom" : "top"}
+          dropdownPosition={eventDataLength === 0 ? "top" : "bottom"}
           selectedTextProps={{ numberOfLines: 1 }}
           labelField="label"
           valueField="value"
@@ -76,12 +77,10 @@ const Eventdropdown = ({
           value={selectedValue?.value}
           showsVerticalScrollIndicator={false}
           onFocus={() => {
-            setIsDropdownOpen(true);
             fetchData();
           }}
           onChange={(item) => {
             setSelectedValue(item);
-            setIsDropdownOpen(false);
             eventpress();
             onSelectEvent(item.label, item.value);
           }}
@@ -91,7 +90,7 @@ const Eventdropdown = ({
           onPress={onPressAdd}
           disabled={allTicketTypesExist}
           style={{
-            opacity: allTicketTypesExist ? .2 : 1,
+            opacity: allTicketTypesExist ? 0.2 : 1,
             paddingBottom: hei(0.5),
           }}
         >
