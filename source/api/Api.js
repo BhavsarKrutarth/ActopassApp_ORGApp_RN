@@ -16,7 +16,31 @@ export const loginUser = async (Id, Password) => {
     throw error;
   }
 };
+export const loistofevent = async (OrganizerLoginid) => {
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGApp/OrganizerEventList/${1}/${1000}/${OrganizerLoginid}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Dashboard event list error", error);
+    throw error;
+  }
+};
 
+export const percentagedata = async (BoxId, EvntId) => {
+  console.log(BoxId, EvntId);
+
+  try {
+    const response = await FetchMethod.GET({
+      EndPoint: `ORGApp/GetOrganizationdashborad/${BoxId}/${EvntId}`,
+    });
+    return response;
+  } catch (error) {
+    console.log("Dashboard percentage data error", error);
+    throw error;
+  }
+}; 
 // =========== Add Seller,Boxoffice,Scanner =============
 
 export const Addnewseller = async (
