@@ -10,13 +10,8 @@ import { useSelector } from "react-redux";
 import Images from "../Image/Images";
 import { EventList } from "../api/Api";
 
-const Eventdropdown = ({
-  eventDataLength,
-  eventpress,
-  onSelectEvent,
-  onPressAdd,
-  allTicketTypesExist,
-}) => {
+const Eventdropdown = ({ eventpress, onSelectEvent, onPressAdd }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
   const { AsyncValue } = useSelector((state) => state.Auth);
@@ -30,7 +25,9 @@ const Eventdropdown = ({
           value: item.EventMasterid,
         }))
       );
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
   };
 
   return (
@@ -65,19 +62,21 @@ const Eventdropdown = ({
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
           }}
-          dropdownPosition={eventDataLength === 0 ? "top" : "bottom"}
+          dropdownPosition={"top"}
           selectedTextProps={{ numberOfLines: 1 }}
           labelField="label"
           valueField="value"
           placeholder="Select Event"
           maxHeight={hei(23)}
-          value={selectedValue}
+          value={selectedValue?.value}
           showsVerticalScrollIndicator={false}
           onFocus={() => {
+            setIsDropdownOpen(true);
             fetchData();
           }}
           onChange={(item) => {
             setSelectedValue(item);
+            setIsDropdownOpen(false);
             eventpress();
             onSelectEvent(item.label, item.value);
           }}
@@ -85,11 +84,8 @@ const Eventdropdown = ({
         />
         <TouchableOpacity
           onPress={onPressAdd}
-          disabled={!allTicketTypesExist}
-          style={{
-            opacity: !allTicketTypesExist ? 0.2 : 1,
-            paddingBottom: hei(0.5),
-          }}
+          disabled={!selectedValue}
+          style={{ opacity: selectedValue ? 1 : 0.2, paddingBottom: hei(0.5) }}
         >
           <ARimage
             source={Images.Add}
@@ -116,7 +112,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   dropdown: {
-    // zIndex: 9999,
+    zIndex: 9999,
     width: wid(30),
     backgroundColor: Colors.lightgrey,
     padding: wid(2),
