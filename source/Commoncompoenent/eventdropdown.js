@@ -20,7 +20,6 @@ const Eventdropdown = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
   const { AsyncValue } = useSelector((state) => state.Auth);
-  console.log("allTicketTypesExist", allTicketTypesExist);
 
   const fetchData = async () => {
     try {
@@ -31,9 +30,7 @@ const Eventdropdown = ({
           value: item.EventMasterid,
         }))
       );
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -74,7 +71,7 @@ const Eventdropdown = ({
           valueField="value"
           placeholder="Select Event"
           maxHeight={hei(23)}
-          value={selectedValue?.value}
+          value={selectedValue}
           showsVerticalScrollIndicator={false}
           onFocus={() => {
             fetchData();
@@ -88,9 +85,9 @@ const Eventdropdown = ({
         />
         <TouchableOpacity
           onPress={onPressAdd}
-          disabled={allTicketTypesExist}
+          disabled={!allTicketTypesExist}
           style={{
-            opacity: allTicketTypesExist ? 0.2 : 1,
+            opacity: !allTicketTypesExist ? 0.2 : 1,
             paddingBottom: hei(0.5),
           }}
         >

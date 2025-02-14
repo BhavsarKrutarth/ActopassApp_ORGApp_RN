@@ -1,75 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl, StyleSheet } from "react-native";
 import { ARcontainer, ARheader, ARtext } from "../../common";
 import { useNavigation } from "@react-navigation/native";
-import { Colors, FontFamily, FontSize, hei, isIos, normalize, wid } from "../../theme";
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  hei,
+  isIos,
+  normalize,
+  wid,
+} from "../../theme";
 import Images from "../../Image/Images";
 import { useSelector } from "react-redux";
-import { getboxhistory } from "../../api/Api";
+import { getboxhistory, SEL_History } from "../../api/Api";
 import LottieView from "lottie-react-native";
 
 const Sellerhistory = () => {
   const navigation = useNavigation();
-
   const { AsyncValue } = useSelector((state) => state.Auth);
-  const [History,Sethistory] = useState([])
+  const [History, Sethistory] = useState([]);
   const [Refresh, Setrefresh] = useState(false);
-  const [PageIndex,SetPageIndex] = useState(1);
-  const [Loading,SetLoading] = useState(false)
-  const [Hashmore,Sethashmore] = useState(false)
-  const PageCount = 3
-
+  const [PageIndex, SetPageIndex] = useState(1);
+  const [Loading, SetLoading] = useState(false);
+  const [HasMore, SetHasMore] = useState(true);
+  const PageCount = 10;
 
   useEffect(() => {
-    gethistory()
-  },[seller]);
-
-  const gethistory = async (value,refresh) => {
-    if(refresh){
-        SetLoading(false)
-    }else{  
-        SetLoading(true)
+    if (AsyncValue.SellerLoginId) {
+      gethistory(1, true);
     }
+  }, []);
+
+  const gethistory = async (value, refresh) => {
+    if (Loading && !refresh) return;
+    if (refresh) {
+      Setrefresh(true);
+      SetPageIndex(1);
+      SetHasMore(true);
+    } else {
+      SetLoading(true);
+    }
+
     try {
-      const resonse = await getboxhistory(value ? value : PageIndex,PageCount,AsyncValue.BoxofficeUserId)
-      if(resonse){
-        Sethistory((pre) => ([...pre,...resonse.Details]))
-        SetPageIndex((pre) => (value ? value + 1 : pre + 1));
-        SetLoading(false)
-        Sethashmore(true)
-        Setrefresh(false)
-      }else{
-        SetLoading(false)
-        Setrefresh(false)
+      const response = await getboxhistory(
+        value || PageIndex,
+        PageCount,
+        AsyncValue.BoxofficeUserId
+      );
+      if (response && response.Details && response.Details.length > 0) {
+        Sethistory(
+          refresh ? response.Details : [...History, ...response.Details]
+        );
+        SetPageIndex(value + 1);
+        SetHasMore(response.Details.length === PageCount);
+      } else {
+        SetHasMore(false);
       }
     } catch (error) {
-       SetLoading(false)
-       Sethashmore(false)
-       Setrefresh(false)
-      console.log('Get History error', error);
-
+    } finally {
+      SetLoading(false);
+      Setrefresh(false);
     }
-  }
-  console.log(History.length);
-  
-  const seller = [
-    {
-      Id: "1",
-      EventName: "XYZ",
-      EventDta: "30 Jan, 2024",
-      MobileNo: "1122334455",
-      Qly: "50",
-      TicketType: "XYZ",
-    },
-    {
-      Id: "2",
-      EventName: "ABC",
-      EventDta: "31 Jan, 2025",
-      MobileNo: "1122334455",
-      Qly: "40",
-      TicketType: "ABC",
-    },
-  ];
+  };
 
   return (
     <ARcontainer>
@@ -84,28 +77,26 @@ const Sellerhistory = () => {
         headerleftimgstyle={{ height: hei(2.5), width: hei(2.5) }}
         Leftpress={() => navigation.goBack()}
       />
+
       <FlatList
-      contentContainerStyle={style.scrollstyle}
+        contentContainerStyle={style.scrollstyle}
         data={History}
-        keyExtractor={(item,index) => index.toString()}
+        keyExtractor={(item, index) => item.Id || index.toString()}
         showsVerticalScrollIndicator={false}
         refreshControl={
-        <RefreshControl
+          <RefreshControl
             refreshing={Refresh}
-            onRefresh={() => {
-              Sethistory([]);
-              Setrefresh(true);
-              gethistory(1, true);
-            }}
+            onRefresh={() => gethistory(1, true)}
             tintColor={Colors.purple}
             colors={[Colors.purple]}
-        />}
-        renderItem={({item,index}) => (
-            <View key={index} style={style.mainview}>
+          />
+        }
+        renderItem={({ item }) => (
+          <View style={style.mainview}>
             <View style={style.detailview}>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Event Name: {""}
+                  Event Name:{" "}
                   <ARtext
                     children={item.EventName}
                     color={Colors.active}
@@ -113,10 +104,9 @@ const Sellerhistory = () => {
                   />
                 </ARtext>
               </View>
-
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Event Date: {""}
+                  Event Date:{" "}
                   <ARtext
                     children={item.EventDate}
                     color={Colors.active}
@@ -126,18 +116,17 @@ const Sellerhistory = () => {
               </View>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Mobile No: {""}
+                  Mobile No:{" "}
                   <ARtext
-                    children={item.BookTicketid}
+                    children={item.MobileNo}
                     color={Colors.active}
                     size={FontSize.font14}
                   />
                 </ARtext>
               </View>
-
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Qty: {""}
+                  Qty:{" "}
                   <ARtext
                     children={item.BookingTicketQty}
                     color={Colors.active}
@@ -147,7 +136,7 @@ const Sellerhistory = () => {
               </View>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Ticket Type: {""}
+                  Ticket Type:{" "}
                   <ARtext
                     children={item.TicketType}
                     color={Colors.active}
@@ -158,21 +147,19 @@ const Sellerhistory = () => {
             </View>
           </View>
         )}
-        onEndReachedThreshold={0.5}
-        onEndReached={() => {
-            Hashmore ? gethistory() : null;
-          }}
-        ListFooterComponent={() => 
-            Loading ? (
-                <View style={{ marginTop: 0, alignItems: "center" }}>
-                  <LottieView
-                    source={Images.loader}
-                    autoPlay
-                    loop
-                    style={{ height: hei(10), width: hei(10) }}
-                  />
-                </View>
-              ) : <View/>
+        onEndReachedThreshold={0.1}
+        onEndReached={() => gethistory(PageIndex, false)}
+        ListFooterComponent={() =>
+          Loading && (
+            <View style={{ marginTop: 0, alignItems: "center" }}>
+              <LottieView
+                source={Images.loader}
+                autoPlay
+                loop
+                style={{ height: hei(10), width: hei(10) }}
+              />
+            </View>
+          )
         }
       />
     </ARcontainer>
@@ -184,11 +171,8 @@ export default Sellerhistory;
 const style = StyleSheet.create({
   scrollstyle: {
     marginTop: hei(1.5),
-    // backgroundColor:'red',
-    // marginHorizontal: wid(3),
     paddingBottom: wid(isIos ? 18 : 25),
   },
-  
   mainview: {
     marginTop: hei(1),
   },
@@ -203,8 +187,6 @@ const style = StyleSheet.create({
     rowGap: hei(1),
   },
   viewmargin: {
-    // marginTop: hei(0.8),
     justifyContent: "center",
-    // backgroundColor:'red'
   },
 });

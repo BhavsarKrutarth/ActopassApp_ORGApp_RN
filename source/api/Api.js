@@ -497,5 +497,5 @@ export const SEL_TicketBook = (
 export const SEL_History = (PageIndex, PageCount, SelllerLoginid) =>
   fetchAPI(
     "GET",
-    `ORGApp_SellerTicketBook/Sellerticketbook_history_List/0/10/11`
+    `ORGApp_SellerTicketBook/Sellerticketbook_history_List/${PageIndex}/${PageCount}/${SelllerLoginid}`
   );
