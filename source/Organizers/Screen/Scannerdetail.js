@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Validation } from "../../utils";
 import ImagePicker from "react-native-image-crop-picker";
 import { editscnnerdata } from "../../api/Api";
+// import { editscnnerdata } from "../../api/Api";
 
 const Scannerdetail = ({ route }) => {
   // console.log(route.params.data);
