@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17">
-      <module name="ActopassReporting.react-native-async-storage_async-storage" target="21" />
-      <module name="ActopassReporting.react-native-linear-gradient" target="21" />
-      <module name="ActopassReporting.react-native-masked-view_masked-view" target="21" />
-      <module name="ActopassReporting.react-native-reanimated" target="21" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

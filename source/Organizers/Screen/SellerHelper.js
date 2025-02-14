@@ -1,17 +1,45 @@
 import { Alert } from "react-native";
 import {
+  TicketBalance,
   TicketData,
   TicketQtyAdd,
   TicketQtyDelete,
   TicketQtyUpdate,
+  TicketType,
 } from "../../api/Api";
 
 export const fetchTicketDetails = async (SelllerLoginid, eventId, setData) => {
   try {
-    const response = await TicketData(SelllerLoginid, eventId);    
+    const response = await TicketData(SelllerLoginid, eventId);
+    console.log("response", response.Details);
+
     if (response.Response === 0) {
       setData(response.Details);
     }
+  } catch (error) {}
+};
+
+export const fetchTicketTypes = async (eventId, setTicketType) => {
+  try {
+    const response = await TicketType(eventId);
+    if (response) {
+      const ticketTypes =
+        response.map((item) => ({
+          label: item.TicketType,
+          value: item.EventMaster_TicketTypeid,
+        })) || [];
+      setTicketType(ticketTypes);
+    }
+  } catch (error) {}
+};
+
+export const fetchTicketBalance = async (
+  SelllerLoginid,
+  eventId,
+  TicketTypeid
+) => {
+  try {
+    const response = await TicketBalance(SelllerLoginid, eventId, TicketTypeid);
   } catch (error) {}
 };
 
@@ -65,7 +93,6 @@ export const updateTicketQty = async (
         SellerTicketQty
       );
       if (response.Response == 0) {
-        setError("");
         Setsuccesmodal(true);
       } else {
         const updatedErrors = [...IsError];

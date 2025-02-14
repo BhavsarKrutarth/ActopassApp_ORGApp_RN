@@ -1,15 +1,19 @@
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
+  Text,
   View,
   RefreshControl,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import {
+  deleteboxoffice,
   deletescannerdata,
+  getboxoffice,
   getscanner,
 } from "../../api/Api";
 import { FontFamily, FontSize, hei, normalize, wid, Colors } from "../../theme";
@@ -35,17 +39,6 @@ const Scannerlist = () => {
   useEffect(() => {
     getscannerlist();
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      onRefreshPage();
-    }, [])
-  );
-  const onRefreshPage = () => {
-    SetGetdata([]);
-    Setrefresh(true);
-    getscannerlist(1, true);
-  };
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Scannerdetail, { data: item });
@@ -121,7 +114,11 @@ const Scannerlist = () => {
         refreshControl={
           <RefreshControl
             refreshing={Refresh}
-            onRefresh={() => onRefreshPage()}
+            onRefresh={() => {
+              SetGetdata([]);
+              Setrefresh(true);
+              getscannerlist(1, true);
+            }}
             tintColor={Colors.purple}
             colors={[Colors.purple]}
           />

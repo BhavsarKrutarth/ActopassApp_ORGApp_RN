@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import {
   ARbutton,
   ARcontainer,
@@ -13,16 +20,14 @@ import {
   FontFamily,
   FontSize,
   hei,
+  height,
   isIos,
   normalize,
   wid,
 } from "../../theme";
+import { useNavigation } from "@react-navigation/native";
 import Images from "../../Image/Images";
-import {
-  Inputdata,
-  Responsemodal,
-  Ticketquantitiy,
-} from "../../Commoncompoenent";
+import { Inputdata, Ticketquantitiy } from "../../Commoncompoenent";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Dropdown } from "react-native-element-dropdown";
 import {
@@ -32,9 +37,9 @@ import {
   SEL_UpComingEvents,
 } from "../../api/Api";
 import { useSelector } from "react-redux";
-import LottieView from "lottie-react-native";
 
 const Ticketsend = () => {
+  const navigation = useNavigation();
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [event, setEvent] = useState([]);
   const [date, setDate] = useState([]);
@@ -42,8 +47,7 @@ const Ticketsend = () => {
   const [value, setValue] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
   const [Tickets, setTickets] = useState([]);
-  const [isLoading, SetLoading] = useState(false);
-  const [responsemodal, setresponsemodal] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [input, setInput] = useState({
     name: "",
     mobileNo: "",
@@ -58,9 +62,11 @@ const Ticketsend = () => {
   });
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await SEL_UpComingEvents(AsyncValue.SellerLoginId);
+        console.log("response event", response);
+        if (!response?.length) setDisable(true);
         setEvent(
           response.map(({ EventName, EventMasterid }) => ({
             label: EventName,
@@ -68,27 +74,31 @@ const Ticketsend = () => {
           })) || []
         );
       } catch (error) {}
-    })();
+    };
+    fetchData();
   }, []);
 
-  useEffect(() => {
+  const fetchEventDate = useCallback(async () => {
     if (!selectedValue) return;
-    (async () => {
-      try {
-        setDate(
-          (await SEL_EventDate(selectedValue.value)).map(
-            ({ EVENTDATE, DISPLAYDATE }) => ({
-              label: DISPLAYDATE,
-              value: EVENTDATE,
-            })
-          )
-        );
-        setTickets(
-          await SEL_TicketType(selectedValue.value, AsyncValue.SellerLoginId)
-        );
-      } catch (error) {}
-    })();
+    try {
+      const dateResponse = await SEL_EventDate(selectedValue.value);
+      setDate(
+        dateResponse.map(({ EVENTDATE, DISPLAYDATE }) => ({
+          label: DISPLAYDATE,
+          value: EVENTDATE,
+        }))
+      );
+      const TicketType = await SEL_TicketType(
+        selectedValue.value,
+        AsyncValue.SellerLoginId
+      );
+      setTickets(TicketType);
+    } catch (error) {}
   }, [selectedValue]);
+
+  useEffect(() => {
+    fetchEventDate();
+  }, [fetchEventDate]);
 
   useEffect(() => {
     let totalprice = 0;
@@ -128,30 +138,37 @@ const Ticketsend = () => {
 
   const validateForm = () => {
     let errors = {};
-    if (!input.name.trim()) errors.name = "Please enter your name.";
+    if (!input.name.trim()) {
+      errors.name = "Please enter your name.";
+    }
     const mobileRegex = /^[0-9]{10}$/;
-    if (!input.mobileNo) errors.mobileNo = "Please enter your mobile number.";
-    else if (!mobileRegex.test(input.mobileNo))
+    if (!input.mobileNo) {
+      errors.mobileNo = "Please enter your mobile number.";
+    } else if (!mobileRegex.test(input.mobileNo)) {
       errors.mobileNo = "Please enter a valid 10-digit mobile number.";
-    else if (input.mobileNo !== input.confirmMobileNo)
+    }
+    if (!input.confirmMobileNo) {
+      errors.confirmMobileNo = "Please confirm your mobile number.";
+    } else if (input.mobileNo !== input.confirmMobileNo) {
       errors.confirmMobileNo =
         "Mobile number and confirm mobile number do not match.";
-    if (!input.remark.trim()) errors.remark = "Please enter your remark.";
-    else if (input.remark.length > 200)
+    }
+    if (!input.remark.trim()) {
+      errors.remark = "Please enter your remark.";
+    } else if (input.remark && input.remark.length > 200) {
       errors.remark = "Remark is too long. Please limit it to 200 characters.";
-    if (!value) errors.date = "Please select a date.";
+    }
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleTicketBook = async () => {
     if (!validateForm()) return;
-    SetLoading(true);
     const ticketTypes = QTYdata.map((item) => ({
       SelllerMasterDetailsid: item.SelllerMasterDetailsid,
       SelllerLoginid: AsyncValue.SellerLoginId,
       Eventmasterid: selectedValue.value,
-      Eventdate: value.value,
+      Eventdate: value,
       Bookingticketqty: item.QTY,
       Bookingamount: item.QTY * item.Price,
       Eventmaster_tickettypeid: item.EventMaster_TicketTypeid,
@@ -167,31 +184,17 @@ const Ticketsend = () => {
         input.name,
         input.remark,
         input.confirmMobileNo,
-        value.value,
+        value,
         ticketTypes
       );
       if (response) {
         setInput({});
-        SetQTYdata([]);
-        setresponsemodal(true);
       }
     } catch (error) {
-    } finally {
-      SetLoading(false);
+      console.error(error);
     }
   };
 
-  if (isLoading)
-    return (
-      <ARcontainer style={{ justifyContent: "center", alignItems: "center" }}>
-        <LottieView
-          source={Images.tickets}
-          autoPlay
-          loop
-          style={{ height: hei(18), width: hei(18) }}
-        />
-      </ARcontainer>
-    );
   return (
     <ARcontainer backgroundColor={Colors.backgroundcolor}>
       <View>
@@ -206,7 +209,6 @@ const Ticketsend = () => {
       </View>
 
       <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: hei(10) }}
         enableAutomaticScroll={isIos ? true : false} // Prevent automatic scroll behavior
         enableOnAndroid={true}
@@ -216,7 +218,7 @@ const Ticketsend = () => {
         extraScrollHeight={0} // Prevent extra space from being added when the keyboard opens
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // Adjust for platform-specific behavior
       >
-        <View style={{ height: hei(isIos ? 28 : 31) }}>
+        <View style={styles.heightview}>
           <View style={styles.shadowview}>
             <View style={styles.secview}>
               <Dropdown
@@ -230,7 +232,6 @@ const Ticketsend = () => {
                   styles.iconStyle,
                   { tintColor: isDisable ? Colors.inactive : Colors.Black },
                 ]}
-                selectedTextProps={{ numberOfLines: 1 }}
                 showsVerticalScrollIndicator={false}
                 containerStyle={styles.ContainerStyle}
                 data={event}
@@ -239,9 +240,14 @@ const Ticketsend = () => {
                 labelField="label"
                 valueField="value"
                 placeholder="Event"
-                value={selectedValue}
                 onChange={(item) => {
                   setSelectedValue(item);
+                  const eventLocation = item.label.split(" - ");
+                  if (eventLocation.length > 1) {
+                    setSelectedLocation(eventLocation[1]);
+                  } else {
+                    setSelectedLocation("");
+                  }
                 }}
                 renderLeftIcon={() => (
                   <ARimage
@@ -268,7 +274,22 @@ const Ticketsend = () => {
                     color={Colors.Text}
                   />
                 </View>
+                {/* <View style={styles.profileimageview}>
+                  <ARimage
+                    source={Images.exa}
+                    style={styles.profileimage}
+                    resizemode={"stretch"}
+                  />
+                </View> */}
               </View>
+              {/* <View style={styles.location}>
+                <ARtext
+                  children={"Location"}
+                  align={""}
+                  size={FontSize.font12}
+                  color={Colors.Text}
+                />
+              </View> */}
               <View style={styles.eventndetailview}>
                 <ARtext size={FontSize.font13}>
                   Event ID: {""}
@@ -279,8 +300,14 @@ const Ticketsend = () => {
                     align={""}
                   />
                 </ARtext>
+                {/* <ARtext
+                  children={"Surat"}
+                  size={FontSize.font14}
+                  color={Colors.Placeholder}
+                  align={""}
+                /> */}
               </View>
-              <View style={{ marginTop: hei(0.7) }}>
+              <View style={styles.eventname}>
                 <ARtext size={FontSize.font13} align={""}>
                   Event Name: {""}
                   <ARtext
@@ -291,6 +318,20 @@ const Ticketsend = () => {
                   />
                 </ARtext>
               </View>
+              {/* <ARbutton Touchstyle={styles.ticketupload}>
+                <ARimage
+                  source={Images.ticket}
+                  style={styles.tiketimage}
+                  tintColor={Colors.White}
+                />
+                <ARtext
+                  children={"BULK TICKETS UPLOAD"}
+                  size={FontSize.font12}
+                  align={""}
+                  color={Colors.White}
+                  fontFamily={FontFamily.Bold}
+                />
+              </ARbutton> */}
             </View>
           </View>
         </View>
@@ -353,18 +394,18 @@ const Ticketsend = () => {
               maxHeight={230}
               labelField="label"
               valueField="value"
-              value={value}
               placeholder="Enter date"
               onChange={(item) => {
-                setValue(item);
+                setValue(item.value);
               }}
             />
-            {errors.date && (
-              <ARtext color={Colors.Red} align={"left"}>
-                {errors.date}
-              </ARtext>
-            )}
           </View>
+          {/* <Inputdata
+            txtchildren={"Select Date"}
+            placeholder={"Enter Date"}
+            inputvalue={""}
+            onchange={(v) => console.log(v)}
+          /> */}
         </View>
 
         <View style={styles.ticketdetail}>
@@ -452,14 +493,6 @@ const Ticketsend = () => {
             </View>
           ) : null}
         </View>
-        <Responsemodal
-          visible={responsemodal}
-          onrequestclose={() => setresponsemodal(false)}
-          onpress={() => setresponsemodal(false)}
-          Images={Images.success}
-          subtext={"!Oh Yeah"}
-          message={"Tickets book successfully."}
-        />
       </KeyboardAwareScrollView>
     </ARcontainer>
   );
@@ -475,10 +508,36 @@ const styles = StyleSheet.create({
     top: hei(2),
     width: wid(100),
   },
+  tochstyle: {
+    marginTop: hei(2),
+    height: hei(5),
+    width: wid(94),
+    borderRadius: 20,
+    backgroundColor: "",
+    borderWidth: normalize(1.5),
+    borderColor: Colors.line,
+    justifyContent: "",
+    alignItems: "",
+    paddingHorizontal: wid(4),
+  },
+  buttonview: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tetview: {
+    flex: 1,
+    marginLeft: wid(3),
+    marginTop: hei(0),
+  },
   eventimage: {
     height: hei(2.3),
     width: hei(2.3),
     marginRight: wid(3),
+  },
+  downarrpeimg: {
+    height: hei(1.5),
+    width: hei(1.5),
   },
   container: {
     position: "absolute",
@@ -498,12 +557,49 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  profileimageview: {
+    backgroundColor: Colors.lable,
+    height: hei(5),
+    width: hei(5),
+    borderRadius: normalize(50),
+  },
+  profileimage: {
+    height: hei(5),
+    width: hei(5),
+  },
+  location: {
+    alignItems: "flex-end",
+    marginVertical: hei(0.6),
+  },
   eventndetailview: {
     marginTop: hei(1.5),
     justifyContent: "space-between",
     flexDirection: "row",
+    // alignItems: 'center',
+    // backgroundColor:'red'
+  },
+  eventname: {
+    marginTop: hei(0.7),
+  },
+  tiketimage: {
+    height: hei(2.2),
+    width: hei(2.2),
+  },
+  ticketupload: {
+    height: hei(4),
+    backgroundColor: Colors.btncolor,
+    borderRadius: normalize(5),
+    marginTop: hei(1.8),
+    marginBottom: hei(0.5),
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    // paddingVertical:hei(1),
+    // paddingHorizontal:wid(1),
+    alignItems: "center",
+    width: wid(isIos ? 50 : 52),
   },
   inputcontainerview: {
+    // marginTop: hei(3),
     backgroundColor: Colors.White,
     borderWidth: normalize(1),
     borderColor: Colors.bordercolor,
@@ -511,6 +607,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: wid(4),
     paddingVertical: hei(1.5),
     marginHorizontal: wid(4),
+  },
+  heightview: {
+    height: hei(isIos ? 28 : 31),
+    backgroundColor: "",
   },
   shadowview: {
     height: hei(16.5),
@@ -526,10 +626,21 @@ const styles = StyleSheet.create({
     rowGap: hei(1.5),
     marginVertical: hei(3),
   },
+  ticketzone: {
+    rowGap: hei(1.5),
+    // backgroundColor:'red'
+  },
+  zoneview: {},
   gridview: {
     marginHorizontal: wid(4),
     paddingVertical: hei(1),
+    // backgroundColor:"pink",
     rowGap: hei(3),
+  },
+  gridbtn: {
+    // backgroundColor:'red',
+    justifyContent: "center",
+    alignItems: "flex-end",
   },
   maingrid: {
     borderWidth: normalize(1.5),
@@ -566,6 +677,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: normalize(10),
   },
   ContainerStyle: {
+    // backgroundColor:"red",
     borderRadius: normalize(9),
     shadowColor: "#000",
     shadowOffset: {
