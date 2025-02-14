@@ -1,27 +1,66 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, FlatList, RefreshControl, StyleSheet } from "react-native";
 import { ARcontainer, ARheader, ARtext } from "../../common";
 import { useNavigation } from "@react-navigation/native";
-import { Colors, FontFamily, FontSize, hei, normalize, wid } from "../../theme";
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  hei,
+  isIos,
+  normalize,
+  wid,
+} from "../../theme";
 import Images from "../../Image/Images";
+import { useSelector } from "react-redux";
 import { SEL_History } from "../../api/Api";
+import LottieView from "lottie-react-native";
 
 const History = () => {
   const navigation = useNavigation();
-  const [seller, setSeller] = useState([]);
-    
+  const { AsyncValue } = useSelector((state) => state.Auth);
+  const [History, Sethistory] = useState([]);
+  const [Refresh, Setrefresh] = useState(false);
+  const [PageIndex, SetPageIndex] = useState(1);
+  const [Loading, SetLoading] = useState(false);
+  const [HasMore, SetHasMore] = useState(true);
+  const PageCount = 10;
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await SEL_History(0, 10, 11);
-        console.log("response", response);
-        setSeller(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
+    if (AsyncValue.SellerLoginId) {
+      gethistory(1, true);
+    }
   }, []);
+
+  const gethistory = async (value, refresh) => {
+    if (Loading && !refresh) return;
+    if (refresh) {
+      Setrefresh(true);
+      SetPageIndex(1);
+      SetHasMore(true);
+    } else {
+      SetLoading(true);
+    }
+    try {
+      const response = await SEL_History(
+        value || PageIndex,
+        PageCount,
+        AsyncValue.SellerLoginId
+      );
+
+      if (response && response.length > 0) {
+        Sethistory(refresh ? response : [...History, ...response]);
+        SetPageIndex(value + 1);
+        SetHasMore(response.length === PageCount);
+      } else {
+        SetHasMore(false);
+      }
+    } catch (error) {
+    } finally {
+      SetLoading(false);
+      Setrefresh(false);
+    }
+  };
 
   return (
     <ARcontainer>
@@ -36,13 +75,26 @@ const History = () => {
         headerleftimgstyle={{ height: hei(2.5), width: hei(2.5) }}
         Leftpress={() => navigation.goBack()}
       />
-      <ScrollView style={style.scrollstyle}>
-        {seller.map((item, index) => (
-          <View key={index} style={style.mainview}>
+
+      <FlatList
+        contentContainerStyle={style.scrollstyle}
+        data={History}
+        keyExtractor={(item, index) => item.Id || index.toString()}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={Refresh}
+            onRefresh={() => gethistory(1, true)}
+            tintColor={Colors.purple}
+            colors={[Colors.purple]}
+          />
+        }
+        renderItem={({ item }) => (
+          <View style={style.mainview}>
             <View style={style.detailview}>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Event Name: {""}
+                  Event Name:{" "}
                   <ARtext
                     children={item.EventName}
                     color={Colors.active}
@@ -50,12 +102,11 @@ const History = () => {
                   />
                 </ARtext>
               </View>
-
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Event Date: {""}
+                  Event Date:{" "}
                   <ARtext
-                    children={item.EventDta}
+                    children={item.EventDate}
                     color={Colors.active}
                     size={FontSize.font14}
                   />
@@ -63,7 +114,7 @@ const History = () => {
               </View>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Mobile No: {""}
+                  Mobile No:{" "}
                   <ARtext
                     children={item.MobileNo}
                     color={Colors.active}
@@ -71,12 +122,11 @@ const History = () => {
                   />
                 </ARtext>
               </View>
-
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Qly: {""}
+                  Qty:{" "}
                   <ARtext
-                    children={item.Qly}
+                    children={item.BookingTicketQty}
                     color={Colors.active}
                     size={FontSize.font14}
                   />
@@ -84,7 +134,7 @@ const History = () => {
               </View>
               <View style={style.viewmargin}>
                 <ARtext align={""} size={FontSize.font14}>
-                  Ticket Type: {""}
+                  Ticket Type:{" "}
                   <ARtext
                     children={item.TicketType}
                     color={Colors.active}
@@ -94,8 +144,22 @@ const History = () => {
               </View>
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+        onEndReachedThreshold={0.1}
+        onEndReached={() => gethistory(PageIndex, false)}
+        ListFooterComponent={() =>
+          Loading && (
+            <View style={{ marginTop: 0, alignItems: "center" }}>
+              <LottieView
+                source={Images.loader}
+                autoPlay
+                loop
+                style={{ height: hei(10), width: hei(10) }}
+              />
+            </View>
+          )
+        }
+      />
     </ARcontainer>
   );
 };
@@ -105,9 +169,7 @@ export default History;
 const style = StyleSheet.create({
   scrollstyle: {
     marginTop: hei(1.5),
-    // backgroundColor:'red',
-    flexGrow: 1,
-    marginHorizontal: wid(3),
+    paddingBottom: wid(isIos ? 18 : 25),
   },
   mainview: {
     marginTop: hei(1),
@@ -123,8 +185,6 @@ const style = StyleSheet.create({
     rowGap: hei(1),
   },
   viewmargin: {
-    // marginTop: hei(0.8),
     justifyContent: "center",
-    // backgroundColor:'red'
   },
 });

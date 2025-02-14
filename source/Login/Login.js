@@ -25,14 +25,15 @@ const Login = () => {
   const [Logindata, Setlogindata] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
-    Id: "ORG-0001",
-    Password: "04BBB12B",
+    Id: "BOX-0017",
+    Password: "12345",
     OTP: "",
   });
 
   const Idvalidation = Fieldvalidation && Validation.isID(Input.Id);
   const Otpvalidation = Fieldvalidation && Validation.isPINValid(Input.OTP);
-  const Passwordvalidation = Fieldvalidation && Validation.isPasswordValid(Input.Password);
+  const Passwordvalidation =
+    Fieldvalidation && Validation.isPasswordValid(Input.Password);
 
   const Login = async (Id, Password) => {
     setfieldvalidation(true);
@@ -56,12 +57,13 @@ const Login = () => {
         } else if (response.Response === 0) {
           dispatch(onAuthChange(true));
           dispatch(setAsyncStorageValue(response));
-          Functions.setAppData(response)
+          Functions.setAppData(response);
           setfieldvalidation(false);
         } else if (response.Response === -1) {
           Alert.alert(response.ResponseMessage);
         }
- 
+        if (response.Response === 2 || response.Response === 0) {
+        }
       }
     } catch (error) {
       console.log(error);
@@ -79,7 +81,7 @@ const Login = () => {
     if (loginotp == otp) {
       dispatch(onAuthChange(true));
       dispatch(setAsyncStorageValue(Logindata));
-      Functions.setAppData(Logindata)
+      Functions.setAppData(Logindata);
       setfieldvalidation(false);
     } else {
       Alert.alert("Invalid OTP.");

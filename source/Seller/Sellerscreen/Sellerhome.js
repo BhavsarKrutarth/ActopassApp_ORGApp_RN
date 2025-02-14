@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   ScrollView,
@@ -49,7 +48,7 @@ import LottieView from "lottie-react-native";
 const Sellerhome = () => {
   const { AsyncValue } = useSelector((state) => state.Auth);
   // console.log(AsyncValue);
-
+  
   const payarry = [
     {
       Id: 1,
@@ -98,7 +97,6 @@ const Sellerhome = () => {
   const [responsemodal, setresponsemodal] = useState(false);
   const [Loader, Setloader] = useState(false);
   const [Waiting, Setwaiting] = useState(false);
-  const [Discountmessage, SetDiscountmessage] = useState(false);
 
   useEffect(() => {
     const getevent = async (BoxofficeUserId) => {
@@ -236,10 +234,6 @@ const Sellerhome = () => {
       if (Disresponse) {
         SetDiscountdetail(Disresponse);
         Setwaiting(false);
-        if(Disresponse.DISCOUNTPRECENTAGE < 1){
-          Setdiscount(false)
-          SetDiscountmessage(true)
-        }
         // console.log('Discount',Disresponse);
       } else {
         Setwaiting(false);
@@ -680,7 +674,10 @@ const Sellerhome = () => {
                     ) : null}
                   </ARbutton>
                   {Waiting ? (
-                    <ARtext children={"Just a waiting"} align={""} />
+                    (<ARtext
+                      children={'Just a waiting'}
+                      align={""}
+                    />)
                   ) : (
                     <ARtext
                       children={`Apply Discount - ${
@@ -690,13 +687,6 @@ const Sellerhome = () => {
                     />
                   )}
                 </View>
-                {/* {Discountmessage && Discountdetail.DISCOUNTPRECENTAGE < 1 ? (
-                  <ARtext
-                    children={`Can't get discount some price`}
-                    color={"red"}
-                    align={""}
-                  />
-                ) : null} */}
                 <View style={styles.paymentmainview}>
                   {payarry.map((item, index) => (
                     <View key={index} style={styles.paymentdirectionview}>
@@ -774,17 +764,6 @@ const Sellerhome = () => {
             </View>
           ) : null}
         </View>
-        <Responsemodal
-          visible={Discountmessage}
-          onrequestclose={() => SetDiscountmessage(false)}
-          onpress={() => SetDiscountmessage(false)}
-          Images={Images.sorry}
-          subtext={'Sorry'}
-          message={'This amount does not qualify for a discount.'}
-          subcolor={Colors.Red}
-        />
-
-
         <Responsemodal
           visible={responsemodal}
           onrequestclose={() => setresponsemodal(false)}
@@ -975,7 +954,7 @@ const styles = StyleSheet.create({
   },
   discountview: {
     flexDirection: "row",
-    marginTop: hei(1),
+    marginVertical: hei(1),
     columnGap: wid(2),
     alignItems: "center",
   },
