@@ -16,6 +16,38 @@ export const loginUser = async (Id, Password) => {
     throw error;
   }
 };
+// ===================Dashboard======================= //
+
+  export const loistofevent = async (OrganizerLoginid) => {
+    try{
+      const response = await FetchMethod.GET({
+        EndPoint: `ORGApp/OrganizerEventList/${1}/${1000}/${OrganizerLoginid}`,
+      })
+      return response
+    }catch(error){
+      console.log('Dashboard event list error',error);
+      throw error
+    }
+  }
+
+
+  export const percentagedata = async (BoxId,EvntId) => {
+    console.log(BoxId,EvntId);
+    
+    try{
+      const response = await FetchMethod.GET({
+        EndPoint:`ORGApp/GetOrganizationdashborad/${BoxId}/${EvntId}`,
+      })
+      return response
+    }catch(error){
+      console.log('Dashboard percentage data error',error);
+      throw error
+    }
+  } 
+
+
+// =============================================== //
+
 
 // =========== Add Seller,Boxoffice,Scanner =============
 
@@ -88,6 +120,7 @@ export const EventDetails = async (EventMasterid) => {
     throw error;
   }
 };
+// ==================================================== //
 
 // =========== Seller get, Edit, delete ==============
 
@@ -143,6 +176,7 @@ export const deleteseller = async (id) => {
     throw error;
   }
 };
+// ====================================================//
 
 // =========== BoxOffice get, Edit, delete ==============
 
@@ -198,6 +232,7 @@ export const deleteboxoffice = async (Id) => {
     throw error;
   }
 };
+// =============================================== ///
 
 // ============= scanner get,update,delete =================
 
@@ -253,6 +288,9 @@ export const deletescannerdata = async (Id) => {
     throw error;
   }
 };
+
+
+// =============================================== //
 
 export const EventList = async (OrganizerLoginId) => {
   try {
@@ -373,6 +411,89 @@ export const getboxhistory = async (
   }
 };
 
+
+
+// ==================== BoxofficeTicketsend ======================
+
+export const geteventlist = async (BoxofficeUserId) => {
+  try{
+    const response = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/ToDayEvent_BoxOffice/${BoxofficeUserId}`,
+    })
+    return response
+  }catch(error){
+    console.log('Get EventList Error',error);
+    throw error
+  }
+}
+
+export const geteventdate = async (EventMasterid) => {
+  try{
+    const response  = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeeventdateList/${EventMasterid}`
+    })
+    return response;
+  }catch(error){
+    console.log('Event Date Get Error',error);
+    throw error;
+  }
+}
+
+
+export const ticketget = async (EventMasterid) => {
+  try{
+    const response = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_tickettypeList/${EventMasterid}`
+    })
+    return response
+  }catch(error){
+    console.log('Event Ticket Type Get Error',error);
+    throw error;
+  }
+}
+
+export const applydis = async (BoxuserId,Amount,EventId) => {
+  try{
+    const response = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/Upcoming_boxofficeevent_discountchk/${BoxuserId}/${Amount}/${EventId}`
+    })
+    return response
+  }catch(error){
+    console.log('Discount Apply Error',error);
+    throw error;
+  }
+} 
+
+
+export const bookingtickets = async (sendobject) => {
+  // console.log(JSON.stringify(sendobject, null, 2));
+  try{
+    const response = await FetchMethod.POST({
+      EndPoint:'ORGAPP_BoxOfficeTicketBook/TicketBooking',
+      Params:sendobject
+    }) 
+    return response;
+  }catch(error){
+    console.log('Booking Ticket Error',error);
+    throw error
+  }
+}
+
+export const getboxhistory = async (PageIndex,PageCount,Boxofficediscountid) => {
+  console.log(PageIndex,PageCount,Boxofficediscountid);
+  
+  try{  
+    const response = await FetchMethod.GET({
+      EndPoint:`ORGAPP_BoxOfficeTicketBook/GetBoxOfficeUserHistoryList/${PageIndex}/${PageCount}/${Boxofficediscountid}`,
+    })
+    return response
+  }catch(error){
+    console.log('GetBox History error',error);
+    throw error
+  }
+}
+
+// ===================================== //
 export const TicketQtyAdd = (
   SelllerLoginid,
   EventMasterid,
@@ -499,3 +620,4 @@ export const SEL_History = (PageIndex, PageCount, SelllerLoginid) =>
     "GET",
     `ORGApp_SellerTicketBook/Sellerticketbook_history_List/0/10/11`
   );
+

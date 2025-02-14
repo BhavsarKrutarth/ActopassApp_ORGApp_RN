@@ -10,19 +10,18 @@ import LottieView from "lottie-react-native";
 
 const Sellerhistory = () => {
   const navigation = useNavigation();
-
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [History,Sethistory] = useState([])
   const [Refresh, Setrefresh] = useState(false);
   const [PageIndex,SetPageIndex] = useState(1);
   const [Loading,SetLoading] = useState(false)
   const [Hashmore,Sethashmore] = useState(false)
-  const PageCount = 3
+  const PageCount = 10
 
 
   useEffect(() => {
     gethistory()
-  },[seller]);
+  },[]);
 
   const gethistory = async (value,refresh) => {
     if(refresh){
@@ -34,13 +33,14 @@ const Sellerhistory = () => {
       const resonse = await getboxhistory(value ? value : PageIndex,PageCount,AsyncValue.BoxofficeUserId)
       if(resonse){
         Sethistory((pre) => ([...pre,...resonse.Details]))
-        SetPageIndex((pre) => (value ? value + 1 : pre + 1));
+        SetPageIndex((previous) => (value ? value + 1 : previous + 1));
         SetLoading(false)
         Sethashmore(true)
         Setrefresh(false)
       }else{
         SetLoading(false)
         Setrefresh(false)
+        Sethashmore(false)
       }
     } catch (error) {
        SetLoading(false)
@@ -50,26 +50,7 @@ const Sellerhistory = () => {
 
     }
   }
-  console.log(History.length);
   
-  const seller = [
-    {
-      Id: "1",
-      EventName: "XYZ",
-      EventDta: "30 Jan, 2024",
-      MobileNo: "1122334455",
-      Qly: "50",
-      TicketType: "XYZ",
-    },
-    {
-      Id: "2",
-      EventName: "ABC",
-      EventDta: "31 Jan, 2025",
-      MobileNo: "1122334455",
-      Qly: "40",
-      TicketType: "ABC",
-    },
-  ];
 
   return (
     <ARcontainer>
@@ -85,7 +66,8 @@ const Sellerhistory = () => {
         Leftpress={() => navigation.goBack()}
       />
       <FlatList
-      contentContainerStyle={style.scrollstyle}
+        contentContainerStyle={style.scrollstyle}
+        initialNumToRender={10}
         data={History}
         keyExtractor={(item,index) => index.toString()}
         showsVerticalScrollIndicator={false}
@@ -160,7 +142,11 @@ const Sellerhistory = () => {
         )}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
-            Hashmore ? gethistory() : null;
+            Hashmore ? 
+            setTimeout(() => {
+              gethistory()
+            }, 2000)
+            : null;
           }}
         ListFooterComponent={() => 
             Loading ? (

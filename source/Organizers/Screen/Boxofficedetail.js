@@ -167,6 +167,7 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
+        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);

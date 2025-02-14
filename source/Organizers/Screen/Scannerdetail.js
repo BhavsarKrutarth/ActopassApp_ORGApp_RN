@@ -257,13 +257,13 @@ const Scannerdetail = ({ route }) => {
                         ongallerypress={opengallary}
                         oncamerapress={openCamera}
                     />
-      <Responsemodal
-        visible={Successmodal}
-        onpress={() => Setsuccesmodal(false)}
-        message={"Data has been edited successfully"}
-        subtext={"!Oh Yeah"}
-        Images={Images.editdata}
-      />
+              <Responsemodal
+                visible={Successmodal}
+                onpress={() => Setsuccesmodal(false)}
+                message={"Data has been edited successfully"}
+                subtext={"!Oh Yeah"}
+                Images={Images.editdata}
+              />
         </View>
         {/* </ScrollView> */}
       </KeyboardAwareScrollView>
