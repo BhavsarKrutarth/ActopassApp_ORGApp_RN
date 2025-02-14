@@ -147,7 +147,6 @@ const Sellerdetail = ({ route }) => {
   };
 
   const editseller = async (
-    
     SelllerLoginid,
     OrganizerLoginid,
     Password,
