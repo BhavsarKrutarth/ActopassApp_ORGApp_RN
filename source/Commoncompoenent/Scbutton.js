@@ -14,6 +14,7 @@ const Scbutton = ({
   children,
   textStyle,
   disabled,
+  canceldisabled,
 }) => {
   return (
     <View style={[style.buttonview, styles]}>
@@ -39,8 +40,9 @@ const Scbutton = ({
           borderRadius={normalize(12)}
           height={hei(5)}
           width={wid(30)}
-          onpress={oncanclepress}
+          onpress={canceldisabled ? null : oncanclepress}
           backgroundColor={backgroundColor || Colors.Black}
+          Touchstyle={{ opacity: canceldisabled ? 0.3 : 1 }}
         >
           <ARtext
             children={children || "Cancel"}

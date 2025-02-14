@@ -1,62 +1,68 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {ARcontainer, ARLoader} from '../../common';
-import {ARheader} from '../../common';
-import {hei, wid, normalize, height, isIos} from '../../theme';
-import {FontFamily, FontSize} from '../../theme';
-import {Colors} from '../../theme';
-import {ARbutton} from '../../common';
-import {ARtext} from '../../common';
-import {ARimage} from '../../common';
-import Images from '../../Image/Images';
-import {useNavigation} from '@react-navigation/native';
-import Navroute from '../navigation/Navroute';
-import Sellerlist from './sellerlist';
-import Boxofficelist from './boxofficelist';
-
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { ARcontainer, ARLoader } from "../../common";
+import { ARheader } from "../../common";
+import { hei, wid, normalize, height, isIos } from "../../theme";
+import { FontFamily, FontSize } from "../../theme";
+import { Colors } from "../../theme";
+import { ARbutton } from "../../common";
+import { ARtext } from "../../common";
+import { ARimage } from "../../common";
+import Images from "../../Image/Images";
+import { useNavigation } from "@react-navigation/native";
+import Navroute from "../navigation/Navroute";
+import Sellerlist from "./sellerlist";
+import Boxofficelist from "./boxofficelist";
+import Scannerlist from "./scannerlist";
+import Createseller from "./Createseller";
 
 const Accountcreation = ({}) => {
   const navigation = useNavigation();
   const [btn, setbtn] = useState(1);
+  const [Addusermodal, Setaddusermodal] = useState(false);
+  const [Sellerrefresh, Setsellerrefresh] = useState(false);
   const tempdata = [
     {
       Id: 1,
-      name: 'Seller',
-      detail: [
-        
-      ],
+      name: "Seller",
+      detail: [],
     },
     {
       Id: 2,
-      name: 'Box office',
-      detail: [
-        
-      ],
+      name: "Box office",
+      detail: [],
     },
     {
       Id: 3,
-      name: 'Scanner',
-      detail: [
-        
-      ],
+      name: "Scanner",
+      detail: [],
     },
   ];
-  
-  const dataset = item => {
+
+  const dataset = (item) => {
     setbtn(item.Id);
-    // setsellerdata(item);
   };
 
-// if (Loading) return <ARLoader visible={Loading}/>
-
+  const refreshdata = (v) => {
+    Setaddusermodal(false);
+    Setsellerrefresh(true);
+  };
 
   return (
     <ARcontainer>
       <ARheader
-        lefttch={{paddingLeft: wid(1)}}
-        texts={'Accounts Details'}
+        lefttch={{ paddingLeft: wid(1) }}
+        texts={"Accounts Details"}
         Lefticon={Images.backarrow}
-        headerleftimgstyle={{height: hei(2.5), width: hei(2.5)}}
+        headerleftimgstyle={{ height: hei(2.5), width: hei(2.5) }}
         size={FontSize.font18}
         textcolor={Colors.Black}
         textfontfamily={FontFamily.SemiBold}
@@ -74,7 +80,8 @@ const Accountcreation = ({}) => {
                 borderRadius: normalize(9),
                 borderWidth: normalize(1.5),
                 borderColor: Colors.bordercolor,
-              }}>
+              }}
+            >
               <ARtext
                 children={item.name}
                 color={btn === item.Id ? Colors.White : Colors.Placeholder}
@@ -84,24 +91,42 @@ const Accountcreation = ({}) => {
           </View>
         ))}
       </View>
-      
-        {btn === 1 ? <Sellerlist /> : btn === 2 ? <Boxofficelist/> : ''}
-     
+
+      {btn === 1 ? (
+        <Sellerlist
+          Ids={btn}
+          // Sellerrefresh={Sellerrefresh}
+          // Sellernotrefresh={() => Setsellerrefresh(false)}
+        />
+      ) : btn === 2 ? (
+        <Boxofficelist 
+        
+        />
+      ) : (
+        <Scannerlist />
+      )}
+
+      <Createseller
+        visible={Addusermodal}
+        Id={btn}
+        closemodal={() => Setaddusermodal(false)}
+        saveclose={(v) => refreshdata(v)}
+        onRequestClose={() => Setaddusermodal(false)}
+      />
+
       <View style={style.addbutton}>
-              <ARbutton
-                Touchstyle={{
-                  height: hei(6.5),
-                  width: hei(6.5),
-                  borderRadius: normalize(50),
-                  backgroundColor:""
-                }}
-                onpress={() => navigation.navigate(Navroute.Createseller,{Id:btn})}
-              >
-                <ARimage source={Images.accountcreation} 
-                style={{}}/>
-              </ARbutton>
+        <ARbutton
+          Touchstyle={{
+            height: hei(6.5),
+            width: hei(6.5),
+            borderRadius: normalize(50),
+            backgroundColor: "",
+          }}
+          onpress={() => Setaddusermodal(true)}
+        >
+          <ARimage source={Images.accountcreation} style={{}} />
+        </ARbutton>
       </View>
-            
     </ARcontainer>
   );
 };
@@ -110,8 +135,8 @@ export default Accountcreation;
 
 const style = StyleSheet.create({
   mapview: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: hei(1),
     marginHorizontal: wid(3),
   },
@@ -129,22 +154,22 @@ const style = StyleSheet.create({
   },
   scrollstyle: {
     marginTop: hei(1.5),
-    paddingBottom:wid(18),
+    paddingBottom: wid(18),
     // backgroundColor:"red"
   },
   mainview: {
     marginTop: hei(1),
   },
   content: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
   codeview: {
     width: wid(42),
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   imageview: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: wid(2),
   },
   imagestyle: {
@@ -153,7 +178,7 @@ const style = StyleSheet.create({
   },
   viewmargin: {
     marginTop: hei(0.8),
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   line: {
     borderWidth: 1,

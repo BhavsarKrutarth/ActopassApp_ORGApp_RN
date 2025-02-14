@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Modal, Platform, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -20,9 +20,8 @@ import { Validation } from "../../utils";
 import { useSelector } from "react-redux";
 import { Addnewseller } from "../../api/Api";
 
-const Createseller = ({route}) => {
+const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
   const navigation = useNavigation();
-  const {Id} = route.params  
   const { AsyncValue } = useSelector((state) => state.Auth);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Loading, setlodading] = useState(false);
@@ -41,12 +40,9 @@ const Createseller = ({route}) => {
   });
 
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
-  const Emailvalidation =
-    Fieldvalidation && Validation.isEmailValid(Input.Email);
-  const Mobilevalidation =
-    Fieldvalidation && Validation.isMobileNumberValid(Input.Number);
-  const Passwordvalidation =
-    Fieldvalidation && Validation.issellerpassword(Input.password);
+  const Emailvalidation = Fieldvalidation && Validation.isEmailValid(Input.Email);
+  const Mobilevalidation = Fieldvalidation && Validation.isMobileNumberValid(Input.Number);
+  const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.password);
   const Photo = Fieldvalidation && Input.selectedImage.imageUri == "";
 
   const validate =
@@ -98,6 +94,28 @@ const Createseller = ({route}) => {
       .catch((err) => console.log(err));
   };
 
+  const oncanclepress = () => {
+    setfieldvalidation(false);
+    setInput({
+      Name: "",
+      password: "",
+      Email: "",
+      Number: "",
+      selectedImage: {
+        base64: "",
+        imageUri: "",
+      },
+      setmodel: false,
+    });
+     closemodal()
+  }
+  const onsuccesspress = (Id) => {
+      setSuccessmodal(false)
+      setTimeout(() => {
+        saveclose(Id)
+      }, 1000);
+  }
+
   const Addseller = async (
     OrganizerLoginId,
     Password,
@@ -147,20 +165,30 @@ const Createseller = ({route}) => {
     }
   };
 
-  if (Loading) return <ARLoader visible={Loading} />;
+  // if (Loading) return <ARLoader visible={Loading} />;
 
   return (
-    <ARcontainer backgroundColor={Colors.backgroundcolor}>
+    <Modal  
+      transparent={false}
+      visible={visible}
+      animationType="slide"
+      onRequestClose={onRequestClose}
+    >
+      <ARcontainer>
+        {
+          Loading ? 
+          <ARLoader visible={Loading} style={{backgroundColor:Colors.White}}/> : null
+        }
       <ARheader
         lefttch={{ paddingLeft: wid(1) }}
-        texts={Id === 1 ? 'Create Seller' : Id === 2 ? 'Create Boxoffice' : 'Create Seller'}
+        texts={Id === 1 ? 'Create Seller' : Id === 2 ? 'Create Boxoffice' : 'Create Scanner'}
         size={FontSize.font18}
         textcolor={Colors.Black}
         textfontfamily={FontFamily.SemiBold}
         tint={Colors.Black}
         Lefticon={Images.backarrow}
         headerleftimgstyle={{ height: hei(2.5), width: hei(2.5) }}
-        Leftpress={() => navigation.goBack()}
+        Leftpress={oncanclepress}
       />
 
       <KeyboardAwareScrollView
@@ -193,7 +221,7 @@ const Createseller = ({route}) => {
               inputvalue={Input.Name}
               onchange={(v) => setInput((pre) => ({ ...pre, Name: v }))}
               errormessage={Namevalidation}
-              err={"Please enter your name must be 3 characters."}
+              err={"Please enter your name must be 2 characters."}
             />
 
             <Inputdata
@@ -237,20 +265,7 @@ const Createseller = ({route}) => {
                 Id
               )
             }
-            oncanclepress={() => {
-              setfieldvalidation(false);
-              setInput({
-                Name: "",
-                password: "",
-                Email: "",
-                Number: "",
-                selectedImage: {
-                  base64: "",
-                  imageUri: "",
-                },
-                setmodel: false,
-              });
-            }}
+            oncanclepress={() => oncanclepress()}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -266,12 +281,14 @@ const Createseller = ({route}) => {
       />
       <Responsemodal 
         visible={Successmodal} 
-        onpress={() => setSuccessmodal(false)} 
+        onpress={() =>{onsuccesspress(Id)}} 
         message={`${Id === 1 ? 'Seller' : Id === 2 ? 'Boxoffice' : 'Scanner' } account has been created successfully.`} 
         subtext={'!Oh Yeah'}
         Images={Images.success}
+        onrequestclose={() => setSuccessmodal(false)}
       />
-    </ARcontainer>
+      </ARcontainer>
+    </Modal>
   );
 };
 
