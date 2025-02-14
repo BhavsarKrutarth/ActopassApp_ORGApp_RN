@@ -9,6 +9,8 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  TextInput,
+  Alert,
 } from "react-native";
 import {
   ARbutton,
@@ -35,7 +37,13 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Validation } from "../../utils";
 import ImagePicker from "react-native-image-crop-picker";
-import { AddDiscount_Box, editboxdata, GetDiscount_Box, UpdateDiscount_Box } from "../../api/Api";
+import {
+  AddDiscount_Box,
+  DeleteDiscount_Box,
+  editboxdata,
+  GetDiscount_Box,
+  UpdateDiscount_Box,
+} from "../../api/Api";
 
 const Boxofficedetail = ({ route }) => {
   const navigation = useNavigation();
@@ -51,18 +59,17 @@ const Boxofficedetail = ({ route }) => {
     BoxofficeUserId,
   } = route.params.data;
   console.log(BoxofficeUserId);
-  
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Successmodal, Setsuccesmodal] = useState(false);
   const [Loading, SetLoading] = useState(false);
-  const [Input, SetInput] = useState({
-    Code: Code,
-    Name: Name,
-    EmailId: EmailId,
-    Password: Password,
-    MobileNo: MobileNo,
+  const [originalData, setOriginalData] = useState({
+    Code,
+    Name,
+    EmailId,
+    Password,
+    MobileNo,
     selectedImage: {
       base64: "",
       imageUri: PHOTOPATH,
@@ -70,14 +77,21 @@ const Boxofficedetail = ({ route }) => {
     },
     setmodel: false,
   });
-  const [data, setData] = useState({});
+  const [Input, SetInput] = useState({ ...originalData });
+  const [data, setData] = useState([]);
   const [isError, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
   const [emptyView, setEmptyView] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({
     eventName: "",
     eventId: "",
   });
+  const [modalInput, setModalInput] = useState({
+    ToAmount: "",
+    FromAmount: "",
+    DiscountAmount: "",
+  });
+  console.log(isError);
+
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
   const Passwordvalidation =
     Fieldvalidation && Validation.issellerpassword(Input.Password);
@@ -158,7 +172,6 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
-        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
@@ -177,58 +190,60 @@ const Boxofficedetail = ({ route }) => {
 
   const getDiscount_Box = async () => {
     try {
-      setLoading(true);
-      const response = await GetDiscount_Box(11, selectedEvent.eventId);
-      if (response && response.length > 0) {
-        setData(response[0]);
-      } else {
-        setData({});
-      }
-    } catch (error) {
-      console.error("Error fetching discount box:", error);
-    } finally {
-      setLoading(false);
-    }
+      const response = await GetDiscount_Box(
+        BoxofficeUserId,
+        selectedEvent.eventId
+      );
+      setData(Array.isArray(response) ? response : []);
+    } catch (error) {}
   };
 
   const addDiscount_Box = async () => {
-    setLoading(true);
     try {
-      const response = await AddDiscount_Box(data, selectedEvent.eventId);
-      console.log(response);
-    } catch (error) {
-      console.error("Error adding discount box:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateDiscount_Box = async () => {
-    setLoading(true);
-    try {
-      const response = await UpdateDiscount_Box(data);
-      if (response.ResponseCode === 0) {
-        setError("");
-      } else {
-        setError(response.ResponseMessage);
+      const response = await AddDiscount_Box(
+        modalInput,
+        BoxofficeUserId,
+        selectedEvent.eventId
+      );
+      if (response.ResponseCode == 0) {
+        setData((prevData) => [...prevData, response]);
+        setError([]);
+        Alert.alert("your dicount data added successfully.");
+        setEmptyView(false);
+      } else if (response.ResponseCode == -1) {
+        setError(
+          "A conflicting range for FromAmount and ToAmount already exists in the table. Please review the existing entries and adjust the values accordingly."
+        );
       }
-    } catch (error) {
-      console.error("Error updating discount box:", error);
-    } finally {
-      setLoading(false);
-    }
+    } catch (error) {}
   };
 
-  const deleteDiscount_Box = async () => {
-    setLoading(true);
+  const updateDiscount_Box = async (index) => {
     try {
-      const response = await DeleteDiscount_Box(data.BoxOfficeDiscountid);
-      if (response) getDiscount_Box();
-    } catch (error) {
-      console.error("Error deleting discount box:", error);
-    } finally {
-      setLoading(false);
-    }
+      const response = await UpdateDiscount_Box(
+        data[index],
+        selectedEvent.eventId
+      );
+      if (response.ResponseCode == 0) {
+        setError([]);
+        Setsuccesmodal(true);
+      } else {
+        const updatedErrors = [...isError];
+        updatedErrors[index] =
+          "A conflicting range for FromAmount and ToAmount already exists in the table. Please review the existing entries and adjust the values accordingly.";
+        setError(updatedErrors);
+      }
+    } catch (error) {}
+  };
+
+  const deleteDiscount_Box = async (index) => {
+    try {
+      const response = await DeleteDiscount_Box(
+        data[index].BoxOfficeDiscountid
+      );
+      if (response)
+        setData((prevData) => prevData.filter((_, idx) => idx !== index));
+    } catch (error) {}
   };
 
   if (Loading) return <ARLoader visible={Loading} />;
@@ -263,7 +278,10 @@ const Boxofficedetail = ({ route }) => {
       >
         <View style={style.containerview}>
           <Uploadphoto
-            oneditpress={() => SetInputdisable(!Inputdisable)}
+            oneditpress={() => {
+              SetInputdisable(!Inputdisable);
+              SetInput({ ...originalData });
+            }}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
             Addphotoicon={Inputdisable}
@@ -318,7 +336,7 @@ const Boxofficedetail = ({ route }) => {
             />
           </View>
           <Scbutton
-            onsavepress={() =>
+            onsavepress={() => {
               editseller(
                 BoxofficeUserId,
                 OrganizerLoginid,
@@ -327,42 +345,39 @@ const Boxofficedetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              )
-            }
-            oncanclepress={() =>
-              SetInput({
-                Code: Code,
-                Name: Name,
-                EmailId: EmailId,
-                Password: Password,
-                MobileNo: MobileNo,
-                selectedImage: {
-                  base64: "",
-                  imageUri: PHOTOPATH,
-                  filename: "",
-                },
-                setmodel: false,
-              })
-            }
+              ).then(() => {
+                setOriginalData({ ...Input });
+              });
+            }}
+            disabled={!Inputdisable}
+            canceldisabled={!Inputdisable}
+            oncanclepress={() => SetInput({ ...originalData })}
           />
           <Eventdropdown
+            eventDataLength={data.length}
             eventpress={() => console.log("Event Pressed")}
             onSelectEvent={(eventName, eventId) =>
               setSelectedEvent({ eventName, eventId })
             }
-            onPressAdd={() => setEmptyView(true)}
+            onPressAdd={() => {
+              setEmptyView(true);
+              setError("");
+            }}
           />
-          {isLoading ? (
-            <ARLoader visible={isLoading} />
-          ) : (
+          {data?.map((item, index) => (
             <DiscountInputView
+              isError={isError}
+              key={item.BoxOfficeDiscountid}
               data={data}
               setData={setData}
               addDiscount_Box={addDiscount_Box}
               updateDiscount_Box={updateDiscount_Box}
               deleteDiscount_Box={deleteDiscount_Box}
+              emptyView={emptyView}
+              eventName={selectedEvent.eventName}
+              index={index}
             />
-          )}
+          ))}
         </View>
       </KeyboardAwareScrollView>
       <Profilemodal
@@ -375,6 +390,41 @@ const Boxofficedetail = ({ route }) => {
         ongallerypress={opengallary}
         oncamerapress={openCamera}
       />
+      <Modal
+        visible={emptyView}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          setEmptyView(false);
+        }}
+      >
+        <View style={style.modalContainer}>
+          <View style={style.modalContent}>
+            <TouchableOpacity
+              onPress={() => {
+                setError([]);
+                setEmptyView(false);
+                getDiscount_Box();
+              }}
+            >
+              <ARimage source={Images.backarrow} style={style.icon} />
+            </TouchableOpacity>
+            <DiscountInputView
+              isError={isError}
+              data={Array.isArray(modalInput) ? modalInput : []}
+              setData={setModalInput}
+              addDiscount_Box={addDiscount_Box}
+              updateDiscount_Box={updateDiscount_Box}
+              deleteDiscount_Box={deleteDiscount_Box}
+              emptyView={emptyView}
+              eventName={selectedEvent.eventName}
+              index={""}
+              setEmptyView={setEmptyView}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <Responsemodal
         visible={Successmodal}
         onpress={() => Setsuccesmodal(false)}
@@ -382,36 +432,6 @@ const Boxofficedetail = ({ route }) => {
         subtext={"!Oh Yeah"}
         Images={Images.editdata}
       />
-      <Modal
-        visible={emptyView}
-        transparent
-        animationType="slide"
-        onDismiss={() => setEmptyView(false)}
-      >
-        <View style={style.modalContainer}>
-          <View style={style.modalContent}>
-            <TouchableOpacity onPress={() => setEmptyView(false)}>
-              <ARimage
-                source={Images.backarrow}
-                style={{
-                  width: wid(6),
-                  height: wid(6),
-                  marginBottom: hei(4),
-                }}
-              />
-            </TouchableOpacity>
-            <DiscountInputView
-              data={data}
-              setData={setData}
-              addDiscount_Box={addDiscount_Box}
-              updateDiscount_Box={updateDiscount_Box}
-              deleteDiscount_Box={deleteDiscount_Box}
-              emptyView={emptyView}
-              eventName={selectedEvent.eventName}
-            />
-          </View>
-        </View>
-      </Modal>
     </ARcontainer>
   );
 };
@@ -459,9 +479,15 @@ const style = StyleSheet.create({
     paddingHorizontal: wid(4),
     borderRadius: 10,
   },
+  icon: {
+    width: wid(6),
+    height: wid(6),
+    marginBottom: hei(4),
+  },
 });
 
 const DiscountInputView = ({
+  isError,
   data,
   setData,
   addDiscount_Box,
@@ -469,13 +495,26 @@ const DiscountInputView = ({
   deleteDiscount_Box,
   emptyView,
   eventName,
+  index,
+  setEmptyView,
 }) => {
-  const handleInputChange = useCallback((field, value) => {
-    setData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  }, []);
+  const handleInputChange = useCallback(
+    (field, value) => {
+      setData((prevData) =>
+        Array.isArray(prevData)
+          ? prevData.map((item, idx) =>
+              idx === index ? { ...item, [field]: value } : item
+            )
+          : { ...prevData, [field]: value }
+      );
+    },
+    [index, setData]
+  );
+  const inputFields = [
+    { label: "To Amount", field: "ToAmount", placeholder: "10" },
+    { label: "From Amount", field: "FromAmount", placeholder: "100" },
+    { label: "Discount", field: "DiscountAmount", placeholder: "10" },
+  ];
 
   return (
     <>
@@ -483,35 +522,56 @@ const DiscountInputView = ({
         <Inputdata
           txtchildren={"Name"}
           placeholder={"Actoscript"}
-          inputvalue={emptyView ? eventName : data?.EventName || ""}
+          inputvalue={emptyView ? eventName : data[index]?.EventName || ""}
           editable={false}
         />
-        <Inputdata
-          txtchildren={"To Amount"}
-          placeholder={"10"}
-          inputvalue={data?.ToAmount?.toString() || ""}
-          onchange={(v) => handleInputChange("ToAmount", v)}
-        />
-        <Inputdata
-          txtchildren={"From Amount"}
-          placeholder={"100"}
-          inputvalue={data?.FromAmount?.toString() || ""}
-          onchange={(v) => handleInputChange("FromAmount", v)}
-        />
-        <Inputdata
-          txtchildren={"Discount"}
-          placeholder={"10"}
-          inputvalue={data?.DiscountAmount?.toString() || ""}
-          onchange={(v) => handleInputChange("DiscountAmount", v)}
-        />
+        {inputFields.map(({ label, field, placeholder }) => (
+          <Inputdata
+            key={field}
+            txtchildren={label}
+            placeholder={placeholder}
+            inputvalue={
+              emptyView ? data[field] : data[index]?.[field]?.toString() || ""
+            }
+            onchange={(text) => handleInputChange(field, text)}
+          />
+        ))}
       </View>
+      {emptyView ? (
+        isError ? (
+          <ARtext
+            style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
+            color={Colors.Red}
+            size={FontSize.font11}
+            fontFamily={FontFamily.Light}
+          >
+            {isError}
+          </ARtext>
+        ) : null
+      ) : (
+        isError[index] && (
+          <ARtext
+            style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
+            color={Colors.Red}
+            size={FontSize.font11}
+            fontFamily={FontFamily.Light}
+          >
+            {isError[index]}
+          </ARtext>
+        )
+      )}
       <Scbutton
-        onsavepress={emptyView ? addDiscount_Box : updateDiscount_Box}
-        oncanclepress={emptyView ? "" : deleteDiscount_Box}
+        onsavepress={() =>
+          emptyView ? addDiscount_Box(index) : updateDiscount_Box(index)
+        }
+        oncanclepress={() =>
+          emptyView ? setEmptyView(false) : deleteDiscount_Box(index)
+        }
         styles={{ marginVertical: hei(3), gap: wid(1) }}
         backgroundColor={emptyView ? Colors.Black : Colors.Red}
-        children={emptyView ? "Cancel" : "Delete"}
-      />
+      >
+        {emptyView ? "Cancel" : "Delete"}
+      </Scbutton>
     </>
   );
 };
