@@ -1,106 +1,116 @@
-import { Alert } from "react-native";
 import {
+  TicketBalance,
   TicketData,
   TicketQtyAdd,
   TicketQtyDelete,
   TicketQtyUpdate,
+  TicketType,
 } from "../../api/Api";
 
-export const fetchTicketDetails = async (SelllerLoginid, eventId, setData) => {
+export const fetchTicketDetails = async (eventId, setTicketData, setData) => {
   try {
-    const response = await TicketData(SelllerLoginid, eventId);    
+    const response = await TicketData(11, eventId);
     if (response.Response === 0) {
-      setData(response.Details);
+      setTicketData(response.Details);
+      const ticketTypes =
+        response.Details?.map((item) => ({
+          label: item.TicketType,
+          value: item.EventMaster_TicketTypeid,
+        })) || [];
+      setData(ticketTypes);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchTicketTypes = async (eventId, setData) => {
+  try {
+    const response = await TicketType(eventId);
+    if (response) {
+      const ticketTypes =
+        response.map((item) => ({
+          label: item.TicketType,
+          value: item.EventMaster_TicketTypeid,
+        })) || [];
+      setData(ticketTypes);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchTicketBalance = async (eventId, TicketTypeid, setBalance) => {
+  try {
+    const response = await TicketBalance(11, eventId, TicketTypeid);
+    console.log("Ticket Balance Response:", response);
+    setBalance(response);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const addTicketQty = async (
-  SelllerLoginid,
   eventId,
   TicketTypeid,
   Balance,
   SellerTicketQty,
+  setTicketData,
   setError,
-  setEmptyView
+  setShowEmptyView
 ) => {
   try {
-    if (SellerTicketQty <= Balance) {
+    if (SellerTicketQty >= 10 && SellerTicketQty <= Balance) {
       const response = await TicketQtyAdd(
-        SelllerLoginid,
+        11,
         eventId,
         TicketTypeid,
         SellerTicketQty
       );
+      console.log(response);
       if (response.Response == 0) {
+        setTicketData([]);
         setError("");
-        Alert.alert("Data add successfully.");
-        setEmptyView(false);
+        setShowEmptyView(false);
       } else {
         setError(response.ResponseMessage);
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const updateTicketQty = async (
-  SelllerLoginid,
-  index,
   SelllerMasterDetailsid,
   eventId,
   TicketTypeid,
-  Balance,
   SellerTicketQty,
-  setError,
-  IsError,
-  Setsuccesmodal
+  setError
 ) => {
   try {
-    if (SellerTicketQty <= Balance) {
-      const response = await TicketQtyUpdate(
-        SelllerMasterDetailsid,
-        SelllerLoginid,
-        eventId,
-        TicketTypeid,
-        SellerTicketQty
-      );
-      if (response.Response == 0) {
-        setError("");
-        Setsuccesmodal(true);
-      } else {
-        const updatedErrors = [...IsError];
-        updatedErrors[index] = response.ResponseMessage;
-        setError(updatedErrors);
-      }
+    const response = await TicketQtyUpdate(
+      SelllerMasterDetailsid,
+      11,
+      eventId,
+      TicketTypeid,
+      SellerTicketQty
+    );
+    if (response.Response == 0) {
+      setError("");
+    } else if (response.Response == -1) {
+      setError(response.ResponseMessage);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-export const deleteTicketQty = async (
-  SelllerMasterDetailsid,
-  setData,
-  setError,
-  IsError,
-  index
-) => {
+export const deleteTicketQty = async (SelllerMasterDetailsid) => {
   try {
-    setError("");
     const response = await TicketQtyDelete(SelllerMasterDetailsid);
-    if (response.Response == 0) {
-      setData((prevData) => {
-        const updatedData = [...prevData];
-        updatedData[index] = {
-          ...updatedData[index],
-          TicketQty: 0,
-          Available_balance: 0,
-          isVisible: false,
-        };
-        return updatedData;
-      });
-    } else {
-      const updatedErrors = [...IsError];
-      updatedErrors[index] = response.ResponseMessage;
-      setError(updatedErrors);
-    }
-  } catch (error) {}
+    console.log("response", response);
+  } catch (error) {
+    console.error(error);
+  }
 };

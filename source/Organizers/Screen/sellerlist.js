@@ -21,7 +21,7 @@ import { ARcontainer, ARtext, ARbutton, ARimage } from "../../common";
 import { Responsemodal } from "../../Commoncompoenent";
 import { useSelector } from "react-redux";
 import Navroute from "../navigation/Navroute";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Images from "../../Image/Images";
 import LottieView from "lottie-react-native";
 
@@ -46,23 +46,12 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
     //   getseller(1)
     //   Sellernotrefresh()
     //   console.log('Data match');
-
+      
     // }else{
     getseller();
     console.log("Data not Match");
     // }
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      onRefreshPage();
-    }, [])
-  );
-  const onRefreshPage = () => {
-    SetGetdata([]);
-    Setrefresh(true);
-    getseller(1, true);
-  };
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Sellerdetail, { data: item });
@@ -78,9 +67,10 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   };
 
   const getsellerdata = () => {
-    getseller();
-    console.log("Hashmore call", Pageindex);
-  };
+    getseller()
+    console.log('Hashmore call',Pageindex);
+    
+  }
   const deletedata = async (id) => {
     Setdeletemodal(false);
     try {
@@ -100,7 +90,7 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   };
 
   const getseller = async (value, Refresh) => {
-    console.log("Api", Pageindex);
+    console.log('Api',Pageindex);
     if (Refresh) {
       SetLoading(false);
     } else {
@@ -131,7 +121,9 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
     SetResponse("");
     Setdeletemodal(false);
   };
-  console.log("Out Page index", Pageindex);
+  console.log('Out Page index',Pageindex);
+
+  
 
   return (
     <ARcontainer>
@@ -143,7 +135,11 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
         refreshControl={
           <RefreshControl
             refreshing={Refresh}
-            onRefresh={() => onRefreshPage()}
+            onRefresh={() => {
+              SetGetdata([]);
+              Setrefresh(true);
+              getseller(1, true);
+            }}
             tintColor={Colors.purple}
             colors={[Colors.purple]}
           />
@@ -227,7 +223,9 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
           </View>
         )}
         onEndReached={() => {
-          Hasmore ? getsellerdata() : null;
+          Hasmore ? getsellerdata()
+          
+          : null;
         }}
         onEndReachedThreshold={0.1}
         ListFooterComponent={
