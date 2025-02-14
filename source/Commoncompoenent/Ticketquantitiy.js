@@ -13,6 +13,7 @@ import ARtext from '../common/ARtext';
 import ARbutton from '../common/ARbutton';
 
 const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
+  
     const [isQTY, setIsQTY] = useState(false)
     const [Quantity, SetQuantity] = useState(0);
    
@@ -27,6 +28,11 @@ const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
         ondecrese({...decreseitem,QTY:Math.max(Quantity - 1,0)})
     }
 
+    const QTYon = (item) => {
+        setIsQTY(!isQTY)
+        increase(item)
+    }
+// console.log(Quantity);
 
   return (
     <View>
@@ -37,13 +43,12 @@ const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
             borderRadius: normalize(10),
             height: hei(9),
             borderWidth: normalize(1),
-            borderColor:
-              item.Type === 'GOLDEN ZONE' ? Colors.Golden : Colors.platnium,
+            borderColor:item.Colorcode
           }}
-            onpress={() => setIsQTY(!isQTY)}
+            onpress={() => QTYon(item)}
         >
           <ARtext
-            children={item.Type}
+            children={item.TicketType}
             align={''}
             size={FontSize.font13}
             fontFamily={FontFamily.SemiBold}
@@ -59,7 +64,7 @@ const Ticketquantitiy = ({onincrese, ondecrese,item}) => {
       <View style={style.qun}>
         <View style={style.texts}>
           <ARtext
-            children={item.Type}
+            children={item.TicketType}
             align={''}
             size={FontSize.font12}
             fontFamily={FontFamily.SemiBold}

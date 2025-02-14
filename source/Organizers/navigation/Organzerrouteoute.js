@@ -7,6 +7,8 @@ import Sellerdetail from "../Screen/Sellerdetail";
 import Boxofficedetail from "../Screen/Boxofficedetail";
 import Scannerdetail from "../Screen/Scannerdetail";
 import Eventdetail from "../Screen/Eventdetails";
+import Createseller from "../Screen/Createseller";
+import Accountcreation from "../Screen/Accountcreation";
 
 const Stack = createStackNavigator()
 
@@ -18,6 +20,8 @@ const Organzerrouteoute = () => {
                 <Stack.Screen component={Boxofficedetail} name={Navroute.Boxofficedatail} />
                 <Stack.Screen component={Scannerdetail} name={Navroute.Scannerdetail} />
                 <Stack.Screen component={Eventdetail} name={Navroute.Eventdetail}/>
+                <Stack.Screen component={Createseller} name={Navroute.Createseller}/>
+                {/* <Stack.Screen component={Accountcreation} name={Navroute.Accountcreation}/> */}
             </Stack.Navigator>
     )
 }

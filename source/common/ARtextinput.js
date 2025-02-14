@@ -31,6 +31,10 @@ const ARtextinput = ({
   value,
   onchangetext,
   securetextentry,
+  keyboardType,
+  editable,
+  maxLength,
+  color
 }) => {
   const Tistyle = {
     height: Tiheight ?? 30,
@@ -40,6 +44,7 @@ const ARtextinput = ({
     FontFamily: Tifontfamily ?? FontFamily.Regular,
     width:Tiwidth,
     // backgroundColor:'pink'
+    color: color ?? Colors.Black
   };
 
   const Tiprops = {
@@ -57,6 +62,9 @@ const ARtextinput = ({
         value={value}
         onChangeText={onchangetext}
         secureTextEntry={securetextentry}
+        keyboardType={keyboardType}
+        editable={editable}
+        maxLength={maxLength}
       />
       {Righticon ? (
         <TouchableOpacity onPress={onPress}>

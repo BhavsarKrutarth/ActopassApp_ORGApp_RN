@@ -8,7 +8,8 @@ const Navroute = {
    Boxofficedatail:'Boxofficedatail',
    DrawerInex: 'Drawer',
    Eventdetail: 'Eventdetail',
-   Setting: 'Setting'
+   Setting: 'Setting',
+   Createseller:'Createseller'
 }
 
 export default Navroute

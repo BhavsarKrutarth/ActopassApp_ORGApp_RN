@@ -7,7 +7,8 @@ import {Colors} from "../theme";
 import { FontFamily,FontSize } from "../theme";
 
 
-const Scbutton = ({onsavepress,oncanclepress,styles}) => {
+const Scbutton = ({onsavepress,oncanclepress,styles,disabled,
+  canceldisabled,}) => {
     return (
         <View style={[style.buttonview,styles]}>
             <View style={[style.btn,{alignItems:"flex-end"}]}>
@@ -16,7 +17,8 @@ const Scbutton = ({onsavepress,oncanclepress,styles}) => {
                 height={hei(5)}
                 width={wid(30)}
                 backgroundColor={Colors.btncolor}
-                onpress={onsavepress}
+                onpress={disabled ? null : onsavepress}
+                Touchstyle={{ opacity: disabled ? 0.3 : 1 }}
                 >
                 <ARtext
                   children={'Save'}
@@ -31,7 +33,8 @@ const Scbutton = ({onsavepress,oncanclepress,styles}) => {
                borderRadius={normalize(12)}
                height={hei(5)}
                width={wid(30)}
-               onpress={oncanclepress}
+               onpress={canceldisabled ? null : oncanclepress}
+               Touchstyle={{ opacity: canceldisabled ? 0.3 : 1 }}
                >
                 <ARtext
                   children={'Cancle'}
