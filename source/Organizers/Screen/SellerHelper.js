@@ -1,116 +1,106 @@
+import { Alert } from "react-native";
 import {
-  TicketBalance,
   TicketData,
   TicketQtyAdd,
   TicketQtyDelete,
   TicketQtyUpdate,
-  TicketType,
 } from "../../api/Api";
 
-export const fetchTicketDetails = async (eventId, setTicketData, setData) => {
+export const fetchTicketDetails = async (SelllerLoginid, eventId, setData) => {
   try {
-    const response = await TicketData(11, eventId);
+    const response = await TicketData(SelllerLoginid, eventId);    
     if (response.Response === 0) {
-      setTicketData(response.Details);
-      const ticketTypes =
-        response.Details?.map((item) => ({
-          label: item.TicketType,
-          value: item.EventMaster_TicketTypeid,
-        })) || [];
-      setData(ticketTypes);
+      setData(response.Details);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const fetchTicketTypes = async (eventId, setData) => {
-  try {
-    const response = await TicketType(eventId);
-    if (response) {
-      const ticketTypes =
-        response.map((item) => ({
-          label: item.TicketType,
-          value: item.EventMaster_TicketTypeid,
-        })) || [];
-      setData(ticketTypes);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const fetchTicketBalance = async (eventId, TicketTypeid, setBalance) => {
-  try {
-    const response = await TicketBalance(11, eventId, TicketTypeid);
-    console.log("Ticket Balance Response:", response);
-    setBalance(response);
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 };
 
 export const addTicketQty = async (
+  SelllerLoginid,
   eventId,
   TicketTypeid,
   Balance,
   SellerTicketQty,
-  setTicketData,
   setError,
-  setShowEmptyView
+  setEmptyView
 ) => {
   try {
-    if (SellerTicketQty >= 10 && SellerTicketQty <= Balance) {
+    if (SellerTicketQty <= Balance) {
       const response = await TicketQtyAdd(
-        11,
+        SelllerLoginid,
         eventId,
         TicketTypeid,
         SellerTicketQty
       );
-      console.log(response);
       if (response.Response == 0) {
-        setTicketData([]);
         setError("");
-        setShowEmptyView(false);
+        Alert.alert("Data add successfully.");
+        setEmptyView(false);
       } else {
         setError(response.ResponseMessage);
       }
     }
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 };
 
 export const updateTicketQty = async (
+  SelllerLoginid,
+  index,
   SelllerMasterDetailsid,
   eventId,
   TicketTypeid,
+  Balance,
   SellerTicketQty,
-  setError
+  setError,
+  IsError,
+  Setsuccesmodal
 ) => {
   try {
-    const response = await TicketQtyUpdate(
-      SelllerMasterDetailsid,
-      11,
-      eventId,
-      TicketTypeid,
-      SellerTicketQty
-    );
-    if (response.Response == 0) {
-      setError("");
-    } else if (response.Response == -1) {
-      setError(response.ResponseMessage);
+    if (SellerTicketQty <= Balance) {
+      const response = await TicketQtyUpdate(
+        SelllerMasterDetailsid,
+        SelllerLoginid,
+        eventId,
+        TicketTypeid,
+        SellerTicketQty
+      );
+      if (response.Response == 0) {
+        setError("");
+        Setsuccesmodal(true);
+      } else {
+        const updatedErrors = [...IsError];
+        updatedErrors[index] = response.ResponseMessage;
+        setError(updatedErrors);
+      }
     }
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 };
 
-export const deleteTicketQty = async (SelllerMasterDetailsid) => {
+export const deleteTicketQty = async (
+  SelllerMasterDetailsid,
+  setData,
+  setError,
+  IsError,
+  index
+) => {
   try {
+    setError("");
     const response = await TicketQtyDelete(SelllerMasterDetailsid);
-    console.log("response", response);
-  } catch (error) {
-    console.error(error);
-  }
+    if (response.Response == 0) {
+      setData((prevData) => {
+        const updatedData = [...prevData];
+        updatedData[index] = {
+          ...updatedData[index],
+          TicketQty: 0,
+          Available_balance: 0,
+          isVisible: false,
+        };
+        return updatedData;
+      });
+    } else {
+      const updatedErrors = [...IsError];
+      updatedErrors[index] = response.ResponseMessage;
+      setError(updatedErrors);
+    }
+  } catch (error) {}
 };

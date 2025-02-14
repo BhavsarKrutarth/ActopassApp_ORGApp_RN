@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -22,117 +22,60 @@ import { ARprogressbar } from "../../common";
 import { useSelector } from "react-redux";
 import { Dropdown } from "react-native-element-dropdown";
 import Navroute from "../navigation/Navroute";
-import { loistofevent, percentagedata } from "../../api/Api";
 
 const Home = () => {
-  const { AsyncValue } = useSelector((state) => state.Auth);
+  const navigation = useNavigation();
   const screenWidth = Dimensions.get("window").width;
-
-  const [currentindex, setcurrentindex] = useState(0);
-  const [btn, setbtn] = useState(1);
-  const [Eventlist, Seteventlist] = useState([]);
-  const [Value, Setvalue] = useState({
-    label: "",
-    value: "",
-  });
-  const [Disable, Setdisable] = useState(false);
-  const [datas, setdata] = useState({});
-  const [Dashdata, Setdashdata] = useState([
-    {
-      Detail: datas.TotalSale || 0,
-      Name: "Total Sale",
-      Subdetail: datas.TotalBookTicket || 0,
-      Subname: "Total BookTicket",
-    },
-    {
-      Detail: datas.TotalEvent || 0,
-      Name: "Total Event",
-      Subdetail: datas.TotalUpcomingEvent || 0,
-      Subname: "Upcoming Event",
-    },
-    {
-      Detail: datas.TotalFixAmount || 0,
-      Name: "Total FixAmount",
-      Subdetail: datas.TotalDynamicAmount || 0,
-      Subname: "Total DynamicAmount",
-    },
-  ]);
-
-  const Percentagedata = [
+  const tempDataArray = [
     {
       id: 1,
+      name: "137510",
+      email: "Total Book Tickets",
       info: "Percentage",
-     
+      data: {
+        Web: "20%",
+        Mob: "20%",
+        Erp: "40%",
+      },
     },
     {
       id: 2,
+      name: "Bob",
+      email: "Total Sale",
       info: "Amount",
+      data: {
+        Web: "30%",
+        Mob: "40%",
+        Erp: "60%",
+      },
     },
     {
       id: 3,
+      name: "Charlie",
+      email: "Total Sale",
       info: "Quantity",
+      data: {
+        Web: "12%",
+        Mob: "14%",
+        Erp: "15%",
+      },
     },
   ];
-
-
-  useEffect(() => {
-    if (Object.keys(datas).length > 1) {
-      Setdashdata((Previous) =>
-        Previous.map((item) =>
-          item.Name === "Total Sale"
-            ? {
-                ...item,
-                Detail: datas.TotalSale,
-                Subdetail: datas.TotalBookTicket,
-              }
-            : item.Name === "Total Event"
-            ? {
-                ...item,
-                Detail: datas.TotalEvent,
-                Subdetail: datas.TotalUpcomingEvent,
-              }
-            : {
-                ...item,
-                Detail: datas.TotalFixAmount,
-                Subdetail: datas.TotalDynamicAmount,
-              }
-        )
-      );
-    } else {
-      getevent();
-    }
-  }, [datas]);
-
-  const getevent = async () => {
-    try {
-      const response = await loistofevent(AsyncValue.OrganizerLoginId);
-      if (response) {
-        // console.log(JSON.stringify(response,null,2));
-        
-        Seteventlist(
-          response.DIscountDetails.map((item) => ({
-            label: item.EventName,
-            value: item.EventMasterid,
-          }))
-        );
-      } else {
-        Setdisable(true);
-      }
-    } catch (error) {
-      console.log("Dashboard getevent erro", error);
-    }
-  };
-
-  const getpercentage = async (BoxId, EvntId) => {
-    try {
-      const respone = await percentagedata(BoxId, EvntId);
-      if (respone) {
-        setdata(respone);
-      }
-    } catch (error) {
-      console.log("Getpercentagedata error", error);
-    }
-  };
+  const data = [
+    { label: "Item 1", value: "1" },
+    { label: "Item 2", value: "2" },
+    { label: "Item 3", value: "3" },
+    { label: "Item 4", value: "4" },
+    { label: "Item 5", value: "5" },
+    { label: "Item 6", value: "6" },
+    { label: "Item 7", value: "7" },
+    { label: "Item 8", value: "8" },
+  ];
+  const [currentindex, setcurrentindex] = useState(0);
+  const [btn, setbtn] = useState(1);
+  const [itm, setitm] = useState(tempDataArray[0].data);
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
 
   const onScroll = (event) => {
     const contentOffset = event.nativeEvent.contentOffset.x;
@@ -140,21 +83,13 @@ const Home = () => {
     setcurrentindex(index);
   };
 
-  const progressdata = (percenatge,btn) => {    
-    
-    if(btn === 1 ){
-      return parseFloat(percenatge) / 100;
-    }else if(btn === 2){
-      const count = ((percenatge / 500000) * 100).toFixed(2)
-      return parseFloat(count) / 100
-    }else{
-      const qty = ((percenatge / 1000) * 100).toFixed(2)
-      return parseFloat(qty) / 100
-    }
+  const progressdata = (percenatge) => {
+    return parseFloat(percenatge) / 100;
   };
 
   const dataset = (item) => {
     setbtn(item.id);
+    setitm(item.data);
   };
 
   return (
@@ -177,22 +112,17 @@ const Home = () => {
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              selectedTextProps={{
-                numberOfLines: 1,
-              }}
               iconStyle={styles.iconStyle}
               showsVerticalScrollIndicator={false}
               containerStyle={styles.ContainerStyle}
-              disable={Disable}
-              data={Eventlist}
+              data={data}
               maxHeight={230}
               labelField="label"
               valueField="value"
               placeholder="Select Event"
+              value={value}
               onChange={(item) => {
-                console.log(item);
-                Setvalue(item);
-                getpercentage(AsyncValue.OrganizerLoginId, item.value);
+                setValue(item.value);
               }}
               renderLeftIcon={() => (
                 <ARimage
@@ -211,8 +141,8 @@ const Home = () => {
             pagingEnabled
             onScroll={onScroll}
             showsHorizontalScrollIndicator={false}
-            data={Dashdata}
-            keyExtractor={(item, index) => index.toString()}
+            data={tempDataArray}
+            keyExtractor={(item) => item.id.toString()}
             style={{ width: wid(90) }}
             renderItem={({ item }) => (
               <View style={styles.dashmainview}>
@@ -255,12 +185,12 @@ const Home = () => {
                       <ARtext
                         size={FontSize.font25}
                         fontFamily={FontFamily.Bold}
-                        children={item.Detail}
+                        children={item.name}
                         align={""}
                       />
                       <ARtext
                         size={FontSize.font12}
-                        children={item.Name}
+                        children={item.email}
                         align={""}
                       />
                     </View>
@@ -269,17 +199,16 @@ const Home = () => {
                       <ARtext
                         size={FontSize.font25}
                         fontFamily={FontFamily.Bold}
-                        children={item.Subdetail}
+                        children={item.name}
                         align={""}
                       />
                       <ARtext
                         size={FontSize.font12}
-                        children={item.Subname}
+                        children={item.email}
                         align={""}
                       />
                     </View>
                   </View>
-
                   <View
                     style={{
                       alignItems: "center",
@@ -287,7 +216,7 @@ const Home = () => {
                       justifyContent: "center",
                     }}
                   >
-                    {Dashdata.map((item, index) => (
+                    {tempDataArray.map((item, index) => (
                       <View
                         key={index}
                         style={[
@@ -322,7 +251,7 @@ const Home = () => {
             marginTop: hei(1),
           }}
         >
-          {Percentagedata.map((item, index) => (
+          {tempDataArray.map((item, index) => (
             <View style={{ width: wid(29) }} key={index}>
               <ARbutton
                 onpress={() => dataset(item)}
@@ -347,28 +276,11 @@ const Home = () => {
           <View style={styles.gap}>
             <View style={styles.content}>
               <ARtext size={FontSize.font12} children={"Web"} />
-              <ARtext
-                size={FontSize.font12}
-                children={`${ btn === 1
-                    ? datas?.TotalWebUser_Percentage || 0
-                    : btn === 2
-                    ? datas?.TotalWebUser_Income || 0
-                    : btn === 3
-                    ? datas?.shopifyQty || 0
-                    : 0}${btn === 1 ? "%" : btn === 2 ? "₹" : ""}`}
-              />
+              <ARtext size={FontSize.font12} children={itm.Web} />
             </View>
             <View>
               <ARprogressbar
-                progress={progressdata(
-                    btn === 1
-                    ? datas?.TotalWebUser_Percentage || 0
-                    : btn === 2
-                    ? datas?.TotalWebUser_Income || 0
-                    : btn === 3
-                    ? datas?.shopifyQty || 0
-                    : 0,btn
-                )}
+                progress={progressdata(itm.Web)}
                 color={Colors.web}
               />
             </View>
@@ -376,26 +288,11 @@ const Home = () => {
           <View style={styles.gap}>
             <View style={styles.content}>
               <ARtext size={FontSize.font12} children={"Mobile"} />
-              <ARtext
-                size={FontSize.font12}
-                children={`${ btn === 1
-                  ? datas?.MobileApp_Percentage || 0
-                  : btn === 2
-                  ? datas?.TotalMobileApp_Income || 0
-                  : btn === 3
-                  ? datas?.MobileQty || 0
-                  : 0}${btn === 1 ? "%" : btn === 2 ? "₹" : ""}`}
-              />
+              <ARtext size={FontSize.font12} children={itm.Mob} />
             </View>
             <View>
               <ARprogressbar
-                progress={progressdata(btn === 1
-                  ? datas?.MobileApp_Percentage || 0
-                  : btn === 2
-                  ? datas?.TotalMobileApp_Income || 0
-                  : btn === 3
-                  ? datas?.MobileQty || 0
-                  : 0,btn )}
+                progress={progressdata(itm.Mob)}
                 color={Colors.mob}
               />
             </View>
@@ -403,32 +300,18 @@ const Home = () => {
           <View style={styles.gap}>
             <View style={styles.content}>
               <ARtext size={FontSize.font12} children={"ERP"} />
-              <ARtext
-                size={FontSize.font12}
-                children={`${ btn === 1
-                  ? datas?.TotalERPUser_Percentage || 0
-                  : btn === 2
-                  ? datas?.TotalERPUser_Income || 0
-                  : btn === 3
-                  ? datas?.ERPQty || 0
-                  : 0}${btn === 1 ? "%" : btn === 2 ? "₹" : ""}`}
-              />
+              <ARtext size={FontSize.font12} children={itm.Erp} />
             </View>
             <View>
               <ARprogressbar
-                progress={progressdata(btn === 1
-                  ? datas?.TotalERPUser_Percentage || 0
-                  : btn === 2
-                  ? datas?.TotalERPUser_Income || 0
-                  : btn === 3
-                  ? datas?.ERPQty || 0
-                  : 0,btn )}
+                progress={progressdata(itm.Mob)}
                 color={Colors.erp}
               />
             </View>
           </View>
         </View>
       </View>
+      
     </ARcontainer>
   );
 };
