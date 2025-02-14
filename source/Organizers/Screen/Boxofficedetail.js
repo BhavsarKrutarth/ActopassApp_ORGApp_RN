@@ -37,8 +37,13 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Validation } from "../../utils";
 import ImagePicker from "react-native-image-crop-picker";
-import { AddDiscount_Box, editboxdata, GetDiscount_Box, UpdateDiscount_Box } from "../../api/Api";
-
+import {
+  AddDiscount_Box,
+  DeleteDiscount_Box,
+  editboxdata,
+  GetDiscount_Box,
+  UpdateDiscount_Box,
+} from "../../api/Api";
 
 const Boxofficedetail = ({ route }) => {
   const navigation = useNavigation();
@@ -54,18 +59,17 @@ const Boxofficedetail = ({ route }) => {
     BoxofficeUserId,
   } = route.params.data;
   console.log(BoxofficeUserId);
-  
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Successmodal, Setsuccesmodal] = useState(false);
   const [Loading, SetLoading] = useState(false);
-  const [Input, SetInput] = useState({
-    Code: Code,
-    Name: Name,
-    EmailId: EmailId,
-    Password: Password,
-    MobileNo: MobileNo,
+  const [originalData, setOriginalData] = useState({
+    Code,
+    Name,
+    EmailId,
+    Password,
+    MobileNo,
     selectedImage: {
       base64: "",
       imageUri: PHOTOPATH,
@@ -73,6 +77,7 @@ const Boxofficedetail = ({ route }) => {
     },
     setmodel: false,
   });
+  const [Input, SetInput] = useState({ ...originalData });
   const [data, setData] = useState([]);
   const [isError, setError] = useState("");
   const [emptyView, setEmptyView] = useState(false);
@@ -167,7 +172,6 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
-        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
@@ -204,9 +208,8 @@ const Boxofficedetail = ({ route }) => {
       if (response.ResponseCode == 0) {
         setData((prevData) => [...prevData, response]);
         setError([]);
-        Alert.alert(
-          "A conflicting range for FromAmount and ToAmount already exists in the table."
-        );
+        Alert.alert("your dicount data added successfully.");
+        setEmptyView(false);
       } else if (response.ResponseCode == -1) {
         setError(
           "A conflicting range for FromAmount and ToAmount already exists in the table. Please review the existing entries and adjust the values accordingly."
@@ -275,7 +278,10 @@ const Boxofficedetail = ({ route }) => {
       >
         <View style={style.containerview}>
           <Uploadphoto
-            oneditpress={() => SetInputdisable(!Inputdisable)}
+            oneditpress={() => {
+              SetInputdisable(!Inputdisable);
+              SetInput({ ...originalData });
+            }}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
             Addphotoicon={Inputdisable}
@@ -330,7 +336,7 @@ const Boxofficedetail = ({ route }) => {
             />
           </View>
           <Scbutton
-            onsavepress={() =>
+            onsavepress={() => {
               editseller(
                 BoxofficeUserId,
                 OrganizerLoginid,
@@ -339,25 +345,16 @@ const Boxofficedetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              )
-            }
-            oncanclepress={() =>
-              SetInput({
-                Code: Code,
-                Name: Name,
-                EmailId: EmailId,
-                Password: Password,
-                MobileNo: MobileNo,
-                selectedImage: {
-                  base64: "",
-                  imageUri: PHOTOPATH,
-                  filename: "",
-                },
-                setmodel: false,
-              })
-            }
+              ).then(() => {
+                setOriginalData({ ...Input });
+              });
+            }}
+            disabled={!Inputdisable}
+            canceldisabled={!Inputdisable}
+            oncanclepress={() => SetInput({ ...originalData })}
           />
           <Eventdropdown
+            eventDataLength={data.length}
             eventpress={() => console.log("Event Pressed")}
             onSelectEvent={(eventName, eventId) =>
               setSelectedEvent({ eventName, eventId })

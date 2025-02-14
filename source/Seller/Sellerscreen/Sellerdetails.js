@@ -8,12 +8,11 @@ import { Inputdata, Profilemodal, Scbutton, Uploadphoto } from "../../Commoncomp
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { useSelector } from "react-redux";
 import ImagePicker from "react-native-image-crop-picker";
-import { Validation } from "../../utils";
 
 
 const Sellerpersonaldetails = () => {
   // const {AsyncValue} = useSelector((state) => state.Auth)
-    const [Fieldvalidation, setfieldvalidation] = useState(false);
+  
     const navigation = useNavigation();
     const [Input,SetInput] = useState({
       Name:'',
@@ -73,47 +72,6 @@ const Sellerpersonaldetails = () => {
         .catch((err) => console.log(err));
     };
 
-    const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
-    const Emailvalidation = Fieldvalidation && Validation.isEmailValid(Input.EmailId);
-    const Mobilevalidation = Fieldvalidation && Validation.isMobileNumberValid(Input.MobileNo);
-    const Passwordvalidation = Fieldvalidation && Validation.issellerpassword(Input.Password);
-    // const Photo = Fieldvalidation && Input.selectedImage.imageUri == "";
-  
-    const validate =
-      !Validation.isEmailValid(Input.EmailId) &&
-      !Validation.isMobileNumberValid(Input.MobileNo) &&
-      !Validation.issellerpassword(Input.Password) &&
-      // !Input.selectedImage.imageUri == "" &&
-      !Validation.isName(Input.Name);
-
-    const editdata = () => {
-      setfieldvalidation(true)
-      if(validate){
-        console.log('Validation false');
-        
-      }else{
-        console.log('please fill the blank');
-        
-      }
-    }
-
-    const cancle = () => {
-      setfieldvalidation(false)
-      SetInput({
-        Name:'',
-        EmailId:'',
-        Password:'',
-        MobileNo:'',
-        selectedImage: {
-          base64: "",
-          imageUri: "",
-          filename: "",
-        },
-        setmodal:false
-      })
-    }
-
-
     return(
       <ARcontainer>
       <ARheader
@@ -139,8 +97,7 @@ const Sellerpersonaldetails = () => {
       contentContainerStyle={{
         // flexGrow: 1,
         paddingHorizontal: wid(4),
-        // backgroundColor:"red",
-        paddingBottom:hei(8)
+        // backgroundColor:"red"
       }}
       enableAutomaticScroll={isIos ? true : false}>
       {/* <ScrollView
@@ -150,25 +107,7 @@ const Sellerpersonaldetails = () => {
 
       <View style={style.containerview}>
         <Uploadphoto
-            oneditpress={() => {
-              SetInputdisable(!Inputdisable)
-              if(Inputdisable){ 
-                setfieldvalidation(false)
-                SetInput({
-                  Name:'',
-                  EmailId:'',
-                  Password:'',
-                  MobileNo:'',
-                  selectedImage: {
-                    base64: "",
-                    imageUri: "",
-                    filename: "",
-                  },
-                  setmodal:false
-                })
-              }
-            }
-            }
+            oneditpress={() => SetInputdisable(!Inputdisable)}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
             Addphotoicon={Inputdisable}
@@ -177,72 +116,52 @@ const Sellerpersonaldetails = () => {
             subtext={Input.selectedImage.filename}
       />
         <View style={style.inputcontainerview}>
-        <Inputdata
+          <Inputdata
             txtchildren={'Code'}
             placeholder={'012345678'}
             inputvalue={''}
-            // onchange={v => SetInput((pre) => ({...pre,Code:v}))}
+            onchange={v => SetInput((pre) => ({...pre,Code:v}))}
             editable={false}
           />
 
           <Inputdata
-            txtchildren={"Name"}
-            placeholder={"Enter Your Name"}
-            inputvalue={Input.Name}
-            onchange={(v) => SetInput((pre) => ({ ...pre, Name: v }))}
-            editable={Inputdisable}
-            color={Inputdisable ? Colors.Black : Colors.Placeholder}
-            errormessage={Namevalidation}
-            err={"Please enter your name must be 3 characters."}
+            txtchildren={'Name'}
+            placeholder={'Enter your Name'}
+            inputvalue={''}
+            onchange={v => console.log(v)}
           />
-
 
           <Inputdata
             txtchildren={'Email ID'}
             placeholder={'Acto123@.com'}
-            inputvalue={Input.EmailId}
-            onchange={(v) => SetInput((pre) => ({ ...pre, EmailId: v }))}
-            editable={Inputdisable}
-            color={Inputdisable ? Colors.Black : Colors.Placeholder}
-            errormessage={Emailvalidation}
-            err={"Please enter valid email."}
+            inputvalue={''}
+            onchange={v => console.log(v)}
           />
 
           <Inputdata
             txtchildren={'Password'}
             placeholder={'1234'}
-            inputvalue={Input.Password}
-            onchange={(v) => SetInput((pre) => ({ ...pre, Password: v }))}
-            editable={Inputdisable}
-            color={Inputdisable ? Colors.Black : Colors.Placeholder}
-            errormessage={Passwordvalidation}
-            err={"Please enter your name must be 4 characters."}
+            inputvalue={''}
+            onchange={v => console.log(v)}
           />
 
           <Inputdata
             txtchildren={'Mobile No'}
             placeholder={'012345678'}
-            inputvalue={Input.MobileNo}
-            onchange={(v) => SetInput((pre) => ({ ...pre, MobileNo: v }))}
-            editable={Inputdisable}
-            color={Inputdisable ? Colors.Black : Colors.Placeholder}
-            errormessage={Mobilevalidation}
-            err={"Please enter your name must be 10 digit."}
-            keyboardType={'numeric'}
+            inputvalue={''}
+            onchange={v => console.log(v)}
           />
         </View>
         <Scbutton
-          onsavepress={() => editdata()}
-          oncanclepress={() => cancle()}
-          disabled={!Inputdisable}
-          canceldisabled={!Inputdisable}
+          onsavepress={() => console.log('press')}
+          oncanclepress={() => console.log('pressd')}
         />
         <Profilemodal
-          visible={Input.setmodal}
-          close={() => SetInput((pre) => ({ ...pre, setmodal: false }))}
-          onRequestClose={() => SetInput((pre) => ({ ...pre, setmodal: false }))}
-          touchableWithoutFeedback={() =>
-            SetInput((pre) => ({ ...pre, setmodal: false }))
+        visible={Input.setmodal}
+        close={() => SetInput((pre) => ({ ...pre, setmodal: false }))}
+        onRequestClose={() => SetInput((pre) => ({ ...pre, setmodal: false }))}
+        touchableWithoutFeedback={() =>
+          SetInput((pre) => ({ ...pre, setmodal: false }))
         }
         ongallerypress={opengallary}
         oncamerapress={openCamera}

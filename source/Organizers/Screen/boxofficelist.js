@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ARbutton, ARcontainer, ARimage, ARtext } from "../../common";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { deleteboxoffice, getboxoffice } from "../../api/Api";
 import { FontFamily, FontSize, hei, normalize, wid, Colors } from "../../theme";
@@ -101,6 +101,17 @@ const Boxofficelist = () => {
     Setdeletemodal(false);
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      onRefreshPage();
+    }, [])
+  );
+  const onRefreshPage = () => {
+    SetGetdata([]);
+    Setrefresh(true);
+    getseller(1, true);
+  };
+
   // console.log('Conditional',Hasmore.TotalRecords !== Getdata.length);
   // console.log(Hasmore.TotalRecords);
   // console.log(Getdata.length);
@@ -115,11 +126,7 @@ const Boxofficelist = () => {
         refreshControl={
           <RefreshControl
             refreshing={Refresh}
-            onRefresh={() => {
-              SetGetdata([]);
-              Setrefresh(true);
-              getseller(1, true);
-            }}
+            onRefresh={() => onRefreshPage()}
             tintColor={Colors.purple}
             colors={[Colors.purple]}
           />

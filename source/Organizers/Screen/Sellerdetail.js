@@ -28,13 +28,10 @@ import { editsellerdata, TicketBalance, TicketType } from "../../api/Api";
 import {
   addTicketQty,
   deleteTicketQty,
-  fetchTicketBalance,
   fetchTicketDetails,
-  fetchTicketTypes,
   updateTicketQty,
 } from "./SellerHelper";
 import { Dropdown } from "react-native-element-dropdown";
-import { all } from "axios";
 
 const Sellerdetail = ({ route }) => {
   const navigation = useNavigation();
@@ -83,7 +80,8 @@ const Sellerdetail = ({ route }) => {
   const validate =
     !Validation.isName(Input.Name) &&
     !Validation.issellerpassword(Input.Password);
-  const [allTicketTypesExist, setAllTicketTypesExist] = useState(true);
+  const [allTicketTypesExist, setAllTicketTypesExist] = useState([]);
+  console.log(allTicketTypesExist == "" ? false : true);
 
   const openCamera = () => {
     ImagePicker.openCamera({
@@ -150,36 +148,35 @@ const Sellerdetail = ({ route }) => {
           EmailId,
           Image
         );
+        console.log(response);
         if (response) {
           SetLoading(false);
           setfieldvalidation(false);
-          console.log("Fetch response", response);
         }
-      } else {
-        console.log("Please fill the blank");
       }
     } catch (error) {
       SetLoading(false);
       setfieldvalidation(false);
-      console.log("Failed to fetch data", error);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       if (selectedEvent.eventId) {
         await ticketDetails();
-        console.log("data", data);
         await fetchTicketData();
-        const checkAllTicketTypesExist = ticketType.every((ticket) =>
-          data.some((event) => event.TicketType === ticket.label)
-        );
-        console.log("checkAllTicketTypesExist", checkAllTicketTypesExist);
-        setAllTicketTypesExist(checkAllTicketTypesExist);
+        if (data) {
+          setAllTicketTypesExist([]);
+          const unavailableTickets = ticketType.filter(
+            (ticket) =>
+              Array.isArray(data) &&
+              !data.some((item) => item.TicketType === ticket.label)
+          );
+          setAllTicketTypesExist(unavailableTickets);
+        }
       }
-    };
-    fetchData();
-  }, [selectedEvent.eventId, emptyView, ticketQtyDelete]);
+    })();
+  }, [selectedEvent.eventId, ticketQtyDelete]);
 
   const ticketDetails = async () => {
     fetchTicketDetails(SelllerLoginid, selectedEvent.eventId, setData);
@@ -189,27 +186,21 @@ const Sellerdetail = ({ route }) => {
     try {
       const ticketTypesResponse = await TicketType(selectedEvent.eventId);
       if (!ticketTypesResponse) return;
-      let ticketTypes = ticketTypesResponse.map((item) => ({
-        label: item.TicketType,
-        value: item.EventMaster_TicketTypeid,
-        Balance: 0,
-      }));
       const updatedTicketTypes = await Promise.all(
-        ticketTypes.map(async (ticket) => {
-          try {
-            const balanceResponse = await TicketBalance(
-              SelllerLoginid,
-              selectedEvent.eventId,
-              ticket.value
-            );
-            return {
-              ...ticket,
-              Balance: balanceResponse?.Available_balance || 0,
-            };
-          } catch (error) {
-            return ticket;
-          }
-        })
+        ticketTypesResponse.map(
+          async ({ TicketType, EventMaster_TicketTypeid }) => ({
+            label: TicketType,
+            value: EventMaster_TicketTypeid,
+            Balance:
+              (
+                await TicketBalance(
+                  SelllerLoginid,
+                  selectedEvent.eventId,
+                  EventMaster_TicketTypeid
+                )
+              )?.Available_balance || 0,
+          })
+        )
       );
       setTicketType(updatedTicketTypes);
     } catch (error) {}
@@ -257,9 +248,7 @@ const Sellerdetail = ({ route }) => {
         IsError,
         index
       );
-    } catch (error) {
-      console.log("Error deleting ticket:", error);
-    }
+    } catch (error) {}
   };
 
   if (Loading) return <ARLoader visible={Loading} />;
@@ -279,11 +268,6 @@ const Sellerdetail = ({ route }) => {
       />
 
       <KeyboardAwareScrollView
-        contentContainerStyle={
-          {
-            // your existing styles
-          }
-        }
         ref={scrollViewRef}
         enableAutomaticScroll={false}
         enableOnAndroid={true}
@@ -295,7 +279,22 @@ const Sellerdetail = ({ route }) => {
       >
         <View style={style.containerview}>
           <Uploadphoto
-            oneditpress={() => SetInputdisable(!Inputdisable)}
+            oneditpress={() => {
+              SetInputdisable(!Inputdisable);
+              SetInput({
+                Code: Code,
+                Name: Name,
+                EmailId: EmailId,
+                Password: Password,
+                MobileNo: MobileNo,
+                selectedImage: {
+                  base64: "",
+                  imageUri: PHOTOPATH,
+                  filename: "",
+                },
+                setmodel: false,
+              });
+            }}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
             Addphotoicon={Inputdisable}
@@ -308,7 +307,6 @@ const Sellerdetail = ({ route }) => {
               txtchildren={"Code"}
               placeholder={"Code"}
               inputvalue={Input.Code}
-              // onchange={v => console.log(v)}
               editable={false}
               color={Colors.Placeholder}
             />
@@ -326,7 +324,6 @@ const Sellerdetail = ({ route }) => {
               txtchildren={"Email ID"}
               placeholder={"abc@gmail.com"}
               inputvalue={Input.EmailId}
-              // onchange={v => console.log(v)}
               editable={false}
               color={Colors.Placeholder}
             />
@@ -344,7 +341,6 @@ const Sellerdetail = ({ route }) => {
               txtchildren={"Mobile No"}
               placeholder={"012589632584"}
               inputvalue={Input.MobileNo}
-              // onchange={v => console.log(v)}
               editable={false}
               color={Colors.Placeholder}
             />
@@ -362,6 +358,8 @@ const Sellerdetail = ({ route }) => {
                 Input.selectedImage.base64
               )
             }
+            disabled={!Inputdisable}
+            canceldisabled={!Inputdisable}
             oncanclepress={() =>
               SetInput({
                 Code: Code,
@@ -391,7 +389,7 @@ const Sellerdetail = ({ route }) => {
               setError("");
               setEmptyView(true);
             }}
-            allTicketTypesExist={allTicketTypesExist}
+            allTicketTypesExist={allTicketTypesExist == "" ? false : true}
           />
 
           <InputView
@@ -548,7 +546,7 @@ const style = StyleSheet.create({
 });
 
 const InputView = ({
-  data = [],
+  data,
   setData,
   IsError,
   ticketType,
@@ -570,8 +568,6 @@ const InputView = ({
       Array.isArray(data) &&
       !data.some((item) => item.TicketType === ticket.label)
   );
-  console.log(selectedTicket);
-
   return (
     <>
       {!emptyView ? (
@@ -644,7 +640,7 @@ const InputView = ({
                   oncanclepress={() =>
                     ticketQtyDelete(item?.SelllerMasterDetailsid, index)
                   }
-                  disabled={isSaveDisabled}
+                  disabled={!item?.TicketQty || item?.TicketQty <= 0}
                 />
               </View>
             )
