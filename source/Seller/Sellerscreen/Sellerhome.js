@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -84,6 +84,14 @@ const Sellerhome = () => {
     TOTALAMOUNT: 0,
   });
   const [Fieldvalidation, setFieldvalidation] = useState(false);
+
+  const nameref = useRef(null)
+  const mobileref = useRef(null)
+  const conformmobileref = useRef(null)
+  const remarks = useRef(null)
+  const selectdates = useRef(null)
+  const scrollViewRef = useRef(null);
+
   const [Input, SetInput] = useState({
     Name: "",
     MobileNo: "",
@@ -99,6 +107,8 @@ const Sellerhome = () => {
   const [Loader, Setloader] = useState(false);
   const [Waiting, Setwaiting] = useState(false);
   const [Discountmessage, SetDiscountmessage] = useState(false);
+
+
 
   useEffect(() => {
     const getevent = async (BoxofficeUserId) => {
@@ -297,7 +307,8 @@ const Sellerhome = () => {
     !Validation.isMobileNumberValid(Input.MobileNo) &&
     !Validation.isSameMobileNumber(Input.MobileNo, Input.ConfirmMobileNo) &&
     !Input.Remark.length < 1 &&
-    !Senddate.label == "";
+    !Senddate.label == "" &&
+    !Pmethod == 0
 
   const sendobject = {
     Boxofficeuserid: AsyncValue.BoxofficeUserId,
@@ -329,7 +340,33 @@ const Sellerhome = () => {
 
   const booktickets = async (sendobject, id) => {
     setFieldvalidation(true);
+    if (Input.Name < 2) {
+      nameref.current.focus();
+      scrollViewRef.current.scrollToPosition(0,0,true);
+      return;
+    }
+    if (Input.MobileNo < 10) {
+      mobileref.current.focus();
+      scrollViewRef.current.scrollToPosition(0,0,true);
+      return;
+    }
+    if (Input.MobileNo != Input.ConfirmMobileNo) {
+      conformmobileref.current.focus();
+      scrollViewRef.current.scrollToPosition(0,0,true);
+      return;
+    }
+    if (Input.Remark < 1) {
+      remarks.current.focus();
+      scrollViewRef.current.scrollToPosition(0,0,true);
+      return;
+    }
+    // if (Senddate.value == '') {
+    //   selectdates.current.focus();
+    //   scrollViewRef.current.scrollToPosition(0,0,true);
+    //   return;
+    // }
     if (validate) {
+      console.log('call');
       Setloader(true);
       try {
         const respone = await bookingtickets(sendobject);
@@ -358,7 +395,7 @@ const Sellerhome = () => {
           source={Images.tickets}
           autoPlay
           loop
-          style={{ height: hei(18), width: hei(18) }}
+          style={{ height: hei(18), width: hei(18)}}
         />
       </ARcontainer>
     );
@@ -377,6 +414,7 @@ const Sellerhome = () => {
       </View>
 
       <KeyboardAwareScrollView
+        ref={scrollViewRef}
         contentContainerStyle={{ paddingBottom: hei(10) }}
         enableAutomaticScroll={isIos ? true : false} // Prevent automatic scroll behavior
         enableOnAndroid={true}
@@ -494,6 +532,7 @@ const Sellerhome = () => {
 
         <View style={styles.inputcontainerview}>
           <Inputdata
+            ref={nameref}
             txtchildren={"Name"}
             placeholder={"Enter Your Name"}
             inputvalue={Input.Name}
@@ -502,6 +541,7 @@ const Sellerhome = () => {
             err={"Please enter your name must be 2 characters."}
           />
           <Inputdata
+            ref={mobileref}
             txtchildren={"Mobile No"}
             placeholder={"Enter Your Number"}
             inputvalue={Input.MobileNo}
@@ -512,6 +552,7 @@ const Sellerhome = () => {
             maxLength={10}
           />
           <Inputdata
+            ref={conformmobileref}
             txtchildren={"Confirm Mobile No"}
             placeholder={"Enter Your Number"}
             inputvalue={Input.ConfirmMobileNo}
@@ -524,6 +565,7 @@ const Sellerhome = () => {
             maxLength={10}
           />
           <Inputdata
+            ref={remarks}
             txtchildren={"Remark"}
             placeholder={"125896325"}
             inputvalue={Input.Remark}
@@ -538,6 +580,7 @@ const Sellerhome = () => {
               fontSize={FontSize.font14}
             />
             <Dropdown
+              // ref={selectdates}
               style={[
                 styles.dropdown,
                 {
@@ -654,15 +697,15 @@ const Sellerhome = () => {
                   </View>
                 ))}
 
-                <View style={styles.discountview}>
                   <ARbutton
                     Touchstyle={{
                       height: hei(2.5),
-                      width: hei(2.5),
-                      borderRadius: normalize(4),
-                      borderWidth: normalize(1),
-                      borderColor: Colors.lable,
-                      backgroundColor: "",
+                      backgroundColor:'',
+                      flexDirection:"row",
+                      columnGap:wid(2),
+                      alignItems:"center",
+                      justifyContent:"",
+                      marginVertical:hei(1)
                     }}
                     onpress={() => {
                       Applydiscount(
@@ -672,13 +715,22 @@ const Sellerhome = () => {
                       );
                     }}
                   >
+                    <View style={{
+                       height: hei(2.5),
+                       width: hei(2.5),
+                       borderRadius: normalize(4),
+                       borderWidth: normalize(1),
+                       borderColor: Colors.lable,
+                       justifyContent:"center"
+                    }}>
+
                     {Discount ? (
                       <ARimage
-                        source={Images.disc}
-                        style={{ height: hei(2.5), width: hei(2.5) }}
+                      source={Images.disc}
+                      style={{ height: hei(2.5), width: hei(2.5) }}
                       />
                     ) : null}
-                  </ARbutton>
+                    </View>
                   {Waiting ? (
                     <ARtext children={"Just a waiting"} align={""} />
                   ) : (
@@ -689,24 +741,20 @@ const Sellerhome = () => {
                       align={""}
                     />
                   )}
-                </View>
-                {/* {Discountmessage && Discountdetail.DISCOUNTPRECENTAGE < 1 ? (
-                  <ARtext
-                    children={`Can't get discount some price`}
-                    color={"red"}
-                    align={""}
-                  />
-                ) : null} */}
+              </ARbutton>
+
                 <View style={styles.paymentmainview}>
                   {payarry.map((item, index) => (
                     <View key={index} style={styles.paymentdirectionview}>
                       <ARbutton
                         Touchstyle={{
                           height: hei(3),
-                          width: hei(3),
+                          width: hei(18),
                           backgroundColor: "",
-                          justifyContent: "",
-                          alignItems: "",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection:'row',
+                          columnGap:wid(2)
                         }}
                         onpress={() => payment(item)}
                       >
@@ -716,8 +764,8 @@ const Sellerhome = () => {
                             Pmethod == item.Id ? Images.payact : Images.paydec
                           }
                         />
-                      </ARbutton>
                       <ARtext children={item.PatmentType} />
+                      </ARbutton>
                     </View>
                   ))}
                 </View>
@@ -988,7 +1036,6 @@ const styles = StyleSheet.create({
   paymentdirectionview: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // backgroundColor: 'pink',
     columnGap: wid(2),
     alignItems: "center",
   },

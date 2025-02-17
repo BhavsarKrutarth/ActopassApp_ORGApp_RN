@@ -36,16 +36,16 @@ const Scannerlist = () => {
     getscannerlist();
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      onRefreshPage();
-    }, [])
-  );
-  const onRefreshPage = () => {
-    SetGetdata([]);
-    Setrefresh(true);
-    getscannerlist(1, true);
-  };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     onRefreshPage();
+  //   }, [])
+  // );
+  // const onRefreshPage = () => {
+  //   SetGetdata([]);
+  //   Setrefresh(true);
+  //   getscannerlist(1, true);
+  // };
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Scannerdetail, { data: item });

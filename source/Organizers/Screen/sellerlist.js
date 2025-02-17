@@ -40,29 +40,29 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   const Pagecount = 4;
 
   useEffect(() => {
-    // if(Sellerrefresh)
-    // {
-    //   SetGetdata([])
-    //   getseller(1)
-    //   Sellernotrefresh()
-    //   console.log('Data match');
+    if(Sellerrefresh)
+    {
+      SetGetdata([])
+      getseller(1)
+      Sellernotrefresh()
+      console.log('Data match');
 
-    // }else{
+    }else{
     getseller();
     console.log("Data not Match");
-    // }
+    }
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      onRefreshPage();
-    }, [])
-  );
-  const onRefreshPage = () => {
-    SetGetdata([]);
-    Setrefresh(true);
-    getseller(1, true);
-  };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     onRefreshPage();
+  //   }, [])
+  // );
+  // const onRefreshPage = () => {
+  //   SetGetdata([]);
+  //   Setrefresh(true);
+  //   getseller(1, true);
+  // };
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Sellerdetail, { data: item });

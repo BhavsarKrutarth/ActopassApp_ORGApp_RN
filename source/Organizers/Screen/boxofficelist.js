@@ -101,11 +101,12 @@ const Boxofficelist = () => {
     Setdeletemodal(false);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      onRefreshPage();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     onRefreshPage();
+  //   }, [])
+  // );
+  
   const onRefreshPage = () => {
     SetGetdata([]);
     Setrefresh(true);

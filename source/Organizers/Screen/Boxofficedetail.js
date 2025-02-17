@@ -58,7 +58,6 @@ const Boxofficedetail = ({ route }) => {
     Password,
     BoxofficeUserId,
   } = route.params.data;
-  console.log(BoxofficeUserId);
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
@@ -159,6 +158,7 @@ const Boxofficedetail = ({ route }) => {
     EmailId,
     Image
   ) => {
+    
     setfieldvalidation(true);
     try {
       if (validate) {
@@ -172,11 +172,38 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
+        console.log(response);
+        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
-          console.log("Fetch response", response);
+          setOriginalData({
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
+            selectedImage: {
+              base64: "",
+              imageUri: response.PHOTOPATH,
+              filename: "",
+            },
+            setmodel: false,
+          })
+          SetInput({
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
+            selectedImage: {
+              base64: "",
+              imageUri: response.PHOTOPATH,
+              filename: "",
+            },
+            setmodel: false,
+          })
         }
       } else {
         console.log("Please fill the blank");
@@ -281,6 +308,9 @@ const Boxofficedetail = ({ route }) => {
             oneditpress={() => {
               SetInputdisable(!Inputdisable);
               SetInput({ ...originalData });
+              if(Inputdisable){
+                setfieldvalidation(false)
+              }
             }}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
@@ -345,9 +375,7 @@ const Boxofficedetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              ).then(() => {
-                setOriginalData({ ...Input });
-              });
+              )
             }}
             disabled={!Inputdisable}
             canceldisabled={!Inputdisable}
