@@ -12,20 +12,25 @@ const ARbutton = ({
   borderRadius,
   justifyContent,
   alignItems,
-  disable
+  disable,
+  hitSlop,
 }) => {
   const Touchablestyle = {
     backgroundColor: backgroundColor ?? Colors.Black,
     height: height ?? hei(6.5),
     width: width,
     borderRadius: borderRadius ?? 14,
-    justifyContent: justifyContent ??'center',
-    alignItems: alignItems ??'center',
-
+    justifyContent: justifyContent ?? "center",
+    alignItems: alignItems ?? "center",
   };
 
   return (
-    <TouchableOpacity style={[Touchablestyle, Touchstyle]} onPress={onpress} disabled={disable}>
+    <TouchableOpacity
+      hitSlop={hitSlop}
+      style={[Touchablestyle, Touchstyle]}
+      onPress={onpress}
+      disabled={disable}
+    >
       {children}
     </TouchableOpacity>
   );

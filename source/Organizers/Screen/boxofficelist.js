@@ -221,7 +221,7 @@ const Boxofficelist = () => {
                 source={Images.loader}
                 autoPlay
                 loop
-                style={{ height: hei(10), width: hei(10) }}
+                style={{ height: hei(5), width: hei(5) }}
               />
             </View>
           ) : null
