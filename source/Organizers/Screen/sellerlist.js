@@ -238,7 +238,7 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
                 autoPlay
                 loop
                 resizeMode="cover"
-                style={{ height: hei(6), width: hei(6) }}
+                style={{ height: hei(5), width: hei(5) }}
               />
             </View>
           ) : (
