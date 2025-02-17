@@ -19,7 +19,7 @@ export const loginUser = async (Id, Password) => {
 export const loistofevent = async (OrganizerLoginid) => {
   try {
     const response = await FetchMethod.GET({
-      EndPoint: `ORGApp/OrganizerEventList/${1}/${1000}/${OrganizerLoginid}`,
+      EndPoint: `ORGApp/Seller_eventmaster_dropdownList/${OrganizerLoginid}`,
     });
     return response;
   } catch (error) {

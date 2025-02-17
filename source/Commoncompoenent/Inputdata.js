@@ -6,18 +6,20 @@ import { hei, normalize } from "../theme";
 import { FontFamily, FontSize } from "../theme";
 import { Colors } from "../theme";
 
-const Inputdata = ({
-  txtchildren,
-  inputvalue,
-  onchange,
-  placeholder,
-  keyboardType,
-  editable,
-  errormessage,
-  err,
-  maxLength,
-  color,
-}) => {  
+const Inputdata = React.forwardRef((props,ref) => {  
+  const{
+    txtchildren,
+    inputvalue,
+    onchange,
+    placeholder,
+    keyboardType,
+    editable,
+    errormessage,
+    err,
+    maxLength,
+    color,
+    
+  }=props
   return (
     <View style={style.textinputview}>
       <ARtext children={txtchildren} align={""} size={FontSize.font14} />
@@ -39,6 +41,7 @@ const Inputdata = ({
         editable={editable}
         maxLength={maxLength}
         color={color}
+        ref={ref}
       />
       {errormessage && (
         <View>
@@ -47,7 +50,7 @@ const Inputdata = ({
       )}
     </View>
   );
-};
+})
 
 export default Inputdata;
 

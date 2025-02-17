@@ -105,10 +105,8 @@ const Home = () => {
     try {
       const response = await loistofevent(AsyncValue.OrganizerLoginId);
       if (response) {
-        // console.log(JSON.stringify(response,null,2));
-
         Seteventlist(
-          response.DIscountDetails.map((item) => ({
+          response.map((item) => ({
             label: item.EventName,
             value: item.EventMasterid,
           }))

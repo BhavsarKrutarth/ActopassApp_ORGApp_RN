@@ -14,7 +14,8 @@ import {height} from '../../sources/Theme';
 import {FontFamily, FontSize} from '../theme/Fonts';
 import ARimage from './ARimage';
 
-const ARtextinput = ({
+const ARtextinput = React.forwardRef((props,ref) => {
+  const {
   Lefticon,
   Righticon,
   Containerstyle,
@@ -34,8 +35,9 @@ const ARtextinput = ({
   keyboardType,
   editable,
   maxLength,
-  color
-}) => {
+  color,
+  } = props
+
   const Tistyle = {
     height: Tiheight ?? 30,
     padding: Tipadding ?? 10,
@@ -56,6 +58,7 @@ const ARtextinput = ({
     <View style={[style.container, Containerstyle]}>
       {Lefticon ? <ARimage source={Lefticon} style={style.imagestyle} /> : null}
       <TextInput
+        ref={ref}
         style={[Tistyle, Tinewstyle]}
         placeholderTextColor={Tiprops.placeholderTextColor}
         placeholder={Tiprops.placeholder}
@@ -73,7 +76,7 @@ const ARtextinput = ({
       ) : null}
     </View>
   );
-};
+})
 
 export default ARtextinput;
 

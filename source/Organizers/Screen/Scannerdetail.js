@@ -130,7 +130,32 @@ const Scannerdetail = ({ route }) => {
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
-          console.log("Fetch response", response);
+          setOriginalData({
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
+            selectedImage: {
+              base64: "",
+              imageUri: response.PHOTOPATH,
+              filename: "",
+            },
+            setmodel: false,
+          })
+          SetInput({
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
+            selectedImage: {
+              base64: "",
+              imageUri: response.PHOTOPATH,
+              filename: "",
+            },
+            setmodel: false,
+          })
         }
       } else {
         console.log("Please fill the blank");
@@ -177,6 +202,9 @@ const Scannerdetail = ({ route }) => {
             oneditpress={() => {
               SetInputdisable(!Inputdisable);
               SetInput({ ...originalData });
+              if(Inputdisable){
+                setfieldvalidation(false)
+              }
             }}
             editicontrue={true}
             Imagedata={Input.selectedImage.imageUri}
@@ -241,9 +269,7 @@ const Scannerdetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              ).then(() => {
-                setOriginalData({ ...Input });
-              });
+              )
             }}
             disabled={!Inputdisable}
             canceldisabled={!Inputdisable}
