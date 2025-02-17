@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   ARbutton,
@@ -55,6 +55,14 @@ const Ticketsend = () => {
   const [TotalQty, SetToatalQty] = useState({
     TQTY: 0,
     TPRICE: 0,
+  });
+  const scrollViewRef = useRef(null);
+  const inputRefs = useRef({
+    name: React.createRef(),
+    mobileNo: React.createRef(),
+    confirmMobileNo: React.createRef(),
+    remark: React.createRef(),
+    date: React.createRef(),
   });
 
   useEffect(() => {
@@ -128,24 +136,45 @@ const Ticketsend = () => {
 
   const validateForm = () => {
     let errors = {};
-    if (!input.name.trim()) errors.name = "Please enter your name.";
+    let firstError = null;
+    if (!input.name.trim()) {
+      errors.name = "Please enter your name.";
+      if (!firstError) firstError = "name";
+    }
     const mobileRegex = /^[0-9]{10}$/;
-    if (!input.mobileNo) errors.mobileNo = "Please enter your mobile number.";
-    else if (!mobileRegex.test(input.mobileNo))
+    if (!input.mobileNo) {
+      errors.mobileNo = "Please enter your mobile number.";
+      if (!firstError) firstError = "mobileNo";
+    } else if (!mobileRegex.test(input.mobileNo)) {
       errors.mobileNo = "Please enter a valid 10-digit mobile number.";
-    else if (input.mobileNo !== input.confirmMobileNo)
+      if (!firstError) firstError = "mobileNo";
+    } else if (input.mobileNo !== input.confirmMobileNo) {
       errors.confirmMobileNo =
         "Mobile number and confirm mobile number do not match.";
-    if (!input.remark.trim()) errors.remark = "Please enter your remark.";
-    else if (input.remark.length > 200)
-      errors.remark = "Remark is too long. Please limit it to 200 characters.";
-    if (!value) errors.date = "Please select a date.";
+      if (!firstError) firstError = "confirmMobileNo";
+    }
+    if (!input.remark.trim()) {
+      errors.remark = "Please enter your remark.";
+      if (!firstError) firstError = "remark";
+    }
+    if (!value) {
+      errors.date = "Please select a date.";
+      if (!firstError) firstError = "date";
+    }
     setErrors(errors);
-    return Object.keys(errors).length === 0;
+    return firstError;
   };
 
   const handleTicketBook = async () => {
-    if (!validateForm()) return;
+    const firstError = validateForm();
+    if (firstError) {
+      scrollViewRef.current.scrollToFocusedInput(
+        inputRefs.current[firstError].current
+      );
+      inputRefs.current[firstError].current.focus();
+      return;
+    }
+
     SetLoading(true);
     const ticketTypes = QTYdata.map((item) => ({
       SelllerMasterDetailsid: item.SelllerMasterDetailsid,
@@ -206,6 +235,7 @@ const Ticketsend = () => {
       </View>
 
       <KeyboardAwareScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: hei(10) }}
         enableAutomaticScroll={isIos ? true : false} // Prevent automatic scroll behavior
@@ -297,6 +327,7 @@ const Ticketsend = () => {
 
         <View style={styles.inputcontainerview}>
           <Inputdata
+            ref={inputRefs.current.name}
             txtchildren={"Name"}
             placeholder={"Enter Your Name"}
             inputvalue={input.name}
@@ -305,6 +336,7 @@ const Ticketsend = () => {
             err={errors.name}
           />
           <Inputdata
+            ref={inputRefs.current.mobileNo}
             txtchildren={"Mobile No"}
             placeholder={"Enter Your Number"}
             inputvalue={input.mobileNo}
@@ -313,6 +345,7 @@ const Ticketsend = () => {
             err={errors.mobileNo}
           />
           <Inputdata
+            ref={inputRefs.current.confirmMobileNo}
             txtchildren={"Confirm Mobile No"}
             placeholder={"Enter Your Number"}
             inputvalue={input.confirmMobileNo}
@@ -323,6 +356,7 @@ const Ticketsend = () => {
             err={errors.confirmMobileNo}
           />
           <Inputdata
+            ref={inputRefs.current.remark}
             txtchildren={"Remark"}
             placeholder={"Enter your remark"}
             inputvalue={input.remark}
@@ -337,6 +371,7 @@ const Ticketsend = () => {
               size={FontSize.font14}
             />
             <Dropdown
+              ref={inputRefs.current.date}
               style={styles.datePicker}
               placeholderStyle={{
                 fontSize: FontSize.font12,
