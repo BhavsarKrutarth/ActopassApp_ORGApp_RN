@@ -271,6 +271,7 @@ const Ticketsend = () => {
                 placeholder="Event"
                 value={selectedValue}
                 onChange={(item) => {
+                  SetQTYdata([]);
                   setSelectedValue(item);
                 }}
                 renderLeftIcon={() => (
