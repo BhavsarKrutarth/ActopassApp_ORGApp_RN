@@ -75,26 +75,24 @@ const Detail = () => {
               Touchstyle={style.eventview}
               onpress={() => navigation.navigate(Navroute.Eventdetail,{Id:item.EventMasterid})}
             >
-              <View style={style.imageview}>
-                <ARimage source={{uri : item.EventMainImage}} resizemode={"stretch"} />
-              </View>
-              <View style={style.texts}>
+                <ARimage source={{uri : item.EventMainImage}} resizemode={'stretch'} style={style.image}/>
                 <ARtext
                   children={item.EventName}
                   numline={1}
-                  align={""}
+                  align={''}
                   size={FontSize.font13}
                   fontFamily={FontFamily.Bold}
                   color={Colors.Black}
+                  style={{marginTop:hei(1),marginHorizontal:wid(2)}}
                 />
                 <ARtext
                   children={item.CityName}
-                  align={""}
+                  align={''}
                   size={FontSize.font11}
                   fontFamily={FontFamily.Regular}
                   color={Colors.Placeholder}
+                  style={{marginTop:hei(0.3),marginHorizontal:wid(2)}}
                 />
-              </View>
             </ARbutton>
           )}
           onEndReached={() => {hasMore.TotalRecords != data.length ? fetchData()
@@ -119,43 +117,22 @@ const style = StyleSheet.create({
     paddingBottom:wid(20)
   },
   eventview: {
-    height: hei(25),
     marginVertical: hei(2),
     backgroundColor: Colors.lightgrey,
     borderRadius: normalize(14),
-    padding: 0,
-    width: wid(42),
+    width: '45%',
     marginHorizontal: wid(2),
-    justifyContent: "",
-    alignItems: "",
     overflow: "hidden",
-  },
-  imageview: {
-    height: hei(18),
-    width: wid(42),
-    // backgroundColor:'red',
-    borderTopLeftRadius: normalize(14),
-    borderTopRightRadius: normalize(14),
+    height:'auto',
+    paddingBottom:wid(3),
+    justifyContent:"",
+    alignItems:""
   },
   image: {
+    height: 'auto',
+    width: '100%',
     borderTopLeftRadius: normalize(14),
     borderTopRightRadius: normalize(14),
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  city: {
-    fontSize: 14,
-    color: "gray",
-    textAlign: "center",
-  },
-  texts: {
-    // backgroundColor:'green',
-    paddingHorizontal: wid(2),
-    justifyContent: "center",
-    height: hei(6),
-    rowGap: hei(0.5),
+    aspectRatio: 1 / 1.3
   },
 });

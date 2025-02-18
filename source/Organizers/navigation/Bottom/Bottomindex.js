@@ -84,7 +84,7 @@ const Bottomindex = () => {
         }}
       />
 
-<Bottom.Screen
+  {/* <Bottom.Screen
         name={Navroute.Setting}
         component={Setting}
         options={{
@@ -97,8 +97,10 @@ const Bottomindex = () => {
             </View>
           ),
         }}
-      />
+      /> */}
+
     </Bottom.Navigator>
+    
   );
 };
 

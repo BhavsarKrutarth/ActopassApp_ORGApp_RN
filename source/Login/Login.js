@@ -16,6 +16,7 @@ import {
   setAsyncStorageValue,
 } from "../redux/Reducer/AuthReducers";
 import { loginUser } from "../api/Api";
+import LottieView from "lottie-react-native";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -25,8 +26,8 @@ const Login = () => {
   const [Logindata, Setlogindata] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
-    Id: "SEL-0001",
-    Password: "1111111111",
+    Id: "ORG-0001",
+    Password: "04BBB12B",
     OTP: "",
   });
 
@@ -94,7 +95,17 @@ const Login = () => {
     setInput((prev) => ({ ...prev, OTP: "" }));
   };
 
-  if (isLoading) return <ARLoader visible={isLoading} />;
+  if (isLoading)
+    return (
+      <ARcontainer style={{ justifyContent: "center", alignItems: "center" }}>
+        <LottieView
+          source={Images.tickets}
+          autoPlay
+          loop
+          style={{ height: hei(18), width: hei(18)}}
+        />
+      </ARcontainer>
+    );
 
   return (
     <ARcontainer>
@@ -135,7 +146,7 @@ const Login = () => {
               Tipadding={10}
               Tiplaceholder="Enter ID"
               Tiflex={1}
-              value={Input.Id}
+              value={Input.Id.toUpperCase()}
               onchangetext={(v) => setInput((prev) => ({ ...prev, Id: v }))}
             />
             {Idvalidation ? (

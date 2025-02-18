@@ -169,7 +169,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
 
   return (
     <Modal  
-      transparent={false}
+      transparent={true}
       visible={visible}
       animationType="slide"
       onRequestClose={onRequestClose}

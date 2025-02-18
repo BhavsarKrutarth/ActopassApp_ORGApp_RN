@@ -16,13 +16,14 @@ import ARcontainer from "../common/ARcontainer";
 
 const Profilemodal = ({ visible, onRequestClose, close, oncamerapress, ongallerypress,touchableWithoutFeedback }) => {
   return (
-    // <ARcontainer>
+    <ARcontainer>
       <Modal
         transparent={true}
         visible={visible}
         animationType="slide"
         onRequestClose={onRequestClose}
       >
+
         <TouchableWithoutFeedback onPress={touchableWithoutFeedback}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -97,7 +98,8 @@ const Profilemodal = ({ visible, onRequestClose, close, oncamerapress, ongallery
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-    // </ARcontainer>
+
+    </ARcontainer>
   );
 };
 
