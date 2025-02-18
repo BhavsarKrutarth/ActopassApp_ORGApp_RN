@@ -59,6 +59,8 @@ const Boxofficedetail = ({ route }) => {
     BoxofficeUserId,
   } = route.params.data;
 
+  
+
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Successmodal, Setsuccesmodal] = useState(false);
@@ -84,12 +86,12 @@ const Boxofficedetail = ({ route }) => {
     eventName: "",
     eventId: "",
   });
+  
   const [modalInput, setModalInput] = useState({
     ToAmount: "",
     FromAmount: "",
     DiscountAmount: "",
   });
-  console.log(isError);
 
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
   const Passwordvalidation =
@@ -135,7 +137,7 @@ const Boxofficedetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -158,6 +160,7 @@ const Boxofficedetail = ({ route }) => {
     EmailId,
     Image
   ) => {
+    // console.log(Image);
     
     setfieldvalidation(true);
     try {
@@ -172,7 +175,6 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
-        console.log(response);
         
         if (response.ResponseCode === "0") {
           SetLoading(false);

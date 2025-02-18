@@ -58,11 +58,11 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   //     onRefreshPage();
   //   }, [])
   // );
-  // const onRefreshPage = () => {
-  //   SetGetdata([]);
-  //   Setrefresh(true);
-  //   getseller(1, true);
-  // };
+  const onRefreshPage = () => {
+    SetGetdata([]);
+    Setrefresh(true);
+    getseller(1, true);
+  };
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Sellerdetail, { data: item });

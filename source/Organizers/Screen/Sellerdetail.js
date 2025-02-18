@@ -112,7 +112,7 @@ const Sellerdetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -136,6 +136,8 @@ const Sellerdetail = ({ route }) => {
     Image
   ) => {
     setfieldvalidation(true);
+    console.log(Image);
+    
     try {
       if (validate) {
         SetLoading(true);
@@ -148,8 +150,8 @@ const Sellerdetail = ({ route }) => {
           EmailId,
           Image
         );
-        console.log(response);
         if (response) {
+          console.log(response);
           SetLoading(false);
           setfieldvalidation(false);
         }
@@ -254,7 +256,7 @@ const Sellerdetail = ({ route }) => {
   if (Loading) return <ARLoader visible={Loading} />;
 
   return (
-    <ARcontainer backgroundColor={Colors.backgroundcolor}>
+    <ARcontainer backgroundColors={Colors.backgroundcolor} color={Colors.backgroundcolor}>
       <ARheader
         lefttch={{ paddingLeft: wid(1) }}
         texts={"Sellers Details"}

@@ -113,9 +113,7 @@ const Boxofficelist = () => {
     getseller(1, true);
   };
 
-  // console.log('Conditional',Hasmore.TotalRecords !== Getdata.length);
-  // console.log(Hasmore.TotalRecords);
-  // console.log(Getdata.length);
+
 
   return (
     <ARcontainer>

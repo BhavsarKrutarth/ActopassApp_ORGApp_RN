@@ -5,18 +5,20 @@ import { isIos } from '../theme';
 
 
 const ARcontainer = ({
-  backgroundColor,
+  backgroundColors,
   children,
   style,
   barStyle,
+  color
 }) => {
+  
   return (
     <SafeAreaView
-      style={[{ flex: 1, backgroundColor: backgroundColor ||  Colors.White}]}>
-      <View style={[{ flex: 1, backgroundColor: backgroundColor || Colors.White }, style]}>
+      style={[{ flex: 1, backgroundColor: backgroundColors ||  Colors.White}]}>
+      <View style={[{ flex: 1, backgroundColor: backgroundColors || Colors.White }, style]}>
         <StatusBar
           barStyle={barStyle ?? 'dark-content'}
-          backgroundColor={Colors.White}
+          backgroundColor={color ?? Colors.White}
         />
         {children}
       </View>
@@ -24,3 +26,4 @@ const ARcontainer = ({
   );
 };
 export default ARcontainer;
+
