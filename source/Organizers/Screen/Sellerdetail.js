@@ -40,7 +40,6 @@ import {
   TicketType,
 } from "../../api/Api";
 import { Dropdown } from "react-native-element-dropdown";
-import LottieView from "lottie-react-native";
 
 const Sellerdetail = ({ route }) => {
   const navigation = useNavigation();
@@ -55,7 +54,7 @@ const Sellerdetail = ({ route }) => {
     Password,
     SelllerLoginid,
   } = route.params.data;
-  console.log(route.params.data);
+console.log(route.params.data);
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
@@ -304,7 +303,7 @@ const Sellerdetail = ({ route }) => {
       } else {
         const updatedErrors = [...IsError];
         updatedErrors[index] =
-          "You cannot select more tickets than the available balance.";
+          "Ticket Quantity cannot be more than available balance.";
         setError(updatedErrors);
       }
     } catch (error) {}
@@ -621,21 +620,12 @@ const InputView = ({
   isLoading,
 }) => {
   const [editableIndex, setEditableIndex] = useState(null);
-  const [originalData, setOriginalData] = useState({});
   const isSaveDisabled = data?.some((t) => !t?.TicketQty || t.TicketQty <= 0);
   const unavailableTickets = ticketType.filter(
     (t) => !data?.some((item) => item.TicketType === t.label)
   );
 
-  if (isLoading)
-    return (
-      <LottieView
-        source={Images.loader}
-        autoPlay
-        loop
-        style={{ height: hei(5), width: hei(5), alignSelf: "center" }}
-      />
-    );
+  if (isLoading) return <ActivityIndicator size={"large"} />;
 
   return emptyView ? (
     <View>
@@ -699,11 +689,9 @@ const InputView = ({
       />
     </View>
   ) : data == "" && eventName != "" ? (
-    <ARtext
-      size={FontSize.font14}
-      fontFamily={FontFamily.SemiBold}
-      children={"No data found."}
-    />
+    <View>
+      <ARtext children={"Nodata Found."} />
+    </View>
   ) : (
     data?.map(
       (item, index) =>
@@ -720,21 +708,9 @@ const InputView = ({
                 }}
                 backgroundColor={""}
                 hitSlop={10}
-                onpress={() => {
-                  if (editableIndex !== index) {
-                    setOriginalData((prev) => ({
-                      ...prev,
-                      [index]: { ...data[index] },
-                    }));
-                  } else {
-                    setData((prevData) =>
-                      prevData.map((item, idx) =>
-                        idx === index ? originalData[index] || item : item
-                      )
-                    );
-                  }
-                  setEditableIndex(editableIndex === index ? null : index);
-                }}
+                onpress={() =>
+                  setEditableIndex(editableIndex === index ? null : index)
+                }
               >
                 <ARimage
                   source={Images.edit}

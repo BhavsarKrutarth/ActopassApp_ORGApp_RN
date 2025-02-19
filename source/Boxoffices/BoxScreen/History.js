@@ -28,7 +28,7 @@ const History = () => {
 
   useEffect(() => {
     if (AsyncValue.SellerLoginId) {
-      gethistory(1);
+      gethistory(1, true);
     }
   }, []);
 
@@ -145,11 +145,7 @@ const History = () => {
           </View>
         )}
         onEndReachedThreshold={0.1}
-        onEndReached={() => {
-          if (HasMore && !Loading) {
-            gethistory(PageIndex, false);
-          }
-        }}
+        onEndReached={() => gethistory(PageIndex, false)}
         ListFooterComponent={() =>
           Loading && (
             <View style={{ marginTop: 0, alignItems: "center" }}>

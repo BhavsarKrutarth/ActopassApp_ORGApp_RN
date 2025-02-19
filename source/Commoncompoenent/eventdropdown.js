@@ -15,7 +15,6 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useSelector } from "react-redux";
 import Images from "../Image/Images";
 import { EventList } from "../api/Api";
-import LottieView from "lottie-react-native";
 
 const Eventdropdown = ({
   eventDataLength,
@@ -27,7 +26,6 @@ const Eventdropdown = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
   const { AsyncValue } = useSelector((state) => state.Auth);
-  const [isLoading, SetLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -40,8 +38,6 @@ const Eventdropdown = ({
           }))
         );
       } catch (error) {
-      } finally {
-        SetLoading(false);
       }
     })();
   }, []);
@@ -66,20 +62,19 @@ const Eventdropdown = ({
           },
         ]}
       >
+       
         <Dropdown
           style={style.dropdown}
           itemTextStyle={style.textStyle}
           placeholderStyle={{
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
-            opacity: isLoading ? 0.2 : 1,
           }}
           data={data}
           selectedTextStyle={{
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
           }}
-          disable={isLoading}
           dropdownPosition={eventDataLength === 0 ? "top" : "bottom"}
           selectedTextProps={{ numberOfLines: 1 }}
           labelField="label"
