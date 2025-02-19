@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
 import {
   Colors,
   FontFamily,
@@ -30,12 +30,14 @@ const Responsemodal = ({
   subsize
 }) => {
   return (
+    
     <Modal
       transparent={true}
       visible={visible}
       animationType="slide"
       onrequestclose={onrequestclose}
     >
+    <SafeAreaView backgroundColor={''} flex={1}>
       <View style={style.modalContainer}>
         <View style={style.modalContent}>
           <View style={{
@@ -126,7 +128,9 @@ const Responsemodal = ({
           )}
         </View>
       </View>
+    </SafeAreaView>
     </Modal>
+
   );
 };
 

@@ -30,17 +30,15 @@ const Scannerlist = () => {
   const [Loading, SetLoading] = useState(false);
   const [Response, SetResponse] = useState("");
   const [Pageindex, Setpageindex] = useState(1);
-  const Pagecount = 4;
+  const Pagecount = 10
 
-  useEffect(() => {
-    getscannerlist();
-  }, []);
+ useFocusEffect(
+     React.useCallback(() => {
+       SetGetdata([]); 
+       getscannerlist(1); 
+     }, [])
+   );
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     onRefreshPage();
-  //   }, [])
-  // );
   
   const onRefreshPage = () => {
     SetGetdata([]);

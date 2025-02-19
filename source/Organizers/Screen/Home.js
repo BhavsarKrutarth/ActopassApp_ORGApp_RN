@@ -105,7 +105,6 @@ const Home = () => {
 
   const getevent = async () => {
     try {
-      setloader(true)
       const response = await loistofevent(AsyncValue.OrganizerLoginId);
       if (response) {
         Seteventlist(
@@ -115,14 +114,11 @@ const Home = () => {
           }))
         );
         Setdisable(false)
-        setloader(false)
       } else {
         Setdisable(true);
-        setloader(false)
       }
     } catch (error) {
       console.log("Dashboard getevent erro", error);
-      setloader(false)
     }
   };
 

@@ -256,7 +256,7 @@ const Sellerdetail = ({ route }) => {
   if (Loading) return <ARLoader visible={Loading} />;
 
   return (
-    <ARcontainer backgroundColors={Colors.backgroundcolor} color={Colors.backgroundcolor}>
+    <ARcontainer backgroundColor={Colors.backgroundcolor}>
       <ARheader
         lefttch={{ paddingLeft: wid(1) }}
         texts={"Sellers Details"}
@@ -298,20 +298,21 @@ const Sellerdetail = ({ route }) => {
               });
             }}
             editicontrue={true}
-            Imagedata={Input.selectedImage.imageUri}
-            Addphotoicon={Inputdisable}
+            // Imagedata={Input.selectedImage.imageUri}
+            // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            subtext={Input.selectedImage.filename}
+            subtext={"Manage seller credentials and assigned tickets."
+}
           />
           <View style={style.inputcontainerview}>
-            <Inputdata
+            {/* <Inputdata
               txtchildren={"Code"}
               placeholder={"Code"}
               inputvalue={Input.Code}
               editable={false}
               color={Colors.Placeholder}
-            />
+            /> */}
             <Inputdata
               txtchildren={"Name"}
               placeholder={"Enter Your Name"}
@@ -473,14 +474,13 @@ export default Sellerdetail;
 const style = StyleSheet.create({
   scrollstyle: {
     flexGrow: 1,
-    // backgroundColor:Colors.Placeholder,
     paddingHorizontal: wid(4),
   },
   containerview: {
     // paddingBottom:hei(1),
-    // backgroundColor:"red"
+    // backgroundColor:"red",
     paddingHorizontal: wid(4),
-    flex: 1,
+    // flex: 1,
   },
   inputcontainerview: {
     marginTop: hei(3),
