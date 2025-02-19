@@ -131,31 +131,31 @@ const Scannerdetail = ({ route }) => {
           setfieldvalidation(false);
           Setsuccesmodal(true);
           setOriginalData({
-            Code:response.Code,
-            Name:response.Name,
-            EmailId:response.EmailId,
-            Password:response.Password,
-            MobileNo:response.MobileNo,
+            Code: response.Code,
+            Name: response.Name,
+            EmailId: response.EmailId,
+            Password: response.Password,
+            MobileNo: response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          })
+          });
           SetInput({
-            Code:response.Code,
-            Name:response.Name,
-            EmailId:response.EmailId,
-            Password:response.Password,
-            MobileNo:response.MobileNo,
+            Code: response.Code,
+            Name: response.Name,
+            EmailId: response.EmailId,
+            Password: response.Password,
+            MobileNo: response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          })
+          });
         }
       } else {
         console.log("Please fill the blank");
@@ -202,16 +202,16 @@ const Scannerdetail = ({ route }) => {
             oneditpress={() => {
               SetInputdisable(!Inputdisable);
               SetInput({ ...originalData });
-              if(Inputdisable){
-                setfieldvalidation(false)
+              if (Inputdisable) {
+                setfieldvalidation(false);
               }
             }}
             editicontrue={true}
-            Imagedata={Input.selectedImage.imageUri}
-            Addphotoicon={Inputdisable}
+            // Imagedata={Input.selectedImage.imageUri}
+            // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            subtext={Input.selectedImage.filename}
+            // subtext={EmpId}
           />
           <View style={style.inputcontainerview}>
             {/* <Inputdata
@@ -269,7 +269,7 @@ const Scannerdetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              )
+              );
             }}
             disabled={!Inputdisable}
             canceldisabled={!Inputdisable}
