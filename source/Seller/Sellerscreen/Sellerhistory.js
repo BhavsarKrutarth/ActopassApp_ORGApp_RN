@@ -148,7 +148,11 @@ const Sellerhistory = () => {
           </View>
         )}
         onEndReachedThreshold={0.1}
-        onEndReached={() => gethistory(PageIndex, false)}
+        onEndReached={() => {
+          if (HasMore && !Loading) {
+            gethistory(PageIndex, false);
+          }
+        }}
         ListFooterComponent={() =>
           Loading && (
             <View style={{ marginTop: 0, alignItems: "center" }}>
