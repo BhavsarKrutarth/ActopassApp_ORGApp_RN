@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { hei, wid, normalize } from "../theme";
 import { Colors } from "../theme";
 import { FontFamily, FontSize } from "../theme";
@@ -9,6 +15,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { useSelector } from "react-redux";
 import Images from "../Image/Images";
 import { EventList } from "../api/Api";
+import LottieView from "lottie-react-native";
 
 const Eventdropdown = ({
   eventDataLength,
@@ -20,18 +27,24 @@ const Eventdropdown = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const [data, setData] = useState([]);
   const { AsyncValue } = useSelector((state) => state.Auth);
+  const [isLoading, SetLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const response = await EventList(AsyncValue.OrganizerLoginId);
-      setData(
-        response?.map((item) => ({
-          label: item.EventName,
-          value: item.EventMasterid,
-        }))
-      );
-    } catch (error) {}
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await EventList(AsyncValue.OrganizerLoginId);
+        setData(
+          response?.map((item) => ({
+            label: item.EventName,
+            value: item.EventMasterid,
+          }))
+        );
+      } catch (error) {
+      } finally {
+        SetLoading(false);
+      }
+    })();
+  }, []);
 
   return (
     <View style={style.textassignview}>
@@ -59,12 +72,14 @@ const Eventdropdown = ({
           placeholderStyle={{
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
+            opacity: isLoading ? 0.2 : 1,
           }}
           data={data}
           selectedTextStyle={{
             fontSize: FontSize.font13,
             fontFamily: FontFamily.Medium,
           }}
+          disable={isLoading}
           dropdownPosition={eventDataLength === 0 ? "top" : "bottom"}
           selectedTextProps={{ numberOfLines: 1 }}
           labelField="label"
@@ -73,9 +88,6 @@ const Eventdropdown = ({
           maxHeight={hei(23)}
           value={selectedValue}
           showsVerticalScrollIndicator={false}
-          onFocus={() => {
-            fetchData();
-          }}
           onChange={(item) => {
             setSelectedValue(item);
             eventpress();
@@ -105,25 +117,21 @@ export default Eventdropdown;
 
 const style = StyleSheet.create({
   textassignview: {
-    // backgroundColor:"yellow",
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: hei(2),
   },
   txtsubview: {
-    // backgroundColor:"red",
     width: wid(45),
     justifyContent: "center",
   },
   dropdown: {
-    // zIndex: 9999,
     width: wid(30),
     backgroundColor: Colors.lightgrey,
     padding: wid(2),
     borderRadius: normalize(5),
     borderWidth: normalize(1),
     borderColor: Colors.bordercolor,
-    elevation: 5,
     justifyContent: "center",
   },
   dropdownContainer: {
@@ -136,6 +144,9 @@ const style = StyleSheet.create({
     padding: normalize(10),
     marginTop: hei(0.5),
     justifyContent: "center",
+    elevation: 0,
+    shadowOpacity: 0,
+    bottom: Platform.OS === "ios" ? hei(0) : hei(5),
   },
   textStyle: {
     fontSize: FontSize.font14,
