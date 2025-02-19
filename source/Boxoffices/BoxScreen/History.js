@@ -28,7 +28,7 @@ const History = () => {
 
   useEffect(() => {
     if (AsyncValue.SellerLoginId) {
-      gethistory(1, true);
+      gethistory(1);
     }
   }, []);
 
@@ -145,7 +145,11 @@ const History = () => {
           </View>
         )}
         onEndReachedThreshold={0.1}
-        onEndReached={() => gethistory(PageIndex, false)}
+        onEndReached={() => {
+          if (HasMore && !Loading) {
+            gethistory(PageIndex, false);
+          }
+        }}
         ListFooterComponent={() =>
           Loading && (
             <View style={{ marginTop: 0, alignItems: "center" }}>
@@ -168,7 +172,7 @@ export default History;
 const style = StyleSheet.create({
   scrollstyle: {
     marginTop: hei(1.5),
-    paddingBottom: wid(isIos ? 18 : 25),
+    paddingBottom: wid(isIos ? 18 : 30),
   },
   mainview: {
     marginTop: hei(1),

@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import {
   ARbutton,
@@ -44,6 +45,7 @@ import {
   GetDiscount_Box,
   UpdateDiscount_Box,
 } from "../../api/Api";
+import LottieView from "lottie-react-native";
 
 const Boxofficedetail = ({ route }) => {
   const navigation = useNavigation();
@@ -58,13 +60,11 @@ const Boxofficedetail = ({ route }) => {
     Password,
     BoxofficeUserId,
   } = route.params.data;
-
-  
-
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
   const [Successmodal, Setsuccesmodal] = useState(false);
   const [Loading, SetLoading] = useState(false);
+  const [isLoading, SetIsLoading] = useState(false);
   const [originalData, setOriginalData] = useState({
     Code,
     Name,
@@ -92,7 +92,6 @@ const Boxofficedetail = ({ route }) => {
     FromAmount: "",
     DiscountAmount: "",
   });
-
   const Namevalidation = Fieldvalidation && Validation.isName(Input.Name);
   const Passwordvalidation =
     Fieldvalidation && Validation.issellerpassword(Input.Password);
@@ -160,8 +159,6 @@ const Boxofficedetail = ({ route }) => {
     EmailId,
     Image
   ) => {
-    // console.log(Image);
-    
     setfieldvalidation(true);
     try {
       if (validate) {
@@ -175,37 +172,36 @@ const Boxofficedetail = ({ route }) => {
           EmailId,
           Image
         );
-        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
           setOriginalData({
-            Code:response.Code,
-            Name:response.Name,
-            EmailId:response.EmailId,
-            Password:response.Password,
-            MobileNo:response.MobileNo,
+            Code: response.Code,
+            Name: response.Name,
+            EmailId: response.EmailId,
+            Password: response.Password,
+            MobileNo: response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          })
+          });
           SetInput({
-            Code:response.Code,
-            Name:response.Name,
-            EmailId:response.EmailId,
-            Password:response.Password,
-            MobileNo:response.MobileNo,
+            Code: response.Code,
+            Name: response.Name,
+            EmailId: response.EmailId,
+            Password: response.Password,
+            MobileNo: response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          })
+          });
         }
       } else {
         console.log("Please fill the blank");
@@ -218,13 +214,17 @@ const Boxofficedetail = ({ route }) => {
   };
 
   const getDiscount_Box = async () => {
+    SetIsLoading(true);
     try {
       const response = await GetDiscount_Box(
         BoxofficeUserId,
         selectedEvent.eventId
       );
-      setData(Array.isArray(response) ? response : []);
-    } catch (error) {}
+      setData(response);
+    } catch (error) {
+    } finally {
+      SetIsLoading(false);
+    }
   };
 
   const addDiscount_Box = async () => {
@@ -237,17 +237,17 @@ const Boxofficedetail = ({ route }) => {
       if (response.ResponseCode == 0) {
         setData((prevData) => [...prevData, response]);
         setError([]);
-        Alert.alert("your dicount data added successfully.");
+        Alert.alert("Discount data has been successfully added");
         setEmptyView(false);
       } else if (response.ResponseCode == -1) {
         setError(
-          "A conflicting range for FromAmount and ToAmount already exists in the table. Please review the existing entries and adjust the values accordingly."
+          "Invalid range: The specified 'From Amount' and 'To Amount' overlap with an existing entry. Please adjust the values to avoid conflicts."
         );
       }
     } catch (error) {}
   };
 
-  const updateDiscount_Box = async (index) => {
+  const updateDiscount_Box = async (index, setOriginalData) => {
     try {
       const response = await UpdateDiscount_Box(
         data[index],
@@ -255,11 +255,15 @@ const Boxofficedetail = ({ route }) => {
       );
       if (response.ResponseCode == 0) {
         setError([]);
+        setOriginalData((prev) => ({
+          ...prev,
+          [index]: { ...data[index] },
+        }));
         Setsuccesmodal(true);
       } else {
         const updatedErrors = [...isError];
         updatedErrors[index] =
-          "A conflicting range for FromAmount and ToAmount already exists in the table. Please review the existing entries and adjust the values accordingly.";
+          "Invalid range: The specified 'From Amount' and 'To Amount' overlap with an existing entry. Please adjust the values to avoid conflicts.";
         setError(updatedErrors);
       }
     } catch (error) {}
@@ -297,12 +301,13 @@ const Boxofficedetail = ({ route }) => {
             // backgroundColor: "pink",
           }
         }
-        enableAutomaticScroll={isIos ? true : false} // Prevent automatic scroll behavior
-        enableOnAndroid={true}
+        keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        enableAutomaticScroll={false} // Prevent automatic scroll behavior
         scrollEnabled={true}
         extraHeight={0}
-        extraScrollHeight={0} // Prevent extra space from being added when the keyboard opens
+        extraScrollHeight={Platform.OS === "ios" ? 50 : 0} // Prevent extra space from being added when the keyboard opens
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // Adjust for platform-specific behavior
       >
         <View style={style.containerview}>
@@ -310,8 +315,8 @@ const Boxofficedetail = ({ route }) => {
             oneditpress={() => {
               SetInputdisable(!Inputdisable);
               SetInput({ ...originalData });
-              if(Inputdisable){
-                setfieldvalidation(false)
+              if (Inputdisable) {
+                setfieldvalidation(false);
               }
             }}
             editicontrue={true}
@@ -377,7 +382,7 @@ const Boxofficedetail = ({ route }) => {
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              )
+              );
             }}
             disabled={!Inputdisable}
             canceldisabled={!Inputdisable}
@@ -393,6 +398,7 @@ const Boxofficedetail = ({ route }) => {
               setEmptyView(true);
               setError("");
             }}
+            allTicketTypesExist={selectedEvent.eventId != "" && true}
           />
           {data?.map((item, index) => (
             <DiscountInputView
@@ -408,6 +414,21 @@ const Boxofficedetail = ({ route }) => {
               index={index}
             />
           ))}
+          {isLoading && (
+            <LottieView
+              source={Images.loader}
+              autoPlay
+              loop
+              style={{ height: hei(5), width: hei(5), alignSelf: "center" }}
+            />
+          )}
+          {!isLoading && selectedEvent.eventId && data == "" && (
+            <ARtext
+              size={FontSize.font14}
+              fontFamily={FontFamily.SemiBold}
+              children={"No data found."}
+            />
+          )}
         </View>
       </KeyboardAwareScrollView>
       <Profilemodal
@@ -528,6 +549,13 @@ const DiscountInputView = ({
   index,
   setEmptyView,
 }) => {
+  const [editableIndex, setEditableIndex] = useState(null);
+  const [originalData, setOriginalData] = useState({});
+
+  if (!data) {
+    return <Text>No data available</Text>;
+  }
+
   const handleInputChange = useCallback(
     (field, value) => {
       setData((prevData) =>
@@ -540,6 +568,7 @@ const DiscountInputView = ({
     },
     [index, setData]
   );
+
   const inputFields = [
     { label: "To Amount", field: "ToAmount", placeholder: "10" },
     { label: "From Amount", field: "FromAmount", placeholder: "100" },
@@ -549,11 +578,44 @@ const DiscountInputView = ({
   return (
     <>
       <View style={[style.inputcontainerview, { marginTop: hei(1) }]}>
+        {!emptyView && (
+          <ARbutton
+            Touchstyle={{
+              height: hei(1.5),
+              width: hei(1.5),
+              position: "absolute",
+              top: hei(1.5),
+              right: hei(1.5),
+            }}
+            backgroundColor={""}
+            onpress={() => {
+              if (editableIndex !== index) {
+                setOriginalData((prev) => ({
+                  ...prev,
+                  [index]: { ...data[index] },
+                }));
+              } else {
+                setData((prevData) =>
+                  prevData.map((item, idx) =>
+                    idx === index ? originalData[index] || item : item
+                  )
+                );
+              }
+              setEditableIndex(editableIndex === index ? null : index);
+            }}
+          >
+            <ARimage
+              source={Images.edit}
+              style={{ height: hei(2), width: hei(2) }}
+            />
+          </ARbutton>
+        )}
         <Inputdata
           txtchildren={"Name"}
           placeholder={"Actoscript"}
           inputvalue={emptyView ? eventName : data[index]?.EventName || ""}
           editable={false}
+          color={Colors.Placeholder}
         />
         {inputFields.map(({ label, field, placeholder }) => (
           <Inputdata
@@ -564,6 +626,14 @@ const DiscountInputView = ({
               emptyView ? data[field] : data[index]?.[field]?.toString() || ""
             }
             onchange={(text) => handleInputChange(field, text)}
+            editable={emptyView ? true : editableIndex === index}
+            color={
+              !emptyView
+                ? editableIndex === index
+                  ? Colors.Black
+                  : Colors.Placeholder
+                : Colors.Black
+            }
           />
         ))}
       </View>
@@ -591,14 +661,17 @@ const DiscountInputView = ({
         )
       )}
       <Scbutton
-        onsavepress={() =>
-          emptyView ? addDiscount_Box(index) : updateDiscount_Box(index)
-        }
+        onsavepress={() => {
+          emptyView
+            ? addDiscount_Box(index)
+            : updateDiscount_Box(index, setOriginalData);
+        }}
         oncanclepress={() =>
           emptyView ? setEmptyView(false) : deleteDiscount_Box(index)
         }
         styles={{ marginVertical: hei(3), gap: wid(1) }}
         backgroundColor={emptyView ? Colors.Black : Colors.Red}
+        disabled={!emptyView ? (editableIndex === index ? false : true) : false}
       >
         {emptyView ? "Cancel" : "Delete"}
       </Scbutton>
