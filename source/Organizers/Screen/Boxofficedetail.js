@@ -304,11 +304,12 @@ const Boxofficedetail = ({ route }) => {
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
-        enableAutomaticScroll={false} // Prevent automatic scroll behavior
+        enableAutomaticScroll={false} 
         scrollEnabled={true}
         extraHeight={0}
-        extraScrollHeight={Platform.OS === "ios" ? 50 : 0} // Prevent extra space from being added when the keyboard opens
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // Adjust for platform-specific behavior
+        extraScrollHeight={Platform.OS === "ios" ? 0 : 0} 
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} 
+        enableResetScrollToCoords={false}
       >
         <View style={style.containerview}>
           <Uploadphoto
@@ -497,6 +498,7 @@ const style = StyleSheet.create({
   containerview: {
     paddingHorizontal: wid(4),
     flex: 1,
+    paddingBottom:hei(1),
     // backgroundColor:"green"
   },
   inputcontainerview: {

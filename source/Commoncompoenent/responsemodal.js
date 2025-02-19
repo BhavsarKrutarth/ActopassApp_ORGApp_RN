@@ -37,7 +37,6 @@ const Responsemodal = ({
       animationType="slide"
       onrequestclose={onrequestclose}
     >
-    <SafeAreaView backgroundColor={''} flex={1}>
       <View style={style.modalContainer}>
         <View style={style.modalContent}>
           <View style={{
@@ -128,7 +127,6 @@ const Responsemodal = ({
           )}
         </View>
       </View>
-    </SafeAreaView>
     </Modal>
 
   );

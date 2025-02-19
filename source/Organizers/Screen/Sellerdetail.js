@@ -42,6 +42,203 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import LottieView from "lottie-react-native";
 
+
+const InputView = ({
+  data,
+  setData,
+  IsError,
+  ticketType,
+  ticketQtyAdd,
+  ticketQtyupdate,
+  ticketQtyDelete,
+  emptyView,
+  setEmptyView,
+  eventName,
+  setSelectedTicket,
+  selectedTicket,
+  isLoading,
+}) => {
+  const [editableIndex, setEditableIndex] = useState(null);
+  const [originalData, setOriginalData] = useState({});
+  const isSaveDisabled = data?.some((t) => !t?.TicketQty || t.TicketQty <= 0);
+  const unavailableTickets = ticketType.filter(
+    (t) => !data?.some((item) => item.TicketType === t.label)
+  );
+
+  if (isLoading)
+    return (
+      <LottieView
+        source={Images.loader}
+        autoPlay
+        loop
+        style={{ height: hei(5), width: hei(5), alignSelf: "center" }}
+      />
+    );
+
+  return emptyView ? (
+    <View>
+      <View style={[style.inputcontainerview, { marginTop: hei(0) }]}>
+        <Inputdata
+          txtchildren="Name"
+          placeholder="Suvarn Navaratri"
+          inputvalue={eventName || ""}
+          editable={false}
+        />
+        <View style={{ marginVertical: hei(1) }}>
+          <ARtext children="Ticket Type" align="left" />
+          <Dropdown
+            style={style.dropdown}
+            data={unavailableTickets}
+            placeholderStyle={style.placeholderStyle}
+            selectedTextStyle={[
+              style.placeholderStyle,
+              { color: Colors.Black },
+            ]}
+            labelField="label"
+            valueField="value"
+            value={selectedTicket?.value}
+            onChange={setSelectedTicket}
+          />
+        </View>
+        <Inputdata
+          txtchildren="Available Ticket"
+          placeholder="0"
+          inputvalue={selectedTicket?.Balance?.toString() || "0"}
+          editable={false}
+        />
+        <Inputdata
+          txtchildren="Ticket Qty"
+          placeholder="0"
+          inputvalue={data[0]?.TicketQty?.toString() || ""}
+          onchange={(v) => setData([{ ...(data[0] || {}), TicketQty: v }])}
+        />
+      </View>
+      {IsError.length > 0 && (
+        <ARtext
+          style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
+          color={Colors.Red}
+          size={FontSize.font11}
+          fontFamily={FontFamily.Light}
+        >
+          {IsError}
+        </ARtext>
+      )}
+      <Scbutton
+        onsavepress={() =>
+          ticketQtyAdd(
+            selectedTicket?.value,
+            selectedTicket?.Balance,
+            data[0]?.TicketQty
+          )
+        }
+        children="Cancel"
+        oncanclepress={() => setEmptyView(true)}
+        disabled={isSaveDisabled}
+      />
+    </View>
+  ) : data == "" && eventName != "" ? (
+    <ARtext
+      size={FontSize.font14}
+      fontFamily={FontFamily.SemiBold}
+      children={"No data found."}
+    />
+  ) : (
+    data?.map(
+      (item, index) =>
+        item?.isVisible !== false && (
+          <View key={index}>
+            <View style={style.inputcontainerview}>
+              <ARbutton
+                Touchstyle={{
+                  height: hei(1.5),
+                  width: hei(1.5),
+                  position: "absolute",
+                  top: hei(1.5),
+                  right: hei(1.5),
+                }}
+                backgroundColor={""}
+                hitSlop={10}
+                onpress={() => {
+                  if (editableIndex !== index) {
+                    setOriginalData((prev) => ({
+                      ...prev,
+                      [index]: { ...data[index] },
+                    }));
+                  } else {
+                    setData((prevData) =>
+                      prevData.map((item, idx) =>
+                        idx === index ? originalData[index] || item : item
+                      )
+                    );
+                  }
+                  setEditableIndex(editableIndex === index ? null : index);
+                }}
+              >
+                <ARimage
+                  source={Images.edit}
+                  style={{ height: hei(2), width: hei(2) }}
+                />
+              </ARbutton>
+              {["EventName", "TicketType", "Available_balance"].map((key) => (
+                <Inputdata
+                  key={key}
+                  txtchildren={key.replace("_", " ")}
+                  inputvalue={item?.[key]?.toString() || ""}
+                  editable={false}
+                  color={Colors.Placeholder}
+                />
+              ))}
+              <Inputdata
+                txtchildren="Ticket Qty"
+                placeholder="0"
+                inputvalue={item?.SellerTicket?.toString()}
+                editable={editableIndex === index}
+                color={
+                  editableIndex === index ? Colors.Black : Colors.Placeholder
+                }
+                onchange={(v) =>
+                  setData((prev) =>
+                    prev.map((d, i) =>
+                      i === index ? { ...d, TicketQty: v, SellerTicket: v } : d
+                    )
+                  )
+                }
+              />
+            </View>
+            {IsError[index] && (
+              <ARtext
+                style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
+                color={Colors.Red}
+                size={FontSize.font11}
+                fontFamily={FontFamily.Light}
+              >
+                {IsError[index]}
+              </ARtext>
+            )}
+            <Scbutton
+              onsavepress={() => {
+                ticketQtyupdate(
+                  index,
+                  item?.SelllerMasterDetailsid,
+                  ticketType[index]?.value,
+                  item?.Available_balance,
+                  item?.TicketQty
+                );
+                setEditableIndex(null);
+              }}
+              backgroundColor={Colors.Red}
+              children="Delete"
+              oncanclepress={() =>
+                ticketQtyDelete(item?.SelllerMasterDetailsid, index)
+              }
+              disabled={!item?.TicketQty || item?.TicketQty <= 0}
+            />
+          </View>
+        )
+    )
+  );
+};
+
 const Sellerdetail = ({ route }) => {
   const navigation = useNavigation();
   const {
@@ -357,6 +554,7 @@ const Sellerdetail = ({ route }) => {
         extraHeight={0}
         extraScrollHeight={0}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        enableResetScrollToCoords={false}
       >
         <View style={style.containerview}>
           <Uploadphoto
@@ -539,7 +737,7 @@ const style = StyleSheet.create({
     paddingHorizontal: wid(4),
   },
   containerview: {
-    // paddingBottom:hei(1),
+    paddingBottom:hei(1),
     // backgroundColor:"red",
     paddingHorizontal: wid(4),
     // flex: 1,
@@ -609,198 +807,4 @@ const style = StyleSheet.create({
   },
 });
 
-const InputView = ({
-  data,
-  setData,
-  IsError,
-  ticketType,
-  ticketQtyAdd,
-  ticketQtyupdate,
-  ticketQtyDelete,
-  emptyView,
-  setEmptyView,
-  eventName,
-  setSelectedTicket,
-  selectedTicket,
-  isLoading,
-}) => {
-  const [editableIndex, setEditableIndex] = useState(null);
-  const [originalData, setOriginalData] = useState({});
-  const isSaveDisabled = data?.some((t) => !t?.TicketQty || t.TicketQty <= 0);
-  const unavailableTickets = ticketType.filter(
-    (t) => !data?.some((item) => item.TicketType === t.label)
-  );
 
-  if (isLoading)
-    return (
-      <LottieView
-        source={Images.loader}
-        autoPlay
-        loop
-        style={{ height: hei(5), width: hei(5), alignSelf: "center" }}
-      />
-    );
-
-  return emptyView ? (
-    <View>
-      <View style={[style.inputcontainerview, { marginTop: hei(0) }]}>
-        <Inputdata
-          txtchildren="Name"
-          placeholder="Suvarn Navaratri"
-          inputvalue={eventName || ""}
-          editable={false}
-        />
-        <View style={{ marginVertical: hei(1) }}>
-          <ARtext children="Ticket Type" align="left" />
-          <Dropdown
-            style={style.dropdown}
-            data={unavailableTickets}
-            placeholderStyle={style.placeholderStyle}
-            selectedTextStyle={[
-              style.placeholderStyle,
-              { color: Colors.Black },
-            ]}
-            labelField="label"
-            valueField="value"
-            value={selectedTicket?.value}
-            onChange={setSelectedTicket}
-          />
-        </View>
-        <Inputdata
-          txtchildren="Available Ticket"
-          placeholder="0"
-          inputvalue={selectedTicket?.Balance?.toString() || "0"}
-          editable={false}
-        />
-        <Inputdata
-          txtchildren="Ticket Qty"
-          placeholder="0"
-          inputvalue={data[0]?.TicketQty?.toString() || ""}
-          onchange={(v) => setData([{ ...(data[0] || {}), TicketQty: v }])}
-        />
-      </View>
-      {IsError.length > 0 && (
-        <ARtext
-          style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
-          color={Colors.Red}
-          size={FontSize.font11}
-          fontFamily={FontFamily.Light}
-        >
-          {IsError}
-        </ARtext>
-      )}
-      <Scbutton
-        onsavepress={() =>
-          ticketQtyAdd(
-            selectedTicket?.value,
-            selectedTicket?.Balance,
-            data[0]?.TicketQty
-          )
-        }
-        children="Cancel"
-        oncanclepress={() => setEmptyView(true)}
-        disabled={isSaveDisabled}
-      />
-    </View>
-  ) : data == "" && eventName != "" ? (
-    <ARtext
-      size={FontSize.font14}
-      fontFamily={FontFamily.SemiBold}
-      children={"No data found."}
-    />
-  ) : (
-    data?.map(
-      (item, index) =>
-        item?.isVisible !== false && (
-          <View key={index}>
-            <View style={style.inputcontainerview}>
-              <ARbutton
-                Touchstyle={{
-                  height: hei(1.5),
-                  width: hei(1.5),
-                  position: "absolute",
-                  top: hei(1.5),
-                  right: hei(1.5),
-                }}
-                backgroundColor={""}
-                hitSlop={10}
-                onpress={() => {
-                  if (editableIndex !== index) {
-                    setOriginalData((prev) => ({
-                      ...prev,
-                      [index]: { ...data[index] },
-                    }));
-                  } else {
-                    setData((prevData) =>
-                      prevData.map((item, idx) =>
-                        idx === index ? originalData[index] || item : item
-                      )
-                    );
-                  }
-                  setEditableIndex(editableIndex === index ? null : index);
-                }}
-              >
-                <ARimage
-                  source={Images.edit}
-                  style={{ height: hei(2), width: hei(2) }}
-                />
-              </ARbutton>
-              {["EventName", "TicketType", "Available_balance"].map((key) => (
-                <Inputdata
-                  key={key}
-                  txtchildren={key.replace("_", " ")}
-                  inputvalue={item?.[key]?.toString() || ""}
-                  editable={false}
-                  color={Colors.Placeholder}
-                />
-              ))}
-              <Inputdata
-                txtchildren="Ticket Qty"
-                placeholder="0"
-                inputvalue={item?.SellerTicket?.toString()}
-                editable={editableIndex === index}
-                color={
-                  editableIndex === index ? Colors.Black : Colors.Placeholder
-                }
-                onchange={(v) =>
-                  setData((prev) =>
-                    prev.map((d, i) =>
-                      i === index ? { ...d, TicketQty: v, SellerTicket: v } : d
-                    )
-                  )
-                }
-              />
-            </View>
-            {IsError[index] && (
-              <ARtext
-                style={{ paddingVertical: hei(1), paddingHorizontal: wid(3) }}
-                color={Colors.Red}
-                size={FontSize.font11}
-                fontFamily={FontFamily.Light}
-              >
-                {IsError[index]}
-              </ARtext>
-            )}
-            <Scbutton
-              onsavepress={() => {
-                ticketQtyupdate(
-                  index,
-                  item?.SelllerMasterDetailsid,
-                  ticketType[index]?.value,
-                  item?.Available_balance,
-                  item?.TicketQty
-                );
-                setEditableIndex(null);
-              }}
-              backgroundColor={Colors.Red}
-              children="Delete"
-              oncanclepress={() =>
-                ticketQtyDelete(item?.SelllerMasterDetailsid, index)
-              }
-              disabled={!item?.TicketQty || item?.TicketQty <= 0}
-            />
-          </View>
-        )
-    )
-  );
-};
