@@ -58,7 +58,6 @@ const Boxofficedetail = ({ route }) => {
     Password,
     BoxofficeUserId,
   } = route.params.data;
-console.log(route.params.data);
 
   const [Inputdisable, SetInputdisable] = useState(false);
   const [Fieldvalidation, setfieldvalidation] = useState(false);
@@ -85,7 +84,6 @@ console.log(route.params.data);
     eventName: "",
     eventId: "",
   });
-
   const [modalInput, setModalInput] = useState({
     ToAmount: "",
     FromAmount: "",
@@ -160,6 +158,7 @@ console.log(route.params.data);
     EmailId,
     Image
   ) => {
+    
     setfieldvalidation(true);
     try {
       if (validate) {
@@ -174,37 +173,37 @@ console.log(route.params.data);
           Image
         );
         console.log(response);
-
+        
         if (response.ResponseCode === "0") {
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
           setOriginalData({
-            Code: response.Code,
-            Name: response.Name,
-            EmailId: response.EmailId,
-            Password: response.Password,
-            MobileNo: response.MobileNo,
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          });
+          })
           SetInput({
-            Code: response.Code,
-            Name: response.Name,
-            EmailId: response.EmailId,
-            Password: response.Password,
-            MobileNo: response.MobileNo,
+            Code:response.Code,
+            Name:response.Name,
+            EmailId:response.EmailId,
+            Password:response.Password,
+            MobileNo:response.MobileNo,
             selectedImage: {
               base64: "",
               imageUri: response.PHOTOPATH,
               filename: "",
             },
             setmodel: false,
-          });
+          })
         }
       } else {
         console.log("Please fill the blank");
@@ -309,16 +308,16 @@ console.log(route.params.data);
             oneditpress={() => {
               SetInputdisable(!Inputdisable);
               SetInput({ ...originalData });
-              if (Inputdisable) {
-                setfieldvalidation(false);
+              if(Inputdisable){
+                setfieldvalidation(false)
               }
             }}
             editicontrue={true}
-            // Imagedata={Input.selectedImage.imageUri}
-            // Addphotoicon={Inputdisable}
+            Imagedata={Input.selectedImage.imageUri}
+            Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            // subtext={EmpId}
+            subtext={Input.selectedImage.filename}
           />
           <View style={style.inputcontainerview}>
             <Inputdata
@@ -376,7 +375,7 @@ console.log(route.params.data);
                 MobileNo,
                 EmailId,
                 Input.selectedImage.base64
-              );
+              )
             }}
             disabled={!Inputdisable}
             canceldisabled={!Inputdisable}
@@ -392,7 +391,6 @@ console.log(route.params.data);
               setEmptyView(true);
               setError("");
             }}
-            allTicketTypesExist={selectedEvent.eventId != "" && true}
           />
           {data?.map((item, index) => (
             <DiscountInputView
@@ -515,6 +513,7 @@ const style = StyleSheet.create({
     marginBottom: hei(4),
   },
 });
+
 const DiscountInputView = ({
   isError,
   data,
@@ -527,8 +526,6 @@ const DiscountInputView = ({
   index,
   setEmptyView,
 }) => {
-  const [editableIndex, setEditableIndex] = useState(null);
-
   const handleInputChange = useCallback(
     (field, value) => {
       setData((prevData) =>
@@ -541,7 +538,6 @@ const DiscountInputView = ({
     },
     [index, setData]
   );
-
   const inputFields = [
     { label: "To Amount", field: "ToAmount", placeholder: "10" },
     { label: "From Amount", field: "FromAmount", placeholder: "100" },
@@ -551,26 +547,6 @@ const DiscountInputView = ({
   return (
     <>
       <View style={[style.inputcontainerview, { marginTop: hei(1) }]}>
-        {!emptyView && (
-          <ARbutton
-            Touchstyle={{
-              height: hei(1.5),
-              width: hei(1.5),
-              position: "absolute",
-              top: hei(1.5),
-              right: hei(1.5),
-            }}
-            backgroundColor={""}
-            onpress={() => {
-              setEditableIndex(editableIndex === index ? null : index);
-            }}
-          >
-            <ARimage
-              source={Images.edit}
-              style={{ height: hei(2), width: hei(2) }}
-            />
-          </ARbutton>
-        )}
         <Inputdata
           txtchildren={"Name"}
           placeholder={"Actoscript"}
@@ -586,7 +562,6 @@ const DiscountInputView = ({
               emptyView ? data[field] : data[index]?.[field]?.toString() || ""
             }
             onchange={(text) => handleInputChange(field, text)}
-            editable={emptyView ? true : editableIndex === index}
           />
         ))}
       </View>

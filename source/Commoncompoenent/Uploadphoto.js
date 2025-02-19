@@ -11,9 +11,9 @@ import {ARbutton} from '../common';
 const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addphotoicon,maintext,subtext}) => {
   return (
     <View style={style.uploadview}>
-      {/* <ARbutton Touchstyle={style.imageview(validate)} disable={true}>
+      <ARbutton Touchstyle={style.imageview(validate)} disable={true}>
         <ARimage source={Imagedata ? {uri:Imagedata} : Images.man} style={Imagedata ? '' : style.image} />
-      </ARbutton> */}
+      </ARbutton>
       <View style={style.uploadtext}>
         <ARtext
           children={maintext ?? 'Upload Photo'}
@@ -22,7 +22,7 @@ const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addpho
           size={FontSize.font14}
         />
         <ARtext
-          children={subtext}
+          children={subtext ?? 'Please add your photo'}
           align={''}
           size={FontSize.font14}
           color={Colors.line}
@@ -34,9 +34,8 @@ const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addpho
                 height: hei(2),
                 width: hei(2),
                 position: 'absolute',
-                top: hei(0),
+                top: hei(4),
                 right: hei(1),
-                
               }}
               backgroundColor={''}
               onpress={oneditpress}>
@@ -94,7 +93,7 @@ const style = StyleSheet.create({
   uploadtext: {
     // backgroundColor:Colors.purple,
     width: wid(67),
-    // marginHorizontal: wid(4),
+    marginHorizontal: wid(4),
     justifyContent: 'center',
   },
 });
