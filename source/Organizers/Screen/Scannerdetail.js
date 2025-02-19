@@ -210,11 +210,11 @@ const Scannerdetail = ({ route }) => {
               }
             }}
             editicontrue={true}
-            Imagedata={Input.selectedImage.imageUri}
-            Addphotoicon={Inputdisable}
+            // Imagedata={Input.selectedImage.imageUri}
+            // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            subtext={Input.selectedImage.filename}
+            subtext={'Manage scanner credentials.'}
           />
           <View style={style.inputcontainerview}>
             {/* <Inputdata

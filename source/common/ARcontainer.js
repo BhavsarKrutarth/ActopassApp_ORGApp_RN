@@ -5,7 +5,7 @@ import { isIos } from '../theme';
 
 
 const ARcontainer = ({
-  backgroundColors,
+  backgroundColor,
   children,
   style,
   barStyle,
@@ -14,8 +14,8 @@ const ARcontainer = ({
   
   return (
     <SafeAreaView
-      style={[{ flex: 1, backgroundColor: backgroundColors ||  Colors.White}]}>
-      <View style={[{ flex: 1, backgroundColor: backgroundColors || Colors.White }, style]}>
+      style={[{ flex: 1, backgroundColor: backgroundColor ||  Colors.White}]}>
+      <View style={[{ flex: 1, backgroundColor: backgroundColor || Colors.White }, style]}>
         <StatusBar
           barStyle={barStyle ?? 'dark-content'}
           backgroundColor={color ?? Colors.White}

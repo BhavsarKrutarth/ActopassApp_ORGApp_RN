@@ -16,7 +16,6 @@ import {
   setAsyncStorageValue,
 } from "../redux/Reducer/AuthReducers";
 import { loginUser } from "../api/Api";
-import LottieView from "lottie-react-native";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -96,16 +95,7 @@ const Login = () => {
   };
 
   if (isLoading)
-    return (
-      <ARcontainer style={{ justifyContent: "center", alignItems: "center" }}>
-        <LottieView
-          source={Images.tickets}
-          autoPlay
-          loop
-          style={{ height: hei(18), width: hei(18)}}
-        />
-      </ARcontainer>
-    );
+    return <ARLoader visible={isLoading} />
 
   return (
     <ARcontainer>

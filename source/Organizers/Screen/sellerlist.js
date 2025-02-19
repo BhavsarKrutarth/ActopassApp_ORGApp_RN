@@ -25,7 +25,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Images from "../../Image/Images";
 import LottieView from "lottie-react-native";
 
-const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
+const Sellerlist = () => {
   const navigation = useNavigation();
   const [Refresh, Setrefresh] = useState(false);
   const [Hasmore, Sethasmore] = useState(false);
@@ -37,27 +37,15 @@ const Sellerlist = ({ Sellerrefresh, Sellernotrefresh }) => {
   const [Loading, SetLoading] = useState(false);
   const [Response, SetResponse] = useState("");
   const [Pageindex, Setpageindex] = useState(1);
-  const Pagecount = 4;
+  const Pagecount = 10
 
-  useEffect(() => {
-    if(Sellerrefresh)
-    {
-      SetGetdata([])
-      getseller(1)
-      Sellernotrefresh()
-      console.log('Data match');
+  useFocusEffect(
+    React.useCallback(() => {
+      SetGetdata([]); // Clear previous data
+      getseller(1); // Fetch fresh data
+    }, [])
+  );
 
-    }else{
-    getseller();
-    console.log("Data not Match");
-    }
-  }, []);
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     onRefreshPage();
-  //   }, [])
-  // );
   const onRefreshPage = () => {
     SetGetdata([]);
     Setrefresh(true);

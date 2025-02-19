@@ -315,21 +315,21 @@ const Boxofficedetail = ({ route }) => {
               }
             }}
             editicontrue={true}
-            Imagedata={Input.selectedImage.imageUri}
-            Addphotoicon={Inputdisable}
+            // Imagedata={Input.selectedImage.imageUri}
+            // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            subtext={Input.selectedImage.filename}
+            subtext={'Manage boxoffice credentials and assigned tickets.'}
           />
           <View style={style.inputcontainerview}>
-            <Inputdata
+            {/* <Inputdata
               txtchildren={"Code"}
               placeholder={"Code"}
               inputvalue={Input.Code}
               // onchange={v => console.log(v)}
               editable={false}
               color={Colors.Placeholder}
-            />
+            /> */}
             <Inputdata
               txtchildren={"Name"}
               placeholder={"Enter Your Name"}

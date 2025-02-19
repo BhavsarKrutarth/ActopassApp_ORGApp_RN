@@ -11,21 +11,26 @@ import {ARbutton} from '../common';
 const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addphotoicon,maintext,subtext}) => {
   return (
     <View style={style.uploadview}>
-      <ARbutton Touchstyle={style.imageview(validate)} disable={true}>
+      {/* <ARbutton Touchstyle={style.imageview(validate)} disable={true}>
         <ARimage source={Imagedata ? {uri:Imagedata} : Images.man} style={Imagedata ? '' : style.image} />
-      </ARbutton>
+      </ARbutton> */}
       <View style={style.uploadtext}>
-        <ARtext
+        {/* <ARtext
           children={maintext ?? 'Upload Photo'}
           align={''}
           fontFamily={FontFamily.Bold}
           size={FontSize.font14}
-        />
+        /> */} 
+        <ARtext align={''} fontFamily={FontFamily.Medium} size={FontSize.font14}>
+          Code: {' '}
+          <ARtext children={maintext} size={FontSize.font13} color={Colors.active}/>
+        </ARtext>
         <ARtext
-          children={subtext ?? 'Please add your photo'}
+          // children={subtext ?? 'Please add your photo'}
+          children={subtext}
           align={''}
-          size={FontSize.font14}
-          color={Colors.line}
+          size={FontSize.font12}
+          color={Colors.active}
         />
       </View>
       {editicontrue && (
@@ -34,8 +39,8 @@ const Uploadphoto = ({oneditpress,onpress,Imagedata,editicontrue,validate,Addpho
                 height: hei(2),
                 width: hei(2),
                 position: 'absolute',
-                top: hei(4),
-                right: hei(1),
+                top: hei(1.5),
+                right: hei(1.5),
               }}
               backgroundColor={''}
               onpress={oneditpress}>
@@ -72,8 +77,13 @@ export default Uploadphoto;
 
 const style = StyleSheet.create({
   uploadview: {
-    // backgroundColor:'yellow',
+    backgroundColor:Colors.White,
     flexDirection: 'row',
+    borderWidth:normalize(1),
+    borderRadius:normalize(5),
+    borderColor:Colors.bordercolor,
+    paddingVertical:hei(1.5),
+    paddingHorizontal:wid(4)
   },
   imageview: (validate) => ({
     backgroundColor: Colors.lightgrey,
@@ -92,8 +102,9 @@ const style = StyleSheet.create({
   },
   uploadtext: {
     // backgroundColor:Colors.purple,
-    width: wid(67),
-    marginHorizontal: wid(4),
+    // width: wid(67),
+    // marginHorizontal: wid(4),
     justifyContent: 'center',
+    gap:2
   },
 });

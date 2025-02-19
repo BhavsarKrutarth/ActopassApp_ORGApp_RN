@@ -52,6 +52,7 @@ export const Addnewseller = async (
   Photos,
   Id
 ) => {
+  console.log('new data',Photos)
   try {
     const response = await FetchMethod.POST({
       EndPoint:
