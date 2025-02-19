@@ -123,7 +123,7 @@ const Sellerdetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -147,6 +147,8 @@ const Sellerdetail = ({ route }) => {
     Image
   ) => {
     setfieldvalidation(true);
+    console.log(Image);
+    
     try {
       if (validate) {
         SetLoading(true);
@@ -160,6 +162,7 @@ const Sellerdetail = ({ route }) => {
           Image
         );
         if (response) {
+          console.log(response);
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
@@ -369,16 +372,18 @@ const Sellerdetail = ({ route }) => {
             // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            // subtext={EmpId}
+            subtext={"Manage seller credentials and assigned tickets."
+}
+
           />
           <View style={style.inputcontainerview}>
-            <Inputdata
+            {/* <Inputdata
               txtchildren={"Code"}
               placeholder={"Code"}
               inputvalue={Input.Code}
               editable={false}
               color={Colors.Placeholder}
-            />
+            /> */}
             <Inputdata
               txtchildren={"Name"}
               placeholder={"Enter Your Name"}
@@ -531,14 +536,13 @@ export default Sellerdetail;
 const style = StyleSheet.create({
   scrollstyle: {
     flexGrow: 1,
-    // backgroundColor:Colors.Placeholder,
     paddingHorizontal: wid(4),
   },
   containerview: {
     // paddingBottom:hei(1),
-    // backgroundColor:"red"
+    // backgroundColor:"red",
     paddingHorizontal: wid(4),
-    flex: 1,
+    // flex: 1,
   },
   inputcontainerview: {
     marginTop: hei(3),

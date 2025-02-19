@@ -9,14 +9,16 @@ const ARcontainer = ({
   children,
   style,
   barStyle,
+  color
 }) => {
+  
   return (
     <SafeAreaView
       style={[{ flex: 1, backgroundColor: backgroundColor ||  Colors.White}]}>
       <View style={[{ flex: 1, backgroundColor: backgroundColor || Colors.White }, style]}>
         <StatusBar
           barStyle={barStyle ?? 'dark-content'}
-          backgroundColor={Colors.White}
+          backgroundColor={color ?? Colors.White}
         />
         {children}
       </View>
@@ -24,3 +26,4 @@ const ARcontainer = ({
   );
 };
 export default ARcontainer;
+

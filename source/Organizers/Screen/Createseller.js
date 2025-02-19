@@ -49,7 +49,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
     !Validation.isEmailValid(Input.Email) &&
     !Validation.isMobileNumberValid(Input.Number) &&
     !Validation.issellerpassword(Input.password) &&
-    !Input.selectedImage.imageUri == "" &&
+    // !Input.selectedImage.imageUri == "" &&
     !Validation.isName(Input.Name);
 
   const openCamera = () => {
@@ -104,6 +104,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
       selectedImage: {
         base64: "",
         imageUri: "",
+        filename:""
       },
       setmodel: false,
     });
@@ -150,6 +151,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
             selectedImage: {
               base64: "",
               imageUri: "",
+              filename:""
             },
             setmodel: false,
           });
@@ -169,7 +171,7 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
 
   return (
     <Modal  
-      transparent={false}
+      transparent={true}
       visible={visible}
       animationType="slide"
       onRequestClose={onRequestClose}
@@ -206,14 +208,14 @@ const Createseller = ({Id,visible,onRequestClose,closemodal,saveclose}) => {
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // Adjust for platform-specific behavior
       >
         <View style={style.containerview}>
-          <Uploadphoto
+          {/* <Uploadphoto
             oneditpress={() => console.log("")}
             onpress={() => setInput((pre) => ({ ...pre, setmodel: true }))}
             Imagedata={Input.selectedImage.imageUri}
             validate={Photo}
             Addphotoicon={true}
             subtext={Input.selectedImage.filename}
-          />
+          /> */}
           <View style={style.inputcontainerview}>
             <Inputdata
               txtchildren={"Name"}

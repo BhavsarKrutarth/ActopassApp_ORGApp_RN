@@ -28,7 +28,7 @@ const Sellerhistory = () => {
 
   useEffect(() => {
     if (AsyncValue.SellerLoginId) {
-      gethistory(1, true);
+      gethistory(1);
     }
   }, []);
 

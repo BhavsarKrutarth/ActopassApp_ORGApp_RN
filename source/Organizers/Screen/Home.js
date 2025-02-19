@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { Dropdown } from "react-native-element-dropdown";
 import Navroute from "../navigation/Navroute";
 import { loistofevent, percentagedata } from "../../api/Api";
+import LottieView from "lottie-react-native";
 
 const Home = () => {
   const { AsyncValue } = useSelector((state) => state.Auth);
@@ -30,12 +31,13 @@ const Home = () => {
 
   const [currentindex, setcurrentindex] = useState(0);
   const [btn, setbtn] = useState(1);
+  const [Loader,setloader] = useState(false)
   const [Eventlist, Seteventlist] = useState([]);
   const [Value, Setvalue] = useState({
     label: "",
     value: "",
   });
-  const [Disable, Setdisable] = useState(false);
+  const [Disable, Setdisable] = useState(true);
   const [datas, setdata] = useState({});
   const [Dashdata, Setdashdata] = useState([
     {
@@ -111,6 +113,7 @@ const Home = () => {
             value: item.EventMasterid,
           }))
         );
+        Setdisable(false)
       } else {
         Setdisable(true);
       }
@@ -121,12 +124,15 @@ const Home = () => {
 
   const getpercentage = async (BoxId, EvntId) => {
     try {
+      setloader(true)
       const respone = await percentagedata(BoxId, EvntId);
       if (respone) {
-        setdata(respone);
+        setdata({...respone,Totalamount:respone.TotalERPUser_Income + respone.TotalWebUser_Income + respone.TotalMobileApp_Income});
+        setloader(false)
       }
     } catch (error) {
       console.log("Getpercentagedata error", error);
+      setloader(false)
     }
   };
 
@@ -136,14 +142,16 @@ const Home = () => {
     setcurrentindex(index);
   };
 
-  const progressdata = (percenatge, btn) => {
+  const progressdata = (percenatge, btn,Totalqty,Totalamt) => {    
+  console.log(percenatge);
+      
     if (btn === 1) {
       return parseFloat(percenatge) / 100;
     } else if (btn === 2) {
-      const count = ((percenatge / 500000) * 100).toFixed(2);
+      const count = ((percenatge / Totalamt) * 100).toFixed(2);
       return parseFloat(count) / 100;
     } else {
-      const qty = ((percenatge / 1000) * 100).toFixed(2);
+      const qty = ((percenatge / Totalqty) * 100).toFixed(2);
       return parseFloat(qty) / 100;
     }
   };
@@ -151,6 +159,19 @@ const Home = () => {
   const dataset = (item) => {
     setbtn(item.id);
   };
+
+  if (Loader)
+    return (
+      <ARcontainer style={{ justifyContent: "center", alignItems: "center" }}>
+        <LottieView
+          source={Images.tickets}
+          autoPlay
+          loop
+          style={{ height: hei(18), width: hei(18)}}
+        />
+      </ARcontainer>
+    );
+console.log('jj');
 
   return (
     <ARcontainer backgroundColor={Colors.backgroundcolor}>
@@ -365,7 +386,9 @@ const Home = () => {
                     : btn === 3
                     ? datas?.shopifyQty || 0
                     : 0,
-                  btn
+                  btn,
+                  datas?.TotalTicket_Assign_EventWise,
+                  datas?.Totalamount
                 )}
                 color={Colors.web}
               />
@@ -397,7 +420,9 @@ const Home = () => {
                     : btn === 3
                     ? datas?.MobileQty || 0
                     : 0,
-                  btn
+                  btn,
+                  datas?.TotalTicket_Assign_EventWise,
+                  datas?.Totalamount
                 )}
                 color={Colors.mob}
               />
@@ -429,7 +454,9 @@ const Home = () => {
                     : btn === 3
                     ? datas?.ERPQty || 0
                     : 0,
-                  btn
+                  btn,
+                  datas?.TotalTicket_Assign_EventWise,
+                  datas?.Totalamount
                 )}
                 color={Colors.erp}
               />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 import { ARcontainer, ARimage, ARLoader, ARtext } from "../../common";
 import { ARheader } from "../../common";
-import { hei, wid, normalize } from "../../theme";
+import { hei, wid, normalize, width } from "../../theme";
 import { FontSize, FontFamily } from "../../theme";
 import Images from "../../Image/Images";
 import { Colors } from "../../theme";
@@ -10,18 +10,19 @@ import { useNavigation } from "@react-navigation/native";
 import { EventDetails } from "../../api/Api";
 import RenderHtml from "react-native-render-html";
 
-const Eventdetail = ({route}) => {
+const Eventdetail = ({ route }) => {
   const navigation = useNavigation();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const {Id} = route.params;
-  
+  const { Id } = route.params;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await EventDetails(Id);
+        console.log(JSON.stringify(response,null,2));
         setData(response[0]);
       } catch (error) {
         console.log(error);
@@ -52,6 +53,7 @@ const Eventdetail = ({route}) => {
           <ARimage
             source={{ uri: data.EventMainImage }}
             resizemode={"stretch"}
+            style={style.imageview}
           />
         </View>
         <View style={style.contentview}>
@@ -62,6 +64,26 @@ const Eventdetail = ({route}) => {
               size={FontSize.font22}
               fontFamily={FontFamily.Bold}
             />
+
+          {data.EventDaysType === 'single' ? 
+          (<View>
+            <View style={[style.dateview,{width:wid(32)}]}>
+              <View style={style.datetime}>
+                <ARimage
+                  source={Images.menu}
+                  style={{ height: hei(2.5), width: hei(2.5) }}
+                />
+              </View>
+              <View style={style.datetext}>
+                <ARtext
+                  children={data.EventStartDate}
+                  color={Colors.Placeholder}
+                  size={FontSize.font13}
+                  align={""}
+                />
+              </View>
+            </View>
+          </View>) : 
 
             <View style={style.dateview}>
               <View style={style.datetime}>
@@ -77,21 +99,19 @@ const Eventdetail = ({route}) => {
                   size={FontSize.font13}
                   align={""}
                 />
-                {data.EventDaysType === "multiple" && (
-                  <>
                     <ARimage
                       source={Images.swip}
                       style={{ height: hei(2.5), width: hei(2.5) }}
                     />
                     <ARtext
-                      children={data.EventEndDate}
+                      children={'25 FEB 2025'}
                       color={Colors.Placeholder}
                       size={FontSize.font13}
                     />
-                  </>
-                )}
               </View>
             </View>
+}
+
             <View style={[style.showtexts, { alignItems: "flex-start" }]}>
               <View
                 style={[
@@ -220,7 +240,8 @@ const style = StyleSheet.create({
   },
   imageview: {
     // backgroundColor:"red",
-    height: hei(30),
+    height: hei(60),
+    width:wid(100)
   },
   contentview: {
     paddingHorizontal: wid(4),
@@ -249,13 +270,14 @@ const style = StyleSheet.create({
     // backgroundColor:"yellow"
   },
   dateview: {
-    justifyContent: "space-between",
     paddingVertical: hei(0.8),
     paddingHorizontal: wid(1),
     backgroundColor: Colors.lightgrey,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: normalize(5),
+    width:wid(64),
+    gap:wid(1)
   },
   datetime: {
     alignItems: "center",
@@ -264,9 +286,10 @@ const style = StyleSheet.create({
   },
   datetext: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: wid(80),
+    width: wid(52),
     alignItems: "center",
+    // backgroundColor:"red",
+    justifyContent:'space-between',
   },
   address: {
     // backgroundColor:"yellow",

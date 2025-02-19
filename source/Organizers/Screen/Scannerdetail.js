@@ -83,7 +83,6 @@ const Scannerdetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -113,6 +112,8 @@ const Scannerdetail = ({ route }) => {
     EmailId,
     Image
   ) => {
+    console.log(Image);
+    
     setfieldvalidation(true);
     try {
       if (validate) {
@@ -127,6 +128,8 @@ const Scannerdetail = ({ route }) => {
           Image
         );
         if (response.ResponseCode === "0") {
+          console.log(response);
+          
           SetLoading(false);
           setfieldvalidation(false);
           Setsuccesmodal(true);
@@ -207,11 +210,11 @@ const Scannerdetail = ({ route }) => {
               }
             }}
             editicontrue={true}
-            Imagedata={Input.selectedImage.imageUri}
-            Addphotoicon={Inputdisable}
+            // Imagedata={Input.selectedImage.imageUri}
+            // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            subtext={Input.selectedImage.filename}
+            subtext={'Manage scanner credentials.'}
           />
           <View style={style.inputcontainerview}>
             {/* <Inputdata

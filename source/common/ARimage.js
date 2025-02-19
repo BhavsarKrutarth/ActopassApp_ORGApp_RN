@@ -12,6 +12,7 @@ const ARimage = ({source, resizemode, style,tintColor}) => {
       resizeMode={resizemode ?? 'contain'}
       style={[ARstyle.image100, style]}
       tintColor={tintColor}
+      
     />
   );
 };

@@ -25,8 +25,8 @@ const Login = () => {
   const [Logindata, Setlogindata] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [Input, setInput] = useState({
-    Id: "SEL-0001",
-    Password: "1111111111",
+    Id: "ORG-0001",
+    Password: "04BBB12B",
     OTP: "",
   });
 
@@ -94,7 +94,8 @@ const Login = () => {
     setInput((prev) => ({ ...prev, OTP: "" }));
   };
 
-  if (isLoading) return <ARLoader visible={isLoading} />;
+  if (isLoading)
+    return <ARLoader visible={isLoading} />
 
   return (
     <ARcontainer>
@@ -135,7 +136,7 @@ const Login = () => {
               Tipadding={10}
               Tiplaceholder="Enter ID"
               Tiflex={1}
-              value={Input.Id}
+              value={Input.Id.toUpperCase()}
               onchangetext={(v) => setInput((prev) => ({ ...prev, Id: v }))}
             />
             {Idvalidation ? (

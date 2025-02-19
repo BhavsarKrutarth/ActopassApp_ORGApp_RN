@@ -29,11 +29,14 @@ const Boxofficelist = () => {
   const [Loading, SetLoading] = useState(false);
   const [Response, SetResponse] = useState("");
   const [Pageindex, Setpageindex] = useState(1);
-  const Pagecount = 4;
+  const Pagecount = 10
 
-  useEffect(() => {
-    getseller();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      SetGetdata([]); // Clear previous data
+      getseller(1); // Fetch fresh data
+    }, [])
+  );
 
   const typeWiseNavigatios = (item) => {
     navigation.navigate(Navroute.Boxofficedatail, { data: item });
@@ -100,12 +103,6 @@ const Boxofficelist = () => {
     SetResponse("");
     Setdeletemodal(false);
   };
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     onRefreshPage();
-  //   }, [])
-  // );
   
   const onRefreshPage = () => {
     SetGetdata([]);
@@ -113,9 +110,7 @@ const Boxofficelist = () => {
     getseller(1, true);
   };
 
-  // console.log('Conditional',Hasmore.TotalRecords !== Getdata.length);
-  // console.log(Hasmore.TotalRecords);
-  // console.log(Getdata.length);
+
 
   return (
     <ARcontainer>

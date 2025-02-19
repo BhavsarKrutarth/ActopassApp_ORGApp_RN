@@ -86,6 +86,7 @@ const Boxofficedetail = ({ route }) => {
     eventName: "",
     eventId: "",
   });
+  
   const [modalInput, setModalInput] = useState({
     ToAmount: "",
     FromAmount: "",
@@ -135,7 +136,7 @@ const Boxofficedetail = ({ route }) => {
       includeBase64: true,
     })
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         SetInput((pre) => ({ ...pre, setmodel: false }));
         SetInput((pre) => ({
           ...pre,
@@ -323,17 +324,17 @@ const Boxofficedetail = ({ route }) => {
             // Addphotoicon={Inputdisable}
             onpress={() => SetInput((pre) => ({ ...pre, setmodel: true }))}
             maintext={Code}
-            // subtext={EmpId}
+            subtext={'Manage boxoffice credentials and assigned tickets.'}
           />
           <View style={style.inputcontainerview}>
-            <Inputdata
+            {/* <Inputdata
               txtchildren={"Code"}
               placeholder={"Code"}
               inputvalue={Input.Code}
               // onchange={v => console.log(v)}
               editable={false}
               color={Colors.Placeholder}
-            />
+            /> */}
             <Inputdata
               txtchildren={"Name"}
               placeholder={"Enter Your Name"}
